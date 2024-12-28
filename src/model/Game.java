@@ -47,25 +47,32 @@ public class Game {
             return false;
         }
 
-        // Execute the move (TJ)
+        // Execute the move
         Piece destinationPiece = board.getPieceAt(to);
 
         // If there is an opponent's Sau piece on the destination, remove it
         if (destinationPiece instanceof Sau && destinationPiece.getColor() != currentPlayer) {
-            System.out.println(destinationPiece.getColor() + " Sau has been captured!");
-            board.removePiece(to); // Remove the captured Sau piece
-        }
+            System.out.println("\n" + destinationPiece.getColor() + " Sau has been captured!");
 
-        // Execute the move
-        board.setPieceAt(to, piece);
-        board.removePiece(from);
-        piece.setPosition(to);
+            board.setPieceAt(to, piece); // Place the capturing piece in the captured Sau's position
+            board.removePiece(from); // Remove the captured Sau piece
+            piece.setPosition(to); // Update the capturing piece's position
+
+            // Check if the game is over immediately after the Sau is removed
+            checkGameOver();
+
+            if (gameOver) {
+                return true; // End the move and indicate the game is over
+            }
+        } else {
+            // Execute the move
+            board.setPieceAt(to, piece);
+            board.removePiece(from);
+            piece.setPosition(to);
+        }
 
         // Check for transformations if required
         piece.transform(board);
-
-        // Check if the game is over
-        checkGameOver();
 
         // Switch turn to the next player
         switchTurn();
@@ -89,7 +96,7 @@ public class Game {
         currentPlayer = (currentPlayer == Color.RED) ? Color.BLUE : Color.RED;
     }
 
-    private void checkGameOver() {
+    public void checkGameOver() {
         boolean redSauExists = false;
         boolean blueSauExists = false;
 
@@ -105,7 +112,6 @@ public class Game {
                 }
             }
         }
-
         gameOver = !(redSauExists && blueSauExists);
 
         if (gameOver) {
@@ -115,5 +121,13 @@ public class Game {
                 System.out.println("Red wins!");
             }
         }
+    }
+
+    /**
+     * Determine the winner.
+     */
+    public String getWinner() {
+        if (!gameOver) return null; // No winner will show if the game isn't over
+        return (getCurrentPlayer() == Color.RED) ? "Red" : "Blue";
     }
 }

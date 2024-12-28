@@ -5,7 +5,6 @@ import model.Board;
 import model.Game;
 import model.Piece;
 import model.Position;
-import model.Color;
 import view.BoardView;
 
 import java.util.List;
@@ -33,8 +32,9 @@ public class GameController {
      * Handles tile clicks in the GUI.
      */
     public void handleTileClick(Position position, BoardView view) {
-        if (isGameOver()) {
-            System.out.println("The game is over. No more moves can be made.");
+        if (game.isGameOver()) {
+            String winnerMessage = game.getWinner() + " wins! Game Over.";
+            view.gameOver(winnerMessage); // Pass the winner message to the view
             return; // No further interaction if the game is over
         }
 
@@ -74,6 +74,13 @@ public class GameController {
     }
 
     /**
+     * Determine the winner
+     */
+    public String getWinner() {
+        return game.getWinner();
+    }
+
+    /**
      * Gets the current player.
      */
     public String getCurrentPlayer() {
@@ -81,12 +88,8 @@ public class GameController {
     }
 
     /**
-     * Determine the winner.
+     *  Reset the game.
      */
-    public String getWinner() {
-        return (game.getCurrentPlayer() == Color.RED) ? "Blue" : "Red";
-    }
-
     public void resetGame() {
         Game.reset(game); // Reset the game model with a new board
         selectedPiece = null; // Clear any selected piece

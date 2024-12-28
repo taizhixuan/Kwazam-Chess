@@ -14,8 +14,7 @@ import java.util.List;
  * GameScreen that extends BoardView for consistency and adds a navigation bar.
  */
 public class GameScreen extends BoardView {
-    private JMenuBar menuBar;
-    private GameController controller;
+    private final GameController controller;
 
     public GameScreen(GameController controller) {
         super(controller); // Call BoardView constructor
@@ -27,7 +26,7 @@ public class GameScreen extends BoardView {
      * Adds a navigation bar to the game screen.
      */
     private void addNavigationBar() {
-        menuBar = new JMenuBar();
+        JMenuBar menuBar = new JMenuBar();
         JMenu gameMenu = new JMenu("Game");
 
         JMenuItem newGame = new JMenuItem("New Game");
@@ -65,5 +64,10 @@ public class GameScreen extends BoardView {
     @Override
     public void clearHighlights() {
         super.clearHighlights(); // Use clear highlight logic from BoardView
+    }
+
+    @Override
+    public void gameOver(String message) {
+        super.gameOver(message);
     }
 }

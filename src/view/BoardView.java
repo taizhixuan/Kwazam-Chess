@@ -116,4 +116,22 @@ public class BoardView extends JFrame {
             }
         }
     }
-}
+
+    public void gameOver(String message) {
+            JOptionPane.showMessageDialog(this, message, "Game Over", JOptionPane.PLAIN_MESSAGE);
+
+            int response = JOptionPane.showConfirmDialog(
+                    this,
+                    "Would you like to start a new game?",
+                    "Game Over",
+                    JOptionPane.YES_NO_OPTION
+            );
+
+            if (response == JOptionPane.YES_OPTION) {
+                controller.resetGame(); // Reset the game state
+                refreshBoard();         // Refresh the game board
+            } else {
+                System.exit(0);          // Exit the game
+            }
+        }
+    }
