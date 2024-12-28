@@ -4,6 +4,7 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Game {
     private final Board board;
     private Color currentPlayer;
@@ -34,6 +35,16 @@ public class Game {
             System.out.println("Invalid move: Cannot move to that position.");
             return false;
         }
+
+        // Execute the move (TJ)
+        Piece destinationPiece = board.getPieceAt(to);
+
+        // If there is an opponent's Sau piece on the destination, remove it
+        if (destinationPiece instanceof Sau && destinationPiece.getColor() != currentPlayer) {
+            System.out.println(destinationPiece.getColor() + " Sau has been captured!");
+            board.removePiece(to); // Remove the captured Sau piece
+        }
+        // TJ
 
         // Execute the move
         board.setPieceAt(to, piece);
@@ -86,5 +97,13 @@ public class Game {
         }
 
         gameOver = !(redSauExists && blueSauExists);
+
+        if (gameOver) {
+            if (!redSauExists) {
+                System.out.println("Game Over! Blue wins!");
+            } else {
+                System.out.println("Game Over! Red wins!");
+            }
+        }
     }
 }

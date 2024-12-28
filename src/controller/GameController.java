@@ -33,6 +33,11 @@ public class GameController {
      * Handles tile clicks in the GUI.
      */
     public void handleTileClick(Position position, BoardView view) {
+        if (isGameOver()) {
+            System.out.println("The game is over. No more moves can be made.");
+            return; // No further interaction if the game is over
+        }
+
         if (selectedPiece == null) {
             // First click: Select a piece
             Piece piece = game.getBoard().getPieceAt(position);

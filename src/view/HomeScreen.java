@@ -111,11 +111,13 @@ public class HomeScreen extends JFrame {
     private void showInstructions() {
         // Display instructions in a popup or new window
         JOptionPane.showMessageDialog(this,
-                "Welcome to Kwazam Chess!\n\n"
-                        + "1. Click on your piece to see valid moves highlighted.\n"
-                        + "2. Click on a green square to move your piece.\n"
-                        + "3. Capture the opponent's 'Sau' to win the game.\n"
-                        + "4. Some pieces transform after specific moves.",
+                """
+                        Welcome to Kwazam Chess!
+                        
+                        1. Click on your piece to see valid moves highlighted.
+                        2. Click on a green square to move your piece.
+                        3. Capture the opponent's 'Sau' to win the game.
+                        4. Some pieces transform after specific moves.""",
                 "Instructions",
                 JOptionPane.INFORMATION_MESSAGE);
     }
