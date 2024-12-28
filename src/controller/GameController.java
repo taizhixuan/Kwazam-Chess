@@ -51,6 +51,12 @@ public class GameController {
             // Second click: Attempt to move the piece
             if (game.movePiece(selectedPiece, position)) {
                 view.clearHighlights(); // Clear highlights after a successful move
+                if (game.isGameOver()) {
+                    String winnerMessage = game.getWinner() + " wins! Game Over.";
+                    view.gameOver(winnerMessage);
+                    selectedPiece = null; // Reset selection
+                    return;
+                }
             } else {
                 System.out.println("Invalid move. Try again.");
             }
