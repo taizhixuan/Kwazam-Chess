@@ -5,6 +5,7 @@ import model.Board;
 import model.Game;
 import model.Piece;
 import model.Position;
+import model.Color;
 import view.BoardView;
 
 import java.util.List;
@@ -72,5 +73,12 @@ public class GameController {
      */
     public String getCurrentPlayer() {
         return game.getCurrentPlayer().name();
+    }
+
+    /**
+     * Determine the winner.
+     */
+    public String getWinner() {
+        return (game.getCurrentPlayer() == Color.RED) ? "Blue" : "Red";
     }
 }
