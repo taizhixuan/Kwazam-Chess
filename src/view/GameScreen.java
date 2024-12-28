@@ -15,9 +15,11 @@ import java.util.List;
  */
 public class GameScreen extends BoardView {
     private JMenuBar menuBar;
+    private GameController controller;
 
     public GameScreen(GameController controller) {
         super(controller); // Call BoardView constructor
+        this.controller = controller; // Store the controller instance
         addNavigationBar(); // Add navigation bar
     }
 
@@ -31,6 +33,11 @@ public class GameScreen extends BoardView {
         JMenuItem newGame = new JMenuItem("New Game");
         newGame.addActionListener(e -> {
             // Logic for starting a new game
+            // Reset the game through the controller
+            controller.resetGame();
+
+            // Refresh the board display
+            super.refreshBoard();
 
             System.out.println("New game started!");
         });

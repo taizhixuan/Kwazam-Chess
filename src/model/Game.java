@@ -6,7 +6,7 @@ import java.util.List;
 
 
 public class Game {
-    private final Board board;
+    private Board board;
     private Color currentPlayer;
     private boolean gameOver;
 
@@ -14,6 +14,17 @@ public class Game {
         this.board = board;
         this.currentPlayer = Color.RED;
         this.gameOver = false;
+    }
+
+    public static void reset(Game game) {
+        // Reset the board to its initial state
+        game.board = new Board();  // This creates a new Board with all pieces in their starting positions
+
+        // Reset the current player to the starting player
+        game.currentPlayer = Color.RED; // Assuming the game starts with the White player
+
+        // Reset the gameOver flag
+        game.gameOver = false;
     }
 
     public List<Position> getPossibleMoves(Piece piece, Position position) {
@@ -44,7 +55,6 @@ public class Game {
             System.out.println(destinationPiece.getColor() + " Sau has been captured!");
             board.removePiece(to); // Remove the captured Sau piece
         }
-        // TJ
 
         // Execute the move
         board.setPieceAt(to, piece);

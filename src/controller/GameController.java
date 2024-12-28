@@ -86,4 +86,9 @@ public class GameController {
     public String getWinner() {
         return (game.getCurrentPlayer() == Color.RED) ? "Blue" : "Red";
     }
+
+    public void resetGame() {
+        Game.reset(game); // Reset the game model with a new board
+        selectedPiece = null; // Clear any selected piece
+    }
 }
