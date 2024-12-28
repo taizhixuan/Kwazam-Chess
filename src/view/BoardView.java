@@ -23,7 +23,7 @@ public class BoardView extends JFrame {
     public BoardView(GameController controller) {
         this.controller = controller;
         setTitle("Kwazam Chess");
-        setSize(BUTTON_SIZE * 5 + 50, BUTTON_SIZE * 8 + 50); // Adjust frame size
+        setSize(BUTTON_SIZE * 5 + 60, BUTTON_SIZE * 8 + 60); // Adjust frame size
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         initializeBoard();
@@ -60,7 +60,7 @@ public class BoardView extends JFrame {
                             getClass().getClassLoader().getResource(piece.getImagePath())
                     );
                     if (icon != null && icon.getImage() != null) {
-                        Image scaledImage = icon.getImage().getScaledInstance(BUTTON_SIZE - 10, BUTTON_SIZE - 10, Image.SCALE_SMOOTH);
+                        Image scaledImage = icon.getImage().getScaledInstance(BUTTON_SIZE - 15, BUTTON_SIZE - 15, Image.SCALE_SMOOTH);
                         button.setIcon(new ImageIcon(scaledImage));
                     }
                 }

@@ -31,6 +31,7 @@ public class GameScreen extends BoardView {
         JMenuItem newGame = new JMenuItem("New Game");
         newGame.addActionListener(e -> {
             // Logic for starting a new game
+
             System.out.println("New game started!");
         });
 

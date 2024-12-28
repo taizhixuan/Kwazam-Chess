@@ -100,9 +100,9 @@ public class Game {
 
         if (gameOver) {
             if (!redSauExists) {
-                System.out.println("Game Over! Blue wins!");
+                System.out.println("Blue wins!");
             } else {
-                System.out.println("Game Over! Red wins!");
+                System.out.println("Red wins!");
             }
         }
     }
