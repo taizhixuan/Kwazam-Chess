@@ -11,8 +11,8 @@ public class GameState implements Serializable {
 
     public GameState(Board board, Color currentPlayer, Object turnCounter) {
         this.board = board;
-        this.currentPlayer = currentPlayer;
-        this.turnCounter = turnCounter;
+        this.currentPlayer = String.valueOf(currentPlayer);
+        this.turnCounter = (int) turnCounter;
     }
 
     // Getters and Setters
