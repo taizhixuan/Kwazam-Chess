@@ -32,12 +32,6 @@ public class GameController {
      * Handles tile clicks in the GUI.
      */
     public void handleTileClick(Position position, BoardView view) {
-        if (game.isGameOver()) {
-            String winnerMessage = game.getWinner() + " wins! Game Over.";
-            view.gameOver(winnerMessage); // Pass the winner message to the view
-            return; // No further interaction if the game is over
-        }
-
         if (selectedPiece == null) {
             // First click: Select a piece
             Piece piece = game.getBoard().getPieceAt(position);
@@ -51,9 +45,15 @@ public class GameController {
             // Second click: Attempt to move the piece
             if (game.movePiece(selectedPiece, position)) {
                 view.clearHighlights(); // Clear highlights after a successful move
+                view.refreshBoard(); // Refresh the GUI immediately
+
                 if (game.isGameOver()) {
+                    Piece capturingPiece = game.getBoard().getPieceAt(position);
+
+                    // Notify the GUI about the game-over scenario
                     String winnerMessage = game.getWinner() + " wins! Game Over.";
                     view.gameOver(winnerMessage);
+
                     selectedPiece = null; // Reset selection
                     return;
                 }
