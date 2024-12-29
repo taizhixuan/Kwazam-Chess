@@ -1,12 +1,9 @@
-// GameController.java
 package controller;
 
-import model.Board;
-import model.Game;
-import model.Piece;
-import model.Position;
+import model.*;
 import view.BoardView;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -57,6 +54,10 @@ public class GameController {
                     selectedPiece = null; // Reset selection
                     return;
                 }
+
+                // Automatically save the game after each valid move
+                saveGame("game_save.dat");
+
             } else {
                 System.out.println("Invalid move. Try again.");
             }
@@ -99,5 +100,18 @@ public class GameController {
     public void resetGame() {
         Game.reset(game); // Reset the game model with a new board
         selectedPiece = null; // Clear any selected piece
+    }
+
+    /**
+     * Save the current game state.
+     */
+    public void saveGame(String filename) {
+        GameState gameState = new GameState(game.getBoard(), game.getCurrentPlayer(), game.getTurnCounter());
+        try {
+            GameSaver.saveGame(gameState, filename);
+            System.out.println("Game saved successfully!");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

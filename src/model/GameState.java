@@ -3,36 +3,33 @@ package model;
 import java.io.Serializable;
 
 public class GameState implements Serializable {
-    private static final long serialVersionUID = 1L;  // For version control in serialization
+    private static final long serialVersionUID = 1L;
 
-    String[][] board;  // 5x8 board, stores piece information
-    String turn;       // "blue" or "red"
-    int turnCounter;   // Tracks the number of turns (to handle Tor/Xor transformations)
-    PieceState[] pieces;  // Stores state of all pieces (position, type, etc.)
+    private Board board;      // The board object (includes piece positions)
+    private String currentPlayer; // "blue" or "red"
+    private int turnCounter;  // Tracks the number of turns
 
-    // Constructor for initializing the game state
-    public GameState(String[][] board, String turn, int turnCounter, PieceState[] pieces) {
+    public GameState(Board board, Color currentPlayer, Object turnCounter) {
         this.board = board;
-        this.turn = turn;
+        this.currentPlayer = currentPlayer;
         this.turnCounter = turnCounter;
-        this.pieces = pieces;
     }
 
-    // Getters and setters for each field (if needed)
-    public String[][] getBoard() {
+    // Getters and Setters
+    public Board getBoard() {
         return board;
     }
 
-    public void setBoard(String[][] board) {
+    public void setBoard(Board board) {
         this.board = board;
     }
 
-    public String getTurn() {
-        return turn;
+    public String getCurrentPlayer() {
+        return currentPlayer;
     }
 
-    public void setTurn(String turn) {
-        this.turn = turn;
+    public void setCurrentPlayer(String currentPlayer) {
+        this.currentPlayer = currentPlayer;
     }
 
     public int getTurnCounter() {
@@ -42,14 +39,4 @@ public class GameState implements Serializable {
     public void setTurnCounter(int turnCounter) {
         this.turnCounter = turnCounter;
     }
-
-    public PieceState[] getPieces() {
-        return pieces;
-    }
-
-    public void setPieces(PieceState[] pieces) {
-        this.pieces = pieces;
-    }
 }
-
-

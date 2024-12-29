@@ -1,36 +1,19 @@
-//            // GameSaver.java
-//            package model;
-//
-//            import com.google.gson.Gson;
-//            import java.io.FileWriter;
-//            import java.io.IOException;
-//
-//            public class GameSaver {
-//                public void saveGame(String filePath, GameState gameState)
-//                {
-//                    Gson gson = new Gson();
-//                    try (FileWriter writer = new FileWriter(filePath))
-//                    {
-//                        gson.toJson(gameState, writer);
-//                        System.out.println("Game saved to " + filePath);
-//                    } catch (IOException e)
-//                    {
-//                        e.printStackTrace();
-//                    }
-//                }
-//    }
-
-
-
-
 package model;
 
 import java.io.*;
 
 public class GameSaver {
-    public static void saveGame(Game game, String filename) throws IOException {
+    // Save the game state to a file using ObjectOutputStream
+    public static void saveGame(GameState gameState, String filename) throws IOException {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
-            oos.writeObject(game);
+            oos.writeObject(gameState);  // Serialize the game state to the file
+        }
+    }
+
+    // Load the game state from a file using ObjectInputStream
+    public static GameState loadGame(String filename) throws IOException, ClassNotFoundException {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
+            return (GameState) ois.readObject();  // Deserialize and return the game state
         }
     }
 }

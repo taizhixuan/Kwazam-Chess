@@ -130,4 +130,8 @@ public class Game {
         if (!gameOver) return null; // No winner will show if the game isn't over
         return (getCurrentPlayer() == Color.RED) ? "Red" : "Blue";
     }
+
+    public Object getTurnCounter() {
+        return null;
+    }
 }
