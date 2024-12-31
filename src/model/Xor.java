@@ -16,6 +16,8 @@ public class Xor extends Piece {
         return movementStrategy.isValidMove(position, newPosition, board);
     }
 
+    /**
+
     @Override
     public void onMove(Board board) {
         super.onMove(board); // Increment move count
@@ -23,14 +25,17 @@ public class Xor extends Piece {
             transform(board);
         }
     }
+     */
 
     @Override
     public void transform(Board board) {
         // Replace this Xor with a new Tor
-        Tor newTor = new Tor(this.color);
-        newTor.setPosition(this.position);
-        newTor.setMoveCount(0); // Reset move count for the transformed piece
-        board.setPieceAt(this.position, newTor);
+        if (moveCount == 2) {
+            Tor newTor = new Tor(this.color);
+            newTor.setPosition(this.position);
+            newTor.setMoveCount(0); // Reset move count for the transformed piece
+            board.setPieceAt(this.position, newTor);
+        }
     }
 
     @Override

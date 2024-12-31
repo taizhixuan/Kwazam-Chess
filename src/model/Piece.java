@@ -64,6 +64,9 @@ public abstract class Piece {
      */
     public void onMove(Board board) {
         incrementMoveCount();
+        if (moveCount == 2) { // Check if transformation condition is met
+            transform(board); // Trigger the transformation
+        }
     }
 
     /**

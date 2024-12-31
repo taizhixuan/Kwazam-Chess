@@ -71,8 +71,8 @@ public class Game {
             piece.setPosition(to);
         }
 
-        // Check for transformations if required
-        piece.transform(board);
+        // After the move, check if the piece should transform
+        piece.onMove(board);
 
         // Switch turn to the next player
         switchTurn();
@@ -95,6 +95,7 @@ public class Game {
     private void switchTurn() {
         currentPlayer = (currentPlayer == Color.RED) ? Color.BLUE : Color.RED;
     }
+
 
     public void checkGameOver() {
         boolean redSauExists = false;
