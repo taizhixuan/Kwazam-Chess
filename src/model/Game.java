@@ -9,11 +9,13 @@ public class Game {
     private Board board;
     private Color currentPlayer;
     private boolean gameOver;
+    private int turnCounter; // Tracks the total number of turns (Red + Blue moves count as one turn)
 
     public Game(Board board) {
         this.board = board;
         this.currentPlayer = Color.RED;
         this.gameOver = false;
+        this.turnCounter = 0; // Initialize turn counter
     }
 
     public static void reset(Game game) {
@@ -25,6 +27,7 @@ public class Game {
 
         // Reset the gameOver flag
         game.gameOver = false;
+        game.turnCounter = 0; // Reset the turn counter
     }
 
     public List<Position> getPossibleMoves(Piece piece, Position position) {
@@ -94,6 +97,34 @@ public class Game {
 
     private void switchTurn() {
         currentPlayer = (currentPlayer == Color.RED) ? Color.BLUE : Color.RED;
+
+        // Increment turn counter after a complete turn (Red + Blue moves)
+        if (currentPlayer == Color.RED) {
+            turnCounter++;
+            if (turnCounter % 2 == 0) { // After every 2 turns
+                transformPieces();
+            }
+        }
+    }
+
+    private void transformPieces() {
+        for (int row = 0; row < board.getRows(); row++) {
+            for (int col = 0; col < board.getColumns(); col++) {
+                Position position = new Position(row, col);
+                Piece piece = board.getPieceAt(position);
+
+                if (piece instanceof Tor) {
+                    Xor newXor = new Xor(piece.getColor());
+                    newXor.setPosition(position);
+                    board.setPieceAt(position, newXor);
+                } else if (piece instanceof Xor) {
+                    Tor newTor = new Tor(piece.getColor());
+                    newTor.setPosition(position);
+                    board.setPieceAt(position, newTor);
+                }
+            }
+        }
+        System.out.println("All Tor and Xor pieces have transformed!");
     }
 
 
