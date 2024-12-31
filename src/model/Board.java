@@ -40,6 +40,7 @@ public class Board {
     }
 
     public int getRows() { return ROWS; }
+
     public int getColumns() { return COLUMNS; }
 
     private void initializeBoard() {

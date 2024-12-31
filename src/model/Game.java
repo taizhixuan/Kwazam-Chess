@@ -131,7 +131,9 @@ public class Game {
         return (getCurrentPlayer() == Color.RED) ? "Red" : "Blue";
     }
 
+    /* (Joyce)
     public Object getTurnCounter() {
         return null;
     }
+     */
 }

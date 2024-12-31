@@ -3,7 +3,7 @@ package controller;
 import model.*;
 import view.BoardView;
 
-import java.io.IOException;
+// import java.io.IOException; (Joyce)
 import java.util.List;
 
 /**
@@ -55,8 +55,10 @@ public class GameController {
                     return;
                 }
 
+                /* (Joyce)
                 // Automatically save the game after each valid move
-                saveGame("game_save.dat");
+                // saveGame("game_save.dat");
+                 */
 
             } else {
                 System.out.println("Invalid move. Try again.");
@@ -102,9 +104,9 @@ public class GameController {
         selectedPiece = null; // Clear any selected piece
     }
 
-    /**
-     * Save the current game state.
-     */
+    /* (Joyce)
+      Save the current game state.
+
     public void saveGame(String filename) {
         GameState gameState = new GameState(game.getBoard(), game.getCurrentPlayer(), game.getTurnCounter());
         try {
@@ -114,4 +116,5 @@ public class GameController {
             e.printStackTrace();
         }
     }
+     */
 }

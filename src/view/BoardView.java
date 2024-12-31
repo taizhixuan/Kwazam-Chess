@@ -8,7 +8,9 @@ import model.Position;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Swing-based GUI for Kwazam Chess.
@@ -45,8 +47,13 @@ public class BoardView extends JFrame {
         boardPanel.removeAll();
         Board board = controller.getBoard();
 
-        for (int row = 0; row < board.getRows(); row++) {
+        boolean isCurrentPlayerRed = controller.getCurrentPlayer().equals("RED");
+
+        for (int row = isCurrentPlayerRed ? board.getRows() - 1 : 0;
+             isCurrentPlayerRed ? row >= 0 : row < board.getRows();
+             row += isCurrentPlayerRed ? -1 : 1) {
             for (int col = 0; col < board.getColumns(); col++) {
+
                 JButton button = new JButton();
                 button.setPreferredSize(new Dimension(BUTTON_SIZE, BUTTON_SIZE));
                 buttons[row][col] = button;
@@ -57,10 +64,15 @@ public class BoardView extends JFrame {
                 // Set piece icon if available
                 if (piece != null) {
                     ImageIcon icon = new ImageIcon(
-                            getClass().getClassLoader().getResource(piece.getImagePath())
+                            Objects.requireNonNull(getClass().getClassLoader().getResource(piece.getImagePath()))
                     );
-                    if (icon != null && icon.getImage() != null) {
-                        Image scaledImage = icon.getImage().getScaledInstance(BUTTON_SIZE - 15, BUTTON_SIZE - 15, Image.SCALE_SMOOTH);
+                    if (icon.getImage() != null) {
+                        Image originalImage = icon.getImage();
+                        Image flippedImage = isCurrentPlayerRed
+                                ? rotateImage(originalImage) // Flip for Red's turn
+                                : originalImage; // No flip for Blue's turn
+
+                        Image scaledImage = flippedImage.getScaledInstance(BUTTON_SIZE - 15, BUTTON_SIZE - 15, Image.SCALE_SMOOTH);
                         button.setIcon(new ImageIcon(scaledImage));
                     }
                 }
@@ -117,6 +129,32 @@ public class BoardView extends JFrame {
         }
     }
 
+    /**
+     * Rotate the image (pieces) 180 degree when the board is flip
+     */
+    private Image rotateImage(Image original) {
+        int width = original.getWidth(null);
+        int height = original.getHeight(null);
+
+        // Create a new buffered image with the same dimensions
+        BufferedImage rotatedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = rotatedImage.createGraphics();
+
+        // Translate to the center of the image, rotate, then translate back
+        g2d.translate(width / 2, height / 2);
+        g2d.rotate(Math.toRadians(180));
+        g2d.translate(-width / 2, -height / 2);
+
+        g2d.drawImage(original, 0, 0, null);
+        g2d.dispose();
+
+        return rotatedImage;
+    }
+
+    /**
+     * Display the game over message by using dialog box.
+     * Ask the user if they would like to start a new game or exit the application.
+     */
     public void gameOver(String message) {
             JOptionPane.showMessageDialog(this, message, "Game Over", JOptionPane.PLAIN_MESSAGE);
 
