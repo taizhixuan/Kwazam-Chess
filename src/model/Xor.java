@@ -16,17 +16,6 @@ public class Xor extends Piece {
         return movementStrategy.isValidMove(position, newPosition, board);
     }
 
-    /**
-
-    @Override
-    public void onMove(Board board) {
-        super.onMove(board); // Increment move count
-        if (moveCount == 2) { // Check if transformation condition is met
-            transform(board);
-        }
-    }
-     */
-
     @Override
     public void transform(Board board) {
         // Replace this Xor with a new Tor
