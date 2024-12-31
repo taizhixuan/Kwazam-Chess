@@ -1,9 +1,10 @@
+// GameController.java
 package controller;
 
 import model.*;
 import view.BoardView;
 
-// import java.io.IOException; (Joyce)
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -117,4 +118,30 @@ public class GameController {
         }
     }
      */
+
+    public void saveGame(String filename) {
+        GameState gameState = new GameState(game.getBoard(), game.getCurrentPlayer(), game.getTurnCounter());
+        try {
+            GameSaver.saveGame(gameState, filename);
+            System.out.println("Game saved successfully!");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Failed to save the game.");
+        }
+    }
+
+    public void loadGame(String filename) {
+        try {
+            GameState gameState = GameSaver.loadGame(filename);
+            game.resetGame(); // Reset the game to initialize properly
+            game.setBoard(gameState.getBoard());
+            game.setCurrentPlayer(gameState.getCurrentPlayer().equalsIgnoreCase("blue") ? Color.BLUE : Color.RED);
+            game.setTurnCounter(gameState.getTurnCounter());
+            System.out.println("Game loaded successfully!");
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("Failed to load the game.");
+        }
+    }
 }
+

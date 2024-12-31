@@ -38,13 +38,48 @@ public class GameScreen extends BoardView {
             // Refresh the board display
             super.refreshBoard();
 
-            System.out.println("New game started!");
+            JOptionPane.showMessageDialog(this, "New game started!");
+        });
+
+        JMenuItem saveGame = new JMenuItem("Save Game");
+        saveGame.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Save your game");
+            int result = fileChooser.showSaveDialog(this);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                String filename = fileChooser.getSelectedFile().getAbsolutePath();
+                try {
+                    controller.saveGame(filename);
+                    JOptionPane.showMessageDialog(this, "Game saved successfully to: " + filename);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Failed to save the game: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        JMenuItem loadGame = new JMenuItem("Load Game");
+        loadGame.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Select a game file to load");
+            int result = fileChooser.showOpenDialog(this);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                String filename = fileChooser.getSelectedFile().getAbsolutePath();
+                try {
+                    controller.loadGame(filename);
+                    refreshBoard();
+                    JOptionPane.showMessageDialog(this, "Game loaded successfully!");
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Failed to load the game: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
         });
 
         JMenuItem exitGame = new JMenuItem("Exit");
         exitGame.addActionListener(e -> System.exit(0));
 
         gameMenu.add(newGame);
+        gameMenu.add(saveGame);
+        gameMenu.add(loadGame);
         gameMenu.add(exitGame);
 
         menuBar.add(gameMenu);

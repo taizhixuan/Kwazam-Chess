@@ -1,3 +1,4 @@
+// GameSaver.java
 package model;
 
 import java.io.*;
@@ -7,6 +8,7 @@ public class GameSaver {
     public static void saveGame(GameState gameState, String filename) throws IOException {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
             oos.writeObject(gameState);  // Serialize the game state to the file
+            System.out.println("Game saved successfully to " + filename);
         }
     }
 

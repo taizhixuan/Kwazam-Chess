@@ -127,7 +127,6 @@ public class Game {
         System.out.println("All Tor and Xor pieces have transformed!");
     }
 
-
     public void checkGameOver() {
         boolean redSauExists = false;
         boolean blueSauExists = false;
@@ -163,9 +162,28 @@ public class Game {
         return (getCurrentPlayer() == Color.RED) ? "Red" : "Blue";
     }
 
-    /* (Joyce)
     public Object getTurnCounter() {
         return null;
     }
-     */
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
+    public void setCurrentPlayer(Color currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    public void setTurnCounter(int turnCounter) {
+        this.turnCounter = turnCounter;
+    }
+
+    public void resetGame() {
+        this.board = new Board(); // Reinitialize the board
+        this.currentPlayer = Color.RED; // Reset to the default starting player
+        this.gameOver = false; // Reset the game over flag
+        this.turnCounter = 0; // Reset the turn counter
+    }
+
+
 }

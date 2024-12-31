@@ -68,4 +68,22 @@ public class GameView {
             System.out.println();
         }
     }
+
+    private void saveGame(String filename) {
+        try {
+            controller.saveGame(filename);
+            System.out.println("Game saved successfully to " + filename);
+        } catch (Exception e) {
+            System.out.println("Failed to save the game: " + e.getMessage());
+        }
+    }
+
+    private void loadGame(String filename) {
+        try {
+            controller.loadGame(filename);
+            System.out.println("Game loaded successfully from " + filename);
+        } catch (Exception e) {
+            System.out.println("Failed to load the game: " + e.getMessage());
+        }
+    }
 }

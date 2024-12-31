@@ -1,3 +1,4 @@
+// HomeScreen.java
 package view;
 
 import controller.GameController;
@@ -103,9 +104,25 @@ public class HomeScreen extends JFrame {
         JOptionPane.showMessageDialog(this, "Resume game is not implemented yet.");
     }
 
+    /**
+     * Load an existing game from a file.
+     */
     private void loadGame() {
-        // Placeholder for load game logic
-        JOptionPane.showMessageDialog(this, "Load game is not implemented yet.");
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Select a game file to load");
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            String filename = fileChooser.getSelectedFile().getAbsolutePath();
+            Board board = new Board(); // Create an empty board
+            GameController controller = new GameController(board);
+            try {
+                controller.loadGame(filename);
+                dispose(); // Close the home screen
+                new GameScreen(controller); // Launch the game screen
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Failed to load the game: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
     private void showInstructions() {
@@ -157,4 +174,5 @@ public class HomeScreen extends JFrame {
             super.paintComponent(g);
         }
     }
+
 }
