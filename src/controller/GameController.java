@@ -1,4 +1,3 @@
-// GameController.java
 package controller;
 
 import model.*;
@@ -58,7 +57,7 @@ public class GameController {
 
                 /* (Joyce)
                 // Automatically save the game after each valid move
-                // saveGame("game_save.dat");
+                saveGameAsText("game_save.txt");
                  */
 
             } else {
@@ -105,14 +104,14 @@ public class GameController {
         selectedPiece = null; // Clear any selected piece
     }
 
-    public void saveGame(String filename) {
+    public void saveGameAsText(String filename) {
         GameState gameState = new GameState(game.getBoard(), game.getCurrentPlayer(), game.getTurnCounter());
         try {
-            GameSaver.saveGame(gameState, filename);
-            System.out.println("Game saved successfully!");
+            GameSaver.saveGameAsText(gameState, filename);
+            System.out.println("Game saved as text successfully!");
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Failed to save the game.");
+            System.out.println("Failed to save the game as text.");
         }
     }
 
@@ -130,4 +129,3 @@ public class GameController {
         }
     }
 }
-

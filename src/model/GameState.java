@@ -11,6 +11,7 @@ public class GameState implements Serializable {
     private Board board;      // The board object (includes piece positions)
     private String currentPlayer; // "blue" or "red"
     private int turnCounter;  // Tracks the number of turns
+    private boolean gameOver;  // Whether the game is over or not
 
     public GameState(Board board, Color currentPlayer, Object turnCounter) {
         this.board = board;
@@ -41,5 +42,14 @@ public class GameState implements Serializable {
 
     public void setTurnCounter(int turnCounter) {
         this.turnCounter = turnCounter;
+    }
+
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
     }
 }

@@ -71,7 +71,7 @@ public class GameView {
 
     private void saveGame(String filename) {
         try {
-            controller.saveGame(filename);
+            controller.saveGameAsText(filename);
             System.out.println("Game saved successfully to " + filename);
         } catch (Exception e) {
             System.out.println("Failed to save the game: " + e.getMessage());

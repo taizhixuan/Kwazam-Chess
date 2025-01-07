@@ -24,4 +24,9 @@ public class Biz extends Piece {
                 ? "resources/images/Biz_red.png"
                 : "resources/images/Biz_blue.png";
     }
+
+    @Override
+    public String getType() {
+        return "Biz";  // Piece type
+    }
 }
