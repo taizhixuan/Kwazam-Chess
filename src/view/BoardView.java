@@ -49,9 +49,9 @@ public class BoardView extends JFrame {
 
         boolean isCurrentPlayerRed = controller.getCurrentPlayer().equals("RED");
 
-        for (int row = isCurrentPlayerRed ? 0 : board.getRows() - 1;
-             isCurrentPlayerRed ? row < board.getRows() : row >= 0;
-             row += isCurrentPlayerRed ? 1 : -1) {
+        for (int row = isCurrentPlayerRed ? board.getRows() - 1 : 0;
+             isCurrentPlayerRed ? row >= 0 : row < board.getRows();
+             row += isCurrentPlayerRed ? -1 : 1) {
             for (int col = isCurrentPlayerRed ? 0 : board.getColumns() - 1;
                  isCurrentPlayerRed ? col < board.getColumns() : col >= 0;
                  col += isCurrentPlayerRed ? 1 : -1) {
