@@ -49,10 +49,12 @@ public class BoardView extends JFrame {
 
         boolean isCurrentPlayerRed = controller.getCurrentPlayer().equals("RED");
 
-        for (int row = isCurrentPlayerRed ? board.getRows() - 1 : 0;
-             isCurrentPlayerRed ? row >= 0 : row < board.getRows();
-             row += isCurrentPlayerRed ? -1 : 1) {
-            for (int col = 0; col < board.getColumns(); col++) {
+        for (int row = isCurrentPlayerRed ? 0 : board.getRows() - 1;
+             isCurrentPlayerRed ? row < board.getRows() : row >= 0;
+             row += isCurrentPlayerRed ? 1 : -1) {
+            for (int col = isCurrentPlayerRed ? 0 : board.getColumns() - 1;
+                 isCurrentPlayerRed ? col < board.getColumns() : col >= 0;
+                 col += isCurrentPlayerRed ? 1 : -1) {
 
                 JButton button = new JButton();
                 button.setPreferredSize(new Dimension(BUTTON_SIZE, BUTTON_SIZE));
@@ -68,11 +70,8 @@ public class BoardView extends JFrame {
                     );
                     if (icon.getImage() != null) {
                         Image originalImage = icon.getImage();
-                        Image flippedImage = isCurrentPlayerRed
-                                ? rotateImage(originalImage) // Flip for Red's turn
-                                : originalImage; // No flip for Blue's turn
-
-                        Image scaledImage = flippedImage.getScaledInstance(BUTTON_SIZE - 15, BUTTON_SIZE - 15, Image.SCALE_SMOOTH);
+                        Image rotatedImage = rotateImage(originalImage); // Always rotate 180 degrees
+                        Image scaledImage = rotatedImage.getScaledInstance(BUTTON_SIZE - 15, BUTTON_SIZE - 15, Image.SCALE_SMOOTH);
                         button.setIcon(new ImageIcon(scaledImage));
                     }
                 }
@@ -96,6 +95,7 @@ public class BoardView extends JFrame {
         boardPanel.revalidate();
         boardPanel.repaint();
     }
+
 
     /**
      * Handles user clicks on the board.
@@ -150,6 +150,7 @@ public class BoardView extends JFrame {
 
         return rotatedImage;
     }
+
 
     /**
      * Display the game over message by using dialog box.
