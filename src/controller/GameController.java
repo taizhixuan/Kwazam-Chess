@@ -118,14 +118,26 @@ public class GameController {
     public void loadGame(String filename) {
         try {
             GameState gameState = GameSaver.loadGame(filename);
-            game.resetGame(); // Reset the game to initialize properly
+
+            // Restore the game state from the loaded file
             game.setBoard(gameState.getBoard());
-            game.setCurrentPlayer(gameState.getCurrentPlayer().equalsIgnoreCase("blue") ? Color.BLUE : Color.RED);
+
+            // Safely set the current player
+            if (gameState.getCurrentPlayer() != null) {
+                game.setCurrentPlayer(gameState.getCurrentPlayer().equalsIgnoreCase("blue") ? Color.BLUE : Color.RED);
+            } else {
+                System.err.println("Warning: Current player is null in the loaded game state.");
+            }
+
+            // Set the turn counter
             game.setTurnCounter(gameState.getTurnCounter());
+
+            // Print success message
             System.out.println("Game loaded successfully!");
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
             System.out.println("Failed to load the game.");
         }
     }
+
 }

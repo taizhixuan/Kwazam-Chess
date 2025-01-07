@@ -13,10 +13,10 @@ public class GameState implements Serializable {
     private int turnCounter;  // Tracks the number of turns
     private boolean gameOver;  // Whether the game is over or not
 
-    public GameState(Board board, Color currentPlayer, Object turnCounter) {
+    public GameState(Board board, Color currentPlayer, int turnCounter) {
         this.board = board;
         this.currentPlayer = String.valueOf(currentPlayer);
-        this.turnCounter = (int) turnCounter;
+        this.turnCounter = turnCounter;
     }
 
     // Getters and Setters

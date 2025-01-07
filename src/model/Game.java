@@ -99,11 +99,9 @@ public class Game {
         currentPlayer = (currentPlayer == Color.RED) ? Color.BLUE : Color.RED;
 
         // Increment turn counter after a complete turn (Red + Blue moves)
-        if (currentPlayer == Color.RED) {
-            turnCounter++;
-            if (turnCounter % 2 == 0) { // After every 2 turns
-                transformPieces();
-            }
+        turnCounter++;
+        if (turnCounter % 2 == 0) { // After every 2 full turns (Red + Blue)
+            transformPieces();
         }
     }
 
@@ -162,7 +160,7 @@ public class Game {
         return (getCurrentPlayer() == Color.RED) ? "Red" : "Blue";
     }
 
-    public Object getTurnCounter() {
+    public int getTurnCounter() {
         return turnCounter;
     }
 
