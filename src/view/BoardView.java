@@ -52,9 +52,9 @@ public class BoardView extends JFrame {
         for (int row = isCurrentPlayerRed ? board.getRows() - 1 : 0;
              isCurrentPlayerRed ? row >= 0 : row < board.getRows();
              row += isCurrentPlayerRed ? -1 : 1) {
-            for (int col = isCurrentPlayerRed ? 0 : board.getColumns() - 1;
-                 isCurrentPlayerRed ? col < board.getColumns() : col >= 0;
-                 col += isCurrentPlayerRed ? 1 : -1) {
+            for (int col = isCurrentPlayerRed ? board.getColumns() - 1 : 0;
+                 isCurrentPlayerRed ? col >= 0 : col < board.getColumns();
+                 col += isCurrentPlayerRed ? -1 : 1) {
 
                 JButton button = new JButton();
                 button.setPreferredSize(new Dimension(BUTTON_SIZE, BUTTON_SIZE));
@@ -63,17 +63,15 @@ public class BoardView extends JFrame {
                 Position position = new Position(row, col);
                 Piece piece = board.getPieceAt(position);
 
-                // Set piece icon if available
+                // Set piece icon with 180-degree rotation if necessary
                 if (piece != null) {
                     ImageIcon icon = new ImageIcon(
                             Objects.requireNonNull(getClass().getClassLoader().getResource(piece.getImagePath()))
                     );
-                    if (icon.getImage() != null) {
-                        Image originalImage = icon.getImage();
-                        Image rotatedImage = rotateImage(originalImage); // Always rotate 180 degrees
-                        Image scaledImage = rotatedImage.getScaledInstance(BUTTON_SIZE - 15, BUTTON_SIZE - 15, Image.SCALE_SMOOTH);
-                        button.setIcon(new ImageIcon(scaledImage));
-                    }
+                    Image originalImage = icon.getImage();
+                    Image displayedImage = isCurrentPlayerRed ? rotateImage(originalImage) : originalImage;
+                    Image scaledImage = displayedImage.getScaledInstance(BUTTON_SIZE - 15, BUTTON_SIZE - 15, Image.SCALE_SMOOTH);
+                    button.setIcon(new ImageIcon(scaledImage));
                 }
 
                 // Checkerboard background
@@ -95,6 +93,7 @@ public class BoardView extends JFrame {
         boardPanel.revalidate();
         boardPanel.repaint();
     }
+
 
 
     /**
