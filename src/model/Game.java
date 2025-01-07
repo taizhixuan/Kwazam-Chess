@@ -10,14 +10,14 @@ public class Game {
     private Color currentPlayer;
     private boolean gameOver;
     private int turnCounter; // Tracks the total number of turns (Red + Blue moves count as one turn)
-    private int turn;
+    private int turn; // Track the total number of turns (for each side)
 
     public Game(Board board) {
         this.board = board;
         this.currentPlayer = Color.RED;
         this.gameOver = false;
         this.turnCounter = 0; // Initialize turn counter
-        this.turn = 0;
+        this.turn = 0; // Initialize turn
     }
 
     public static void reset(Game game) {

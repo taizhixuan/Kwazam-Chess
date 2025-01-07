@@ -18,15 +18,18 @@ public class GameSaver {
     // Save the game state to a text file in the specified format
     public static void saveGameAsText(GameState gameState, String filename) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            writer.write("// The move count made\n");
             writer.write("moveCount: " + gameState.getTurn() + "\n");
+            writer.write("\n" + "// The player to play a move\n");
             writer.write("currentPlayer: " + gameState.getCurrentPlayer() + "\n");
 
             // Log game-over status
+            writer.write("\n" + "// Whether the game is over\n");
             writer.write("isGameOver: " + gameState.isGameOver() + "\n");
 
             // Write each piece on the board
             writer.write("// Pieces on the board\n");
-            writer.write("// Type, ID, y Position, x Position, Color, direction (for Point)\n");
+            writer.write("\n" + "// Type, ID, y Position, x Position, Color, direction (for Point)\n");
             for (int row = 0; row < gameState.getBoard().getRows(); row++) {
                 for (int col = 0; col < gameState.getBoard().getColumns(); col++) {
                     Piece piece = gameState.getBoard().getPieceAt(new Position(row, col));
