@@ -98,10 +98,12 @@ public class Game {
     private void switchTurn() {
         currentPlayer = (currentPlayer == Color.RED) ? Color.BLUE : Color.RED;
 
-        // Increment turn counter after a complete turn (Red + Blue moves)
-        turnCounter++;
-        if (turnCounter % 2 == 0) { // After every 2 full turns (Red + Blue)
-            transformPieces();
+        // Increment turn counter only after both players have moved (one full turn)
+        if (currentPlayer == Color.RED) {
+            turnCounter++;
+            if (turnCounter % 2 == 0) { // After every 2 full turns (one Blue + one Red move)
+                transformPieces();
+            }
         }
     }
 

@@ -41,18 +41,16 @@ public class GameController {
         } else {
             // Second click: Attempt to move the piece
             if (game.movePiece(selectedPiece, position)) {
-                view.clearHighlights(); // Clear highlights after a successful move
-                view.refreshBoard(); // Refresh the GUI immediately
+                view.clearHighlights();
+                view.refreshBoard(); // Refresh the GUI after a successful move and transformations
+
+                if (game.getTurnCounter() % 2 == 0) {
+                    view.refreshBoard(); // Ensure the GUI reflects piece transformations
+                }
 
                 if (game.isGameOver()) {
-                    Piece capturingPiece = game.getBoard().getPieceAt(position);
-
-                    // Notify the GUI about the game-over scenario
                     String winnerMessage = game.getWinner() + " wins! Game Over.";
                     view.gameOver(winnerMessage);
-
-                    selectedPiece = null; // Reset selection
-                    return;
                 }
 
                 /* (Joyce)
