@@ -28,8 +28,8 @@ public class GameSaver {
             writer.write("isGameOver: " + gameState.isGameOver() + "\n");
 
             // Write each piece on the board
-            writer.write("// Pieces on the board\n");
-            writer.write("\n" + "// Type, ID, y Position, x Position, Color, direction (for Point)\n");
+            writer.write("\n" + "// Pieces on the board\n");
+            writer.write("// Type, ID, y Position, x Position, Color, direction (for Point)\n");
             for (int row = 0; row < gameState.getBoard().getRows(); row++) {
                 for (int col = 0; col < gameState.getBoard().getColumns(); col++) {
                     Piece piece = gameState.getBoard().getPieceAt(new Position(row, col));
