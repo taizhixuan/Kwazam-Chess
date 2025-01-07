@@ -10,12 +10,14 @@ public class Game {
     private Color currentPlayer;
     private boolean gameOver;
     private int turnCounter; // Tracks the total number of turns (Red + Blue moves count as one turn)
+    private int turn;
 
     public Game(Board board) {
         this.board = board;
         this.currentPlayer = Color.RED;
         this.gameOver = false;
         this.turnCounter = 0; // Initialize turn counter
+        this.turn = 0;
     }
 
     public static void reset(Game game) {
@@ -27,7 +29,7 @@ public class Game {
 
         // Reset the gameOver flag
         game.gameOver = false;
-        game.turnCounter = 0; // Reset the turn counter
+        game.turn = 0; // Reset the turn counter
     }
 
     public List<Position> getPossibleMoves(Piece piece, Position position) {
@@ -73,6 +75,8 @@ public class Game {
             board.removePiece(from);
             piece.setPosition(to);
         }
+
+        turn++;
 
         // After the move, check if the piece should transform
         piece.onMove(board);
@@ -162,8 +166,12 @@ public class Game {
         return (getCurrentPlayer() == Color.RED) ? "Red" : "Blue";
     }
 
+    public int getTurn() {
+        return turn;
+    }
+
     public int getTurnCounter() {
-        return turnCounter;
+        return turn;
     }
 
     public void setBoard(Board board) {
@@ -172,6 +180,10 @@ public class Game {
 
     public void setCurrentPlayer(Color currentPlayer) {
         this.currentPlayer = currentPlayer;
+    }
+
+    public void setTurn(int turn) {
+        this.turn = turn;
     }
 
     public void setTurnCounter(int turnCounter) {

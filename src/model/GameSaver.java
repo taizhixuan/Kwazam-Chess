@@ -18,7 +18,7 @@ public class GameSaver {
     // Save the game state to a text file in the specified format
     public static void saveGameAsText(GameState gameState, String filename) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-            writer.write("moveCount: " + gameState.getTurnCounter() + "\n");
+            writer.write("moveCount: " + gameState.getTurn() + "\n");
             writer.write("currentPlayer: " + gameState.getCurrentPlayer() + "\n");
 
             // Log game-over status

@@ -129,7 +129,7 @@ public class GameController {
             }
 
             // Set the turn counter
-            game.setTurnCounter(gameState.getTurnCounter());
+            game.setTurn(gameState.getTurn());
 
             // Print success message
             System.out.println("Game loaded successfully!");
