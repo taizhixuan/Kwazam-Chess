@@ -2,8 +2,8 @@
 package model;
 
 public class Biz extends Piece {
-    public Biz(Color color) {
-        super(color);
+    public Biz(Color color, int bizId) {
+        super(color, bizId);
         this.movementStrategy = new BizMovement();
     }
 

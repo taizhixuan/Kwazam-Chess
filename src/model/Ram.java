@@ -8,8 +8,8 @@ package model;
 public class Ram extends Piece {
     private boolean goingForward; // For Red, forward means row+1; for Blue, row-1.
 
-    public Ram(Color color) {
-        super(color);
+    public Ram(Color color, int id) {
+        super(color, id);
         this.movementStrategy = new RamMovement();
         // Default: Red goes downward, Blue goes upward
         this.goingForward = true;

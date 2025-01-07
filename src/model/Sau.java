@@ -5,8 +5,8 @@ package model;
  * Sau: moves 1 step in any direction. Its capture ends the game.
  */
 public class Sau extends Piece {
-    public Sau(Color color) {
-        super(color);
+    public Sau(Color color, int sauId) {
+        super(color, sauId);
         this.movementStrategy = new SauMovement();
     }
 

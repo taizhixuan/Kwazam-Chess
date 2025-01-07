@@ -12,10 +12,12 @@ public abstract class Piece {
     protected Color color; // Color of the piece (RED or BLUE)
     protected MovementStrategy movementStrategy; // Movement logic for this piece
     protected int moveCount; // Tracks the number of moves this piece has made
+    private final int id; // Unique ID for the piece
 
-    public Piece(Color color) {
+    public Piece(Color color, int id) {
         this.color = color;
         this.moveCount = 0; // Initialize move count
+        this.id = id;
     }
 
     public Color getColor() {
@@ -94,7 +96,7 @@ public abstract class Piece {
         return this.getClass().getSimpleName();
     }
 
-    public String getId() {
-        return null;
+    public int getId() {
+        return id;
     }
 }

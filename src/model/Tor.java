@@ -5,8 +5,8 @@ package model;
  * Tor: rook-like movement, transforms into Xor after 2 moves.
  */
 public class Tor extends Piece {
-    public Tor(Color color) {
-        super(color);
+    public Tor(Color color, int torId) {
+        super(color, torId);
         this.movementStrategy = new TorMovement(); // Initialize movement strategy
     }
 
@@ -20,7 +20,8 @@ public class Tor extends Piece {
     public void transform(Board board) {
         if (moveCount == 2) {
             // Replace this Tor with a new Xor
-            Xor newXor = new Xor(this.color);
+            int xorId = Board.IDGenerator.getXorId();
+            Xor newXor = new Xor(this.color, xorId);
             newXor.setPosition(this.position);
             newXor.setMoveCount(0); // Reset move count for the transformed piece
             board.setPieceAt(this.position, newXor);

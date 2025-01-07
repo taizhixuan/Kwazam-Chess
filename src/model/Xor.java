@@ -5,8 +5,8 @@ package model;
  * Xor: bishop-like, transforms back to Tor after 2 moves.
  */
 public class Xor extends Piece {
-    public Xor(Color color) {
-        super(color);
+    public Xor(Color color, int xorId) {
+        super(color, xorId);
         this.movementStrategy = new XorMovement(); // Initialize movement strategy
     }
 
@@ -20,7 +20,8 @@ public class Xor extends Piece {
     public void transform(Board board) {
         // Replace this Xor with a new Tor
         if (moveCount == 2) {
-            Tor newTor = new Tor(this.color);
+            int torId = Board.IDGenerator.getTorId();
+            Tor newTor = new Tor(this.color, torId);
             newTor.setPosition(this.position);
             newTor.setMoveCount(0); // Reset move count for the transformed piece
             board.setPieceAt(this.position, newTor);
