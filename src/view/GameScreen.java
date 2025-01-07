@@ -41,21 +41,7 @@ public class GameScreen extends BoardView {
             JOptionPane.showMessageDialog(this, "New game started!");
         });
 
-        JMenuItem saveGame = new JMenuItem("Save Game");
-        saveGame.addActionListener(e -> {
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setDialogTitle("Save your game");
-            int result = fileChooser.showSaveDialog(this);
-            if (result == JFileChooser.APPROVE_OPTION) {
-                String filename = fileChooser.getSelectedFile().getAbsolutePath();
-                try {
-                    controller.saveGame(filename);
-                    JOptionPane.showMessageDialog(this, "Game saved successfully to: " + filename);
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(this, "Failed to save the game: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
+        JMenuItem saveGame = getJMenuItem();
 
         JMenuItem loadGame = new JMenuItem("Load Game");
         loadGame.addActionListener(e -> {
@@ -84,6 +70,25 @@ public class GameScreen extends BoardView {
 
         menuBar.add(gameMenu);
         setJMenuBar(menuBar); // Set the menu bar for this JFrame
+    }
+
+    private JMenuItem getJMenuItem() {
+        JMenuItem saveGame = new JMenuItem("Save Game");
+        saveGame.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Save your game");
+            int result = fileChooser.showSaveDialog(this);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                String filename = fileChooser.getSelectedFile().getAbsolutePath();
+                try {
+                    controller.saveGame(filename);
+                    JOptionPane.showMessageDialog(this, "Game saved successfully to: " + filename);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Failed to save the game: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        return saveGame;
     }
 
     @Override

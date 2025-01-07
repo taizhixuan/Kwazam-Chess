@@ -105,20 +105,6 @@ public class GameController {
         selectedPiece = null; // Clear any selected piece
     }
 
-    /* (Joyce)
-      Save the current game state.
-
-    public void saveGame(String filename) {
-        GameState gameState = new GameState(game.getBoard(), game.getCurrentPlayer(), game.getTurnCounter());
-        try {
-            GameSaver.saveGame(gameState, filename);
-            System.out.println("Game saved successfully!");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-     */
-
     public void saveGame(String filename) {
         GameState gameState = new GameState(game.getBoard(), game.getCurrentPlayer(), game.getTurnCounter());
         try {
@@ -133,7 +119,7 @@ public class GameController {
     public void loadGame(String filename) {
         try {
             GameState gameState = GameSaver.loadGame(filename);
-            game.resetGame(); // Reset the game to initialize properly
+            Game.reset(game); // Reset the game to initialize properly
             game.setBoard(gameState.getBoard());
             game.setCurrentPlayer(gameState.getCurrentPlayer().equalsIgnoreCase("blue") ? Color.BLUE : Color.RED);
             game.setTurnCounter(gameState.getTurnCounter());
