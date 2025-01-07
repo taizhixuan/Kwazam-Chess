@@ -18,4 +18,7 @@ public class GameSaver {
             return (GameState) ois.readObject();  // Deserialize and return the game state
         }
     }
+
+    public static void saveGameAsText(GameState gameState, String filename) {
+    }
 }

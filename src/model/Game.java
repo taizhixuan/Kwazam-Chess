@@ -178,5 +178,12 @@ public class Game {
         this.turnCounter = turnCounter;
     }
 
+    public void resetGame() {
+        this.board = new Board(); // Reinitialize the board
+        this.currentPlayer = Color.RED; // Reset to the default starting player
+        this.gameOver = false; // Reset the game over flag
+        this.turnCounter = 0; // Reset the turn counter
+    }
+
 
 }

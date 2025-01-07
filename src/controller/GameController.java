@@ -119,7 +119,7 @@ public class GameController {
     public void loadGame(String filename) {
         try {
             GameState gameState = GameSaver.loadGame(filename);
-            Game.reset(game); // Reset the game to initialize properly
+            game.resetGame(); // Reset the game to initialize properly
             game.setBoard(gameState.getBoard());
             game.setCurrentPlayer(gameState.getCurrentPlayer().equalsIgnoreCase("blue") ? Color.BLUE : Color.RED);
             game.setTurnCounter(gameState.getTurnCounter());
