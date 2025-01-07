@@ -34,6 +34,11 @@ public class Xor extends Piece {
                 : "resources/images/Xor_blue.png";
     }
 
+    @Override
+    public String getType() {
+        return "Xor";  // Piece type
+    }
+
     public void setMoveCount(int m) {
         this.moveCount = m;
     }

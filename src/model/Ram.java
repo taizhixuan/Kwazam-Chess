@@ -53,6 +53,11 @@ public class Ram extends Piece {
                 : "resources/images/Ram_blue.png";
     }
 
+    @Override
+    public String getType() {
+        return "Ram";  // Piece type
+    }
+
     public boolean isGoingForward() {
         return goingForward;
     }

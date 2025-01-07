@@ -89,4 +89,12 @@ public abstract class Piece {
         }
         return validMoves;
     }
+
+    public String getType() {
+        return this.getClass().getSimpleName();
+    }
+
+    public String getId() {
+        return null;
+    }
 }

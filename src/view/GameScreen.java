@@ -49,7 +49,7 @@ public class GameScreen extends BoardView {
             if (result == JFileChooser.APPROVE_OPTION) {
                 String filename = fileChooser.getSelectedFile().getAbsolutePath();
                 try {
-                    controller.saveGame(filename);
+                    controller.saveGameAsText(filename);
                     JOptionPane.showMessageDialog(this, "Game saved successfully to: " + filename);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, "Failed to save the game: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

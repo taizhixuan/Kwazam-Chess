@@ -163,7 +163,7 @@ public class Game {
     }
 
     public Object getTurnCounter() {
-        return null;
+        return turnCounter;
     }
 
     public void setBoard(Board board) {

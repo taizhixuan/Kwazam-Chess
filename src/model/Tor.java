@@ -34,6 +34,11 @@ public class Tor extends Piece {
                 : "resources/images/Tor_blue.png";
     }
 
+    @Override
+    public String getType() {
+        return "Tor";  // Piece type
+    }
+
     public void setMoveCount(int m) {
         this.moveCount = m;
     }

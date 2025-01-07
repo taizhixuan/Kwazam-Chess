@@ -27,4 +27,9 @@ public class Sau extends Piece {
                 ? "resources/images/Sau_red.png"
                 : "resources/images/Sau_blue.png";
     }
+
+    @Override
+    public String getType() {
+        return "Sau";  // Piece type
+    }
 }
