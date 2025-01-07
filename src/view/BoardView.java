@@ -40,6 +40,7 @@ public class BoardView extends JFrame {
         refreshBoard();
     }
 
+
     /**
      * Redraws the board with updated piece positions and icons.
      */
@@ -95,7 +96,6 @@ public class BoardView extends JFrame {
     }
 
 
-
     /**
      * Handles user clicks on the board.
      */
@@ -103,6 +103,7 @@ public class BoardView extends JFrame {
         Position position = new Position(row, col);
         controller.handleTileClick(position, this);
     }
+
 
     /**
      * Highlights valid move positions in green.
@@ -112,6 +113,7 @@ public class BoardView extends JFrame {
             buttons[move.getRow()][move.getColumn()].setBackground(Color.GREEN);
         }
     }
+
 
     /**
      * Clears all highlights and resets the checkerboard.
@@ -127,6 +129,7 @@ public class BoardView extends JFrame {
             }
         }
     }
+
 
     /**
      * Rotate the image (pieces) 180 degree when the board is flip
