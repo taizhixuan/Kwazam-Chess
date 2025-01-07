@@ -45,7 +45,9 @@ public class Board {
     public int getColumns() { return COLUMNS; }
 
 
-    // Assigned IDs for each different type of pieces
+    /**
+     *  Assigned IDs for each different type of pieces
+     */
     public static class IDGenerator {
         private static int ramId = 1;
         private static final int torId = 7;
@@ -74,6 +76,9 @@ public class Board {
         }
     }
 
+    /**
+     *  Place all pieces at their initial place.
+     */
     private void initializeBoard() {
         // Top row - Red
         setPieceAt(new Position(0, 0), new Tor(Color.RED, IDGenerator.getTorId()));

@@ -103,6 +103,9 @@ public class GameController {
         selectedPiece = null; // Clear any selected piece
     }
 
+    /**
+     *  Save the game in .txt file.
+     */
     public void saveGameAsText(String filename) {
         GameState gameState = new GameState(game.getBoard(), game.getCurrentPlayer(), game.getTurnCounter());
         try {
