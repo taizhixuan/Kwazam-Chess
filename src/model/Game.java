@@ -177,9 +177,6 @@ public class Game {
         return (getCurrentPlayer() == Color.RED) ? "Red" : "Blue";
     }
 
-    public int getTurn() {
-        return turn;
-    }
 
     public int getTurnCounter() {
         return turn;
