@@ -12,11 +12,18 @@ public class GameState implements Serializable {
     private String currentPlayer; // "blue" or "red"
     private int turn;  // Tracks the number of turns
     private boolean gameOver;  // Whether the game is over or not
+    private boolean isBlueTurn; // Flag for blue's turn
 
     public GameState(Board board, Color currentPlayer, int turn) {
         this.board = board;
         this.currentPlayer = String.valueOf(currentPlayer);
         this.turn = turn;
+        this.isBlueTurn = currentPlayer == Color.BLUE; // Determine if it's Blue's turn
+    }
+
+    // Getter for isBlueTurn
+    public boolean isBlueTurn() {
+        return isBlueTurn;
     }
 
     // Getters and Setters

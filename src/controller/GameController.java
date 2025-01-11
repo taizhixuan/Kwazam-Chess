@@ -54,6 +54,11 @@ public class GameController {
                     view.gameOver(winnerMessage);
                 }
 
+                /* (Joyce)
+                // Automatically save the game after each valid move
+                saveGameAsText("game_save.txt");
+                 */
+
             } else {
                 System.out.println("Invalid move. Try again.");
             }

@@ -46,6 +46,20 @@ public class Board {
 
 
     /**
+     * Rotate coordinates if it's Blue's turn
+     */
+    public Position rotateCoordinates(Position position, boolean isBlueTurn) {
+        if (isBlueTurn) {
+            int rotatedRow = Board.ROWS - 1 - position.getRow();  // Flip row (7 -> 0)
+            int rotatedCol = Board.COLUMNS - 1 - position.getColumn();  // Flip column (4 -> 0)
+            return new Position(rotatedRow, rotatedCol);
+        } else {
+            return position; // No rotation for Red's turn
+        }
+    }
+
+
+    /**
      *  Assigned IDs for each different type of pieces
      */
     public static class IDGenerator {
@@ -56,7 +70,12 @@ public class Board {
         private static final int sauId = 10;
 
         public static int getNextRamId() {
-            return ramId++;
+            if (ramId <= 5) {
+                return ramId++; // Rams will get IDs from 1 to 5
+            } else {
+                ramId = 1; // Reset for the next round (or could throw error, depending on needs)
+                return ramId++;
+            }
         }
 
         public static int getTorId() {
@@ -67,8 +86,14 @@ public class Board {
             return xorId;
         }
 
+        // Get the next available Biz ID (8 or 9)
         public static int getNextBizId() {
-            return bizId++;
+            if (bizId <= 9) {
+                return bizId++;
+            } else {
+                bizId = 8; // Reset Biz ID
+                return bizId++;
+            }
         }
 
         public static int getSauId() {

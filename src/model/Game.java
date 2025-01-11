@@ -99,9 +99,6 @@ public class Game {
         return currentPlayer;
     }
 
-    /**
-     * Switch the player turn (either red to blue or blue to red) after each turn
-     */
     private void switchTurn() {
         currentPlayer = (currentPlayer == Color.RED) ? Color.BLUE : Color.RED;
 
@@ -114,9 +111,6 @@ public class Game {
         }
     }
 
-    /**
-     * Transform Xor to Tor and Tor to Xor
-     */
     private void transformPieces() {
         for (int row = 0; row < board.getRows(); row++) {
             for (int col = 0; col < board.getColumns(); col++) {
@@ -139,9 +133,6 @@ public class Game {
         System.out.println("All Tor and Xor pieces have transformed!");
     }
 
-    /**
-     * Check if one of the Sau have been captured or not
-     */
     public void checkGameOver() {
         boolean redSauExists = false;
         boolean blueSauExists = false;
@@ -177,6 +168,9 @@ public class Game {
         return (getCurrentPlayer() == Color.RED) ? "Red" : "Blue";
     }
 
+    public int getTurn() {
+        return turn;
+    }
 
     public int getTurnCounter() {
         return turn;
