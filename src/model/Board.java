@@ -46,32 +46,62 @@ public class Board {
 
 
     /**
+     *  Assigned IDs for each different type of pieces
+     */
+    public static class IDGenerator {
+        private static int ramId = 1;
+        private static final int torId = 7;
+        private static final int xorId = 6;
+        private static int bizId = 8;
+        private static final int sauId = 10;
+
+        public static int getNextRamId() {
+            return ramId++;
+        }
+
+        public static int getTorId() {
+            return torId;
+        }
+
+        public static int getXorId() {
+            return xorId;
+        }
+
+        public static int getNextBizId() {
+            return bizId++;
+        }
+
+        public static int getSauId() {
+            return sauId;
+        }
+    }
+
+    /**
      *  Place all pieces at their initial place.
      */
     private void initializeBoard() {
         // Top row - Red
-        setPieceAt(new Position(0, 0), PieceFactory.createPiece("tor", Color.RED, 0));
-        setPieceAt(new Position(0, 1), PieceFactory.createPiece("biz", Color.RED, 0));
-        setPieceAt(new Position(0, 2), PieceFactory.createPiece("sau", Color.RED, 0));
-        setPieceAt(new Position(0, 3), PieceFactory.createPiece("biz", Color.RED, 1));
-        setPieceAt(new Position(0, 4), PieceFactory.createPiece("xor", Color.RED, 0));
+        setPieceAt(new Position(0, 0), new Tor(Color.RED, IDGenerator.getTorId()));
+        setPieceAt(new Position(0, 1), new Biz(Color.RED, IDGenerator.getNextBizId()));
+        setPieceAt(new Position(0, 2), new Sau(Color.RED, IDGenerator.getSauId()));
+        setPieceAt(new Position(0, 3), new Biz(Color.RED, IDGenerator.getNextBizId()));
+        setPieceAt(new Position(0, 4), new Xor(Color.RED, IDGenerator.getXorId()));
 
         // Row 1 - Red Rams
         for (int col = 0; col < COLUMNS; col++) {
-            setPieceAt(new Position(1, col), PieceFactory.createPiece("ram", Color.RED, col));
+            setPieceAt(new Position(1, col), new Ram(Color.RED, IDGenerator.getNextRamId()));
         }
 
         // Row 6 - Blue Rams
         for (int col = 0; col < COLUMNS; col++) {
-            setPieceAt(new Position(6, col), PieceFactory.createPiece("ram", Color.BLUE, col));
+            setPieceAt(new Position(6, col), new Ram(Color.BLUE, IDGenerator.getNextRamId()));
         }
 
         // Bottom row - Blue
-        setPieceAt(new Position(7, 0), PieceFactory.createPiece("xor", Color.BLUE, 0));
-        setPieceAt(new Position(7, 1), PieceFactory.createPiece("biz", Color.BLUE, 0));
-        setPieceAt(new Position(7, 2), PieceFactory.createPiece("sau", Color.BLUE, 0));
-        setPieceAt(new Position(7, 3), PieceFactory.createPiece("biz", Color.BLUE, 1));
-        setPieceAt(new Position(7, 4), PieceFactory.createPiece("tor", Color.BLUE, 0));
+        setPieceAt(new Position(7, 0), new Xor(Color.BLUE, IDGenerator.getXorId()));
+        setPieceAt(new Position(7, 1), new Biz(Color.BLUE, IDGenerator.getNextBizId()));
+        setPieceAt(new Position(7, 2), new Sau(Color.BLUE,IDGenerator.getSauId()));
+        setPieceAt(new Position(7, 3), new Biz(Color.BLUE, IDGenerator.getNextBizId()));
+        setPieceAt(new Position(7, 4), new Tor(Color.BLUE, IDGenerator.getTorId()));
     }
-
 }

@@ -118,12 +118,12 @@ public class Game {
                 Piece piece = board.getPieceAt(position);
 
                 if (piece instanceof Tor) {
-                    int xorId = IDGenerator.getXorId();
+                    int xorId = Board.IDGenerator.getXorId();
                     Xor newXor = new Xor(piece.getColor(), xorId);
                     newXor.setPosition(position);
                     board.setPieceAt(position, newXor);
                 } else if (piece instanceof Xor) {
-                    int torId = IDGenerator.getTorId();
+                    int torId = Board.IDGenerator.getTorId();
                     Tor newTor = new Tor(piece.getColor(), torId);
                     newTor.setPosition(position);
                     board.setPieceAt(position, newTor);
