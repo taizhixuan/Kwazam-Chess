@@ -11,10 +11,66 @@ import java.util.List;
 public class GameScreen extends BoardView {
     private final GameController controller;
 
+    // Sidebar components
+    private JPanel sidePanel;
+    private JLabel currentPlayerLabel;
+    // You can add a timer label or other controls here
+    private JLabel timerLabel;
+
     public GameScreen(GameController controller) {
-        super(controller); // Call BoardView constructor
-        this.controller = controller; // Store the controller instance
-        addNavigationBar(); // Add navigation bar
+        super(controller); // Call BoardView constructor (which sets up mainPanel)
+        this.controller = controller;
+        addNavigationBar(); // The menu bar you already implemented
+
+        // Now rearrange layout to add a sidebar:
+        setupLayoutWithSidebar();
+    }
+
+    /**
+     * Reconfigure the frame so mainPanel is in the center, and we have
+     * an additional panel on the right side for game status, controls, etc.
+     */
+    private void setupLayoutWithSidebar() {
+        // 1) Remove everything from the current frame (including mainPanel).
+        getContentPane().removeAll();
+        // 2) Set a BorderLayout
+        getContentPane().setLayout(new BorderLayout());
+
+        // 3) Add BoardView's mainPanel to the center
+        //    (We exposed it via getMainPanel().)
+        JPanel boardViewPanel = getMainPanel();
+        getContentPane().add(boardViewPanel, BorderLayout.CENTER);
+
+        // 4) Create our new sidePanel
+        sidePanel = new JPanel();
+        sidePanel.setPreferredSize(new Dimension(200, getHeight()));
+        sidePanel.setLayout(new BoxLayout(sidePanel, BoxLayout.Y_AXIS));
+
+        // Add a gap at the top
+        sidePanel.add(Box.createVerticalStrut(20));
+
+        // A label for "Current Player"
+        currentPlayerLabel = new JLabel("Current Player: " + controller.getCurrentPlayer());
+        currentPlayerLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        currentPlayerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        sidePanel.add(currentPlayerLabel);
+
+        sidePanel.add(Box.createVerticalStrut(20));
+
+        // A placeholder "Timer" label
+        timerLabel = new JLabel("Timer: [Not Implemented]");
+        timerLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        timerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        sidePanel.add(timerLabel);
+
+        // You could add more controls (buttons, text fields, etc.) here...
+
+        // 5) Add sidePanel to the east
+        getContentPane().add(sidePanel, BorderLayout.EAST);
+
+        // 6) Revalidate & repaint
+        getContentPane().revalidate();
+        getContentPane().repaint();
     }
 
     private void addNavigationBar() {

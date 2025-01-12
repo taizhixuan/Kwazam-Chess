@@ -20,6 +20,9 @@ public class BoardView extends JFrame {
     private JPanel boardPanel;
     private JButton[][] buttons;
 
+    // Make the mainPanel protected so subclasses can rearrange it
+    protected JPanel mainPanel;
+
     private static final int BUTTON_SIZE = 90; // Adjust this for larger pieces
 
     public BoardView(GameController controller) {
@@ -35,9 +38,17 @@ public class BoardView extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Provide access to the main panel, so that a subclass can
+     * place it in a different layout or add a sidebar.
+     */
+    protected JPanel getMainPanel() {
+        return mainPanel;
+    }
+
     private void initializeBoard() {
-        // Create the main container panel with GridBagLayout for precise positioning
-        JPanel mainPanel = new JPanel(new GridBagLayout());
+        // Assign to the class field mainPanel, not a local variable
+        this.mainPanel = new JPanel(new GridBagLayout());
         mainPanel.setBackground(getBackground());
 
         // Create the board panel with GridLayout for buttons
@@ -91,9 +102,11 @@ public class BoardView extends JFrame {
         gbc.anchor = GridBagConstraints.CENTER;
         mainPanel.add(boardPanel, gbc);
 
+        // Finally, add mainPanel to the frame
         add(mainPanel);
         refreshBoard();
     }
+
 
     /**
      * Redraws the board with updated piece positions and icons.
