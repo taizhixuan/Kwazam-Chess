@@ -6,8 +6,11 @@ import model.Board;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 
 public class HomeScreen extends JFrame {
+    // Keep a static reference to the last GameController so we can "resume" it
+    private static GameController savedController = null;
 
     public HomeScreen() {
         // Frame settings
@@ -34,7 +37,7 @@ public class HomeScreen extends JFrame {
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(50, 150, 50, 150));
         buttonPanel.setBackground(new Color(230, 230, 230)); // Light gray background
 
-        // Create Buttons with modern gradient styling
+        // Create Buttons
         CustomButton newGameButton = createGradientButton("Create New Game");
         CustomButton resumeGameButton = createGradientButton("Resume Game");
         CustomButton loadGameButton = createGradientButton("Load Game");
@@ -67,7 +70,6 @@ public class HomeScreen extends JFrame {
      */
     private CustomButton createGradientButton(String text) {
         CustomButton button = new CustomButton(text);
-
         button.setFont(new Font("Segoe UI", Font.PLAIN, 20));
         button.setFocusPainted(false);
         button.setForeground(Color.WHITE);
@@ -75,37 +77,53 @@ public class HomeScreen extends JFrame {
         button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // Add hover effect
+        // Hover effect
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 button.setHovered(true);
-                button.repaint(); // Trigger repaint for the glow effect
+                button.repaint();
             }
 
             @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 button.setHovered(false);
-                button.repaint(); // Remove the glow effect
+                button.repaint();
             }
         });
-
         return button;
     }
 
+    /**
+     * Create a new game and store the controller in a static reference
+     * so we can resume it later.
+     */
     private void startNewGame() {
-        // Logic to start a new game
-        dispose();
-        new GameScreen(new GameController(new Board()));
-    }
-
-    private void resumeGame() {
-        // Placeholder for resume game logic
-        JOptionPane.showMessageDialog(this, "Resume game is not implemented yet.");
+        dispose(); // close this HomeScreen
+        GameController controller = new GameController(new Board());
+        savedController = controller; // store in static field
+        new GameScreen(controller);   // open the game screen
     }
 
     /**
-     * Load an existing game from a file.
+     * Resume a previously created game if it exists.
+     */
+    private void resumeGame() {
+        if (savedController == null) {
+            JOptionPane.showMessageDialog(this,
+                    "No saved game to resume!",
+                    "Resume Game",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        // If we have a saved controller, open it again
+        dispose();
+        new GameScreen(savedController);
+    }
+
+    /**
+     * Load an existing game from a file into a new GameController,
+     * then open GameScreen with that.
      */
     private void loadGame() {
         JFileChooser fileChooser = new JFileChooser();
@@ -117,26 +135,122 @@ public class HomeScreen extends JFrame {
             GameController controller = new GameController(board);
             try {
                 controller.loadGame(filename);
-                dispose(); // Close the home screen
-                new GameScreen(controller); // Launch the game screen
+                dispose();
+                savedController = controller;  // store it for "resume"
+                new GameScreen(controller);     // Launch the game screen
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Failed to load the game: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this,
+                        "Failed to load the game: " + e.getMessage(),
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         }
     }
 
     private void showInstructions() {
-        // Display instructions in a popup or new window
-        JOptionPane.showMessageDialog(this,
-                """
-                        Welcome to Kwazam Chess!
-                        
-                        1. Click on your piece to see valid moves highlighted.
-                        2. Click on a green square to move your piece.
-                        3. Capture the opponent's 'Sau' to win the game.
-                        4. Some pieces transform after specific moves.""",
-                "Instructions",
-                JOptionPane.INFORMATION_MESSAGE);
+        // 1) Load each piece image via getResource(...)
+        //    Make sure the filenames match your actual PNG files in /resources/images/.
+        //    If any returns null, verify the file path & resource folder settings.
+        URL bizBlueURL = getClass().getResource("/resources/images/Biz_blue.png");
+        URL bizRedURL  = getClass().getResource("/resources/images/Biz_red.png");
+        URL ramBlueURL = getClass().getResource("/resources/images/Ram_blue.png");
+        URL ramRedURL  = getClass().getResource("/resources/images/Ram_red.png");
+        URL torBlueURL = getClass().getResource("/resources/images/Tor_blue.png");
+        URL torRedURL  = getClass().getResource("/resources/images/Tor_red.png");
+        URL xorBlueURL = getClass().getResource("/resources/images/Xor_blue.png");
+        URL xorRedURL  = getClass().getResource("/resources/images/Xor_red.png");
+        URL sauBlueURL = getClass().getResource("/resources/images/Sau_blue.png");
+        URL sauRedURL  = getClass().getResource("/resources/images/Sau_red.png");
+
+        // 2) Build an HTML string that shows each piece image with a label/description.
+        //    The <img src='...'> tags will display the images from your resources.
+        String instructionsHTML = "<html>" +
+                "<h1 style='text-align:center;'>Kwazam Chess Instructions</h1>" +
+                "<p style='font-size:14px;'>Below are the game rules and piece images for quick reference.</p>" +
+
+                "<h2>Board</h2>" +
+                "<ul>" +
+                "  <li>Size: 5x8 grid.</li>" +
+                "  <li>Pieces are arranged in specific starting positions.</li>" +
+                "</ul>" +
+
+                "<h2>Pieces</h2>" +
+                // --- Biz ---
+                "<h3>Biz</h3>" +
+                "<p>" +
+                "  <img src='" + bizBlueURL + "' width='50' height='50'>&nbsp;" +
+                "  <img src='" + bizRedURL  + "' width='50' height='50'><br/>" +
+                "  \u2022 Moves in an L-shape (like a knight).<br/>" +
+                "  \u2022 Can jump over other pieces." +
+                "</p>" +
+                // --- Ram ---
+                "<h3>Ram</h3>" +
+                "<p>" +
+                "  <img src='" + ramBlueURL + "' width='50' height='50'>&nbsp;" +
+                "  <img src='" + ramRedURL  + "' width='50' height='50'><br/>" +
+                "  \u2022 Moves one step forward.<br/>" +
+                "  \u2022 Reverses direction at board edge." +
+                "</p>" +
+                // --- Tor ---
+                "<h3>Tor</h3>" +
+                "<p>" +
+                "  <img src='" + torBlueURL + "' width='50' height='50'>&nbsp;" +
+                "  <img src='" + torRedURL  + "' width='50' height='50'><br/>" +
+                "  \u2022 Moves orthogonally any number of cells.<br/>" +
+                "  \u2022 Cannot jump over other pieces.<br/>" +
+                "  \u2022 Transforms into an <b>Xor</b> after 2 turns." +
+                "</p>" +
+                // --- Xor ---
+                "<h3>Xor</h3>" +
+                "<p>" +
+                "  <img src='" + xorBlueURL + "' width='50' height='50'>&nbsp;" +
+                "  <img src='" + xorRedURL  + "' width='50' height='50'><br/>" +
+                "  \u2022 Moves diagonally any number of cells.<br/>" +
+                "  \u2022 Cannot jump over other pieces.<br/>" +
+                "  \u2022 Transforms back into a <b>Tor</b> after 2 turns." +
+                "</p>" +
+                // --- Sau ---
+                "<h3>Sau</h3>" +
+                "<p>" +
+                "  <img src='" + sauBlueURL + "' width='50' height='50'>&nbsp;" +
+                "  <img src='" + sauRedURL  + "' width='50' height='50'><br/>" +
+                "  \u2022 Moves one step in any direction.<br/>" +
+                "  \u2022 Key piece: capturing a Sau ends the game." +
+                "</p>" +
+
+                "<h2>Turns</h2>" +
+                "<ul>" +
+                "  <li>Players alternate turns.</li>" +
+                "  <li>After each Red & Blue move (2 total), Tor & Xor transform.</li>" +
+                "</ul>" +
+
+                "<h2>Saving & Loading</h2>" +
+                "<ul>" +
+                "  <li>Save the game at any point to a text file.</li>" +
+                "  <li>Load a saved state to resume the same board.</li>" +
+                "</ul>" +
+
+                "<h2>Basic GUI Steps</h2>" +
+                "<ol>" +
+                "  <li>Click on your piece to see valid moves highlighted in green.</li>" +
+                "  <li>Click a highlighted square to move there.</li>" +
+                "  <li>Capture the opponent's Sau to win!</li>" +
+                "</ol>" +
+
+                "</html>";
+
+        // 3) Display the instructions in a dialog. We use a JLabel with HTML content.
+        JLabel instructionsLabel = new JLabel(instructionsHTML);
+        // Optionally, we can allow the label to scroll if there's a lot of content:
+        JScrollPane scrollPane = new JScrollPane(instructionsLabel);
+        scrollPane.setPreferredSize(new Dimension(550, 500));
+
+        JOptionPane.showMessageDialog(
+                this,
+                scrollPane,
+                "Kwazam Chess Instructions",
+                JOptionPane.INFORMATION_MESSAGE
+        );
     }
 
     /**
@@ -160,19 +274,20 @@ public class HomeScreen extends JFrame {
             int height = getHeight();
 
             // Create a gradient background
-            GradientPaint gradient = new GradientPaint(0, 0, new Color(77, 182, 172), 0, height, new Color(38, 116, 128));
+            GradientPaint gradient = new GradientPaint(
+                    0, 0, new Color(77, 182, 172),
+                    0, height, new Color(38, 116, 128)
+            );
             g2d.setPaint(gradient);
             g2d.fillRoundRect(0, 0, width, height, 15, 15);
 
             // Draw the flashlight effect
             if (isHovered) {
-                g2d.setColor(new Color(255, 255, 255, 128)); // Semi-transparent white
-                g2d.setStroke(new BasicStroke(4)); // Thicker border
+                g2d.setColor(new Color(255, 255, 255, 128));
+                g2d.setStroke(new BasicStroke(4));
                 g2d.drawRoundRect(2, 2, width - 4, height - 4, 15, 15);
             }
-
             super.paintComponent(g);
         }
     }
-
 }
