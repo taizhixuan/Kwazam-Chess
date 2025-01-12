@@ -8,27 +8,34 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * GameScreen: Removes the "Current Player" label, adds a timer feature.
+ */
 public class GameScreen extends BoardView {
     private final GameController controller;
 
     // Sidebar components
     private JPanel sidePanel;
-    private JLabel currentPlayerLabel;
-    // You can add a timer label or other controls here
+    // Removed currentPlayerLabel
+    // Timer
     private JLabel timerLabel;
+    private Timer gameTimer;
+    private int secondsElapsed = 0;
 
     public GameScreen(GameController controller) {
         super(controller); // Call BoardView constructor (which sets up mainPanel)
         this.controller = controller;
-        addNavigationBar(); // The menu bar you already implemented
+        addNavigationBar(); // The menu bar
 
-        // Now rearrange layout to add a sidebar:
+        // Layout with sidebar
         setupLayoutWithSidebar();
+        // Start the timer
+        startGameTimer();
     }
 
     /**
-     * Reconfigure the frame so mainPanel is in the center, and we have
-     * an additional panel on the right side for game status, controls, etc.
+     * Reconfigure the frame so mainPanel is in the center,
+     * and we have an additional panel on the right side for game status, controls, etc.
      */
     private void setupLayoutWithSidebar() {
         // 1) Remove everything from the current frame (including mainPanel).
@@ -37,7 +44,6 @@ public class GameScreen extends BoardView {
         getContentPane().setLayout(new BorderLayout());
 
         // 3) Add BoardView's mainPanel to the center
-        //    (We exposed it via getMainPanel().)
         JPanel boardViewPanel = getMainPanel();
         getContentPane().add(boardViewPanel, BorderLayout.CENTER);
 
@@ -49,30 +55,46 @@ public class GameScreen extends BoardView {
         // Add a gap at the top
         sidePanel.add(Box.createVerticalStrut(20));
 
-        // A label for "Current Player"
-        currentPlayerLabel = new JLabel("Current Player: " + controller.getCurrentPlayer());
-        currentPlayerLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        currentPlayerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        sidePanel.add(currentPlayerLabel);
-
-        sidePanel.add(Box.createVerticalStrut(20));
-
-        // A placeholder "Timer" label
-        timerLabel = new JLabel("Timer: [Not Implemented]");
+        // 5) Timer label
+        timerLabel = new JLabel("Time: 0s");
         timerLabel.setFont(new Font("Arial", Font.PLAIN, 16));
         timerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         sidePanel.add(timerLabel);
 
-        // You could add more controls (buttons, text fields, etc.) here...
+        // You could add more controls (buttons, text fields, etc.) here if desired
 
-        // 5) Add sidePanel to the east
+        // 6) Add sidePanel to the east
         getContentPane().add(sidePanel, BorderLayout.EAST);
 
-        // 6) Revalidate & repaint
+        // 7) Revalidate & repaint
         getContentPane().revalidate();
         getContentPane().repaint();
     }
 
+    /**
+     * Sets up a javax.swing.Timer that increments `secondsElapsed` every second.
+     */
+    private void startGameTimer() {
+        // Fire an event every 1000 ms = 1 second
+        gameTimer = new Timer(1000, e -> {
+            secondsElapsed++;
+            timerLabel.setText("Time: " + secondsElapsed + "s");
+        });
+        gameTimer.start();
+    }
+
+    /**
+     * (Optional) Stop the timer if the game is over or the window is closed.
+     */
+    private void stopGameTimer() {
+        if (gameTimer != null) {
+            gameTimer.stop();
+        }
+    }
+
+    /**
+     * Add your navigation bar / menu items here
+     */
     private void addNavigationBar() {
         JMenuBar menuBar = new JMenuBar();
         JMenu gameMenu = new JMenu("Menu");
@@ -86,6 +108,8 @@ public class GameScreen extends BoardView {
         newGame.addActionListener(e -> {
             controller.resetGame();
             super.refreshBoard();
+            // Reset the timer if you like
+            secondsElapsed = 0;
             JOptionPane.showMessageDialog(this, "New game started!");
         });
         gameMenu.add(newGame);
@@ -121,6 +145,7 @@ public class GameScreen extends BoardView {
                 try {
                     controller.loadGame(filename);
                     refreshBoard();
+                    // Reset or keep the timer as you wish
                     JOptionPane.showMessageDialog(this, "Game loaded successfully!");
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this,
@@ -136,13 +161,18 @@ public class GameScreen extends BoardView {
         backHome.addActionListener(e -> {
             // Dispose this window and return to HomeScreen
             dispose();
+            // Stop the timer
+            stopGameTimer();
             new HomeScreen();
         });
         gameMenu.add(backHome);
 
         // 5) Exit Game
         JMenuItem exitGame = new JMenuItem("Exit");
-        exitGame.addActionListener(e -> System.exit(0));
+        exitGame.addActionListener(e -> {
+            stopGameTimer();
+            System.exit(0);
+        });
         gameMenu.add(exitGame);
 
         // Add the menu to the menu bar
@@ -152,7 +182,8 @@ public class GameScreen extends BoardView {
 
     @Override
     public void refreshBoard() {
-        super.refreshBoard(); // same logic as BoardView
+        super.refreshBoard();
+        // Optionally, do something else here if needed
     }
 
     @Override
@@ -167,6 +198,8 @@ public class GameScreen extends BoardView {
 
     @Override
     public void gameOver(String message) {
+        // Stop the timer if game is over
+        stopGameTimer();
         super.gameOver(message);
     }
 }
