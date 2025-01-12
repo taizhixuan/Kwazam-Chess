@@ -23,9 +23,11 @@ public class GameView {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Welcome to Kwazam Chess!");
 
+        // Loop until the game is over
         while (!controller.isGameOver()) {
             displayBoard();
-            System.out.println("Current player: " + controller.getCurrentPlayer());
+            String currentPlayer = controller.getCurrentPlayer();
+            System.out.println("Current player: " + currentPlayer);
             System.out.println("Enter your move (format: fromRow fromCol toRow toCol):");
 
             try {
@@ -37,17 +39,28 @@ public class GameView {
                 Position from = new Position(fromRow, fromCol);
                 Position to = new Position(toRow, toCol);
 
+                // Attempt the move
                 if (controller.movePiece(from, to)) {
-                    System.out.println("Move successful.");
+                    // Move was successful
+                    System.out.printf(
+                            "%s moved from (%d, %d) to (%d, %d) successfully.%n",
+                            currentPlayer, fromRow, fromCol, toRow, toCol
+                    );
                 } else {
-                    System.out.println("Invalid move. Try again.");
+                    // Move was invalid
+                    System.out.printf(
+                            "Invalid move by %s: Cannot move from (%d, %d) to (%d, %d). Try again.%n",
+                            currentPlayer, fromRow, fromCol, toRow, toCol
+                    );
                 }
             } catch (Exception e) {
-                System.out.println("Invalid input. Must be four integers.");
-                scanner.nextLine(); // clear buffer
+                // Catch input format issues (e.g., not four integers)
+                System.out.println("Invalid input. Must be four integers (e.g., '0 1 0 2').");
+                scanner.nextLine(); // Clear the buffer to avoid infinite loop
             }
         }
 
+        // Once the game is over, announce the winner
         System.out.println("Game over! The winner is " + controller.getCurrentPlayer());
         scanner.close();
     }
@@ -58,9 +71,12 @@ public class GameView {
             for (int c = 0; c < board.getColumns(); c++) {
                 Piece piece = board.getPieceAt(new Position(r, c));
                 if (piece == null) {
+                    // Empty square
                     System.out.print(" . ");
                 } else {
+                    // For example: "RB" for Red Bishop, "BK" for Blue King, etc.
                     String colorPrefix = (piece.getColor() == Color.RED) ? "R" : "B";
+                    // Grab first 2 chars of the piece's class name (or as many as are available)
                     String pieceType = piece.getClass().getSimpleName().substring(0, 2);
                     System.out.print(" " + colorPrefix + pieceType + " ");
                 }

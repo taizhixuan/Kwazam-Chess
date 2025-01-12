@@ -19,6 +19,15 @@ public class GameController {
         this.selectedPiece = null;
     }
 
+    public boolean isPieceSelected() {
+        return selectedPiece != null;
+    }
+
+    public Position getSelectedPiece() {
+        return selectedPiece;
+    }
+
+
     /**
      * Handles a move request from a position to another.
      */
@@ -30,40 +39,56 @@ public class GameController {
      * Handles tile clicks in the GUI.
      */
     public void handleTileClick(Position position, BoardView view) {
+        // If no piece is selected yet
         if (selectedPiece == null) {
-            // First click: Select a piece
+            // Try to select a piece if it belongs to the current player
             Piece piece = game.getBoard().getPieceAt(position);
-            if (piece != null && piece.getColor() == game.getCurrentPlayer()) {
-                selectedPiece = position; // Remember the selected piece
+            if (piece != null && piece.getColor().name().equalsIgnoreCase(game.getCurrentPlayer().name())) {
+                selectedPiece = position;
                 List<Position> validMoves = game.getPossibleMoves(piece, position);
                 view.clearHighlights();
-                view.highlightValidMoves(validMoves); // Highlight valid moves
+                view.highlightSelectedPiece(position);
+                view.highlightValidMoves(validMoves);
             }
         } else {
-            // Second click: Attempt to move the piece
-            if (game.movePiece(selectedPiece, position)) {
+            // A piece is already selected
+            // 1) If the user clicks the same piece => deselect
+            if (selectedPiece.equals(position)) {
+                selectedPiece = null;
                 view.clearHighlights();
-                view.refreshBoard(); // Refresh the GUI after a successful move and transformations
-
-                if (game.getTurnCounter() % 2 == 0) {
-                    view.refreshBoard(); // Ensure the GUI reflects piece transformations
-                }
-
-                if (game.isGameOver()) {
-                    String winnerMessage = game.getWinner() + " wins! Game Over.";
-                    view.gameOver(winnerMessage);
-                }
-
-                /* (Joyce)
-                // Automatically save the game after each valid move
-                saveGameAsText("game_save.txt");
-                 */
-
             } else {
-                System.out.println("Invalid move. Try again.");
+                // 2) If the user clicks another piece of the same color => ignore
+                Piece pieceAtClicked = game.getBoard().getPieceAt(position);
+                if (pieceAtClicked != null &&
+                        pieceAtClicked.getColor().name().equalsIgnoreCase(game.getCurrentPlayer().name())) {
+                    // Optionally show a message or just ignore
+                    System.out.println("You must deselect the current piece first (by clicking it again).");
+                    return;
+                }
+
+                // 3) Otherwise, try to move the selected piece to the clicked tile
+                if (game.movePiece(selectedPiece, position)) {
+                    view.clearHighlights();
+                    view.refreshBoard();  // Refresh after a successful move
+
+                    // If needed, refresh again if there's any extra logic after moves
+                    if (game.getTurnCounter() % 2 == 0) {
+                        view.refreshBoard();
+                    }
+
+                    // Check if the move ended the game
+                    if (game.isGameOver()) {
+                        String winnerMessage = game.getWinner() + " wins! Game Over.";
+                        view.gameOver(winnerMessage);
+                    }
+                } else {
+                    System.out.println("Invalid move. Try again.");
+                }
+
+                // Reset the selected piece
+                selectedPiece = null;
+                view.refreshBoard();  // Ensure final board state is shown
             }
-            selectedPiece = null; // Reset selection
-            view.refreshBoard(); // Refresh the GUI
         }
     }
 
