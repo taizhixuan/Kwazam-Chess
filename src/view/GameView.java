@@ -23,7 +23,6 @@ public class GameView {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Welcome to Kwazam Chess!");
 
-        // Loop until the game is over
         while (!controller.isGameOver()) {
             displayBoard();
             String currentPlayer = controller.getCurrentPlayer();
@@ -33,30 +32,40 @@ public class GameView {
             try {
                 int fromRow = scanner.nextInt();
                 int fromCol = scanner.nextInt();
-                int toRow = scanner.nextInt();
-                int toCol = scanner.nextInt();
+                int toRow   = scanner.nextInt();
+                int toCol   = scanner.nextInt();
+
+                // --- Coordinate Flip Only if RED is current player ---
+                if (currentPlayer.equals("RED")) {
+                    fromRow = 7 - fromRow; // 7 = last row index
+                    fromCol = 4 - fromCol; // 4 = last col index
+                    toRow   = 7 - toRow;
+                    toCol   = 4 - toCol;
+                }
 
                 Position from = new Position(fromRow, fromCol);
-                Position to = new Position(toRow, toCol);
+                Position to   = new Position(toRow, toCol);
 
                 // Attempt the move
                 if (controller.movePiece(from, to)) {
-                    // Move was successful
                     System.out.printf(
                             "%s moved from (%d, %d) to (%d, %d) successfully.%n",
-                            currentPlayer, fromRow, fromCol, toRow, toCol
+                            currentPlayer,
+                            // Show the user the original typed values,
+                            // which match the visual board labeling:
+                            currentPlayer.equals("RED") ? (7 - fromRow) : fromRow,
+                            currentPlayer.equals("RED") ? (4 - fromCol) : fromCol,
+                            currentPlayer.equals("RED") ? (7 - toRow) : toRow,
+                            currentPlayer.equals("RED") ? (4 - toCol) : toCol
                     );
                 } else {
-                    // Move was invalid
                     System.out.printf(
-                            "Invalid move by %s: Cannot move from (%d, %d) to (%d, %d). Try again.%n",
-                            currentPlayer, fromRow, fromCol, toRow, toCol
+                            "Invalid move by %s. Try again.%n", currentPlayer
                     );
                 }
             } catch (Exception e) {
-                // Catch input format issues (e.g., not four integers)
                 System.out.println("Invalid input. Must be four integers (e.g., '0 1 0 2').");
-                scanner.nextLine(); // Clear the buffer to avoid infinite loop
+                scanner.nextLine(); // Clear the buffer
             }
         }
 
@@ -64,6 +73,7 @@ public class GameView {
         System.out.println("Game over! The winner is " + controller.getCurrentPlayer());
         scanner.close();
     }
+
 
     private void displayBoard() {
         Board board = controller.getBoard();
@@ -103,3 +113,4 @@ public class GameView {
         }
     }
 }
+
