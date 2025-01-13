@@ -1,11 +1,12 @@
-// Board.java
 package model;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Board {
     private final Piece[][] grid;
     private static final int ROWS = 8;
     private static final int COLUMNS = 5;
-
 
     public Board() {
         grid = new Piece[ROWS][COLUMNS];
@@ -40,10 +41,29 @@ public class Board {
         return getPieceAt(position) == null;
     }
 
-    public int getRows() { return ROWS; }
+    public int getRows() {
+        return ROWS;
+    }
 
-    public int getColumns() { return COLUMNS; }
+    public int getColumns() {
+        return COLUMNS;
+    }
 
+    /**
+     * Get all pieces currently on the board.
+     */
+    public List<Piece> getPieces() {
+        List<Piece> pieces = new ArrayList<>();
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLUMNS; col++) {
+                Piece piece = grid[row][col];
+                if (piece != null) {
+                    pieces.add(piece); // Add piece to the list if it's not null
+                }
+            }
+        }
+        return pieces;
+    }
 
     /**
      * Rotate coordinates if it's Blue's turn
@@ -58,9 +78,12 @@ public class Board {
         }
     }
 
+    public void placePiece(Piece piece, Position position) {
+        // This method can be implemented if needed for piece placement logic
+    }
 
     /**
-     *  Assigned IDs for each different type of pieces
+     * Assigned IDs for each different type of pieces
      */
     public static class IDGenerator {
         private static int ramId = 1;
@@ -102,7 +125,7 @@ public class Board {
     }
 
     /**
-     *  Place all pieces at their initial place.
+     * Place all pieces at their initial place.
      */
     private void initializeBoard() {
         // Top row - Red
@@ -125,8 +148,34 @@ public class Board {
         // Bottom row - Blue
         setPieceAt(new Position(7, 0), new Xor(Color.BLUE, IDGenerator.getXorId()));
         setPieceAt(new Position(7, 1), new Biz(Color.BLUE, IDGenerator.getNextBizId()));
-        setPieceAt(new Position(7, 2), new Sau(Color.BLUE,IDGenerator.getSauId()));
+        setPieceAt(new Position(7, 2), new Sau(Color.BLUE, IDGenerator.getSauId()));
         setPieceAt(new Position(7, 3), new Biz(Color.BLUE, IDGenerator.getNextBizId()));
         setPieceAt(new Position(7, 4), new Tor(Color.BLUE, IDGenerator.getTorId()));
+    }
+
+    /**
+     * Determines if the game is over. The game is over if either player has no pieces left.
+     */
+    public boolean isGameOver() {
+        boolean redHasPieces = false;
+        boolean blueHasPieces = false;
+
+        // Iterate through all rows and columns
+        for (int row = 0; row < getRows(); row++) {
+            for (int col = 0; col < getColumns(); col++) {
+                Piece piece = getPieceAt(new Position(row, col));
+                if (piece != null) {
+                    // Check if any Red or Blue pieces are still on the board
+                    if (piece.getColor() == Color.RED) {
+                        redHasPieces = true;
+                    } else if (piece.getColor() == Color.BLUE) {
+                        blueHasPieces = true;
+                    }
+                }
+            }
+        }
+
+        // Game is over if either Red or Blue has no pieces left
+        return !redHasPieces || !blueHasPieces;
     }
 }

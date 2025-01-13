@@ -200,4 +200,7 @@ public class Game {
     }
 
 
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
+    }
 }

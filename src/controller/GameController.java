@@ -1,4 +1,3 @@
-// GameController.java
 package controller;
 
 import model.*;
@@ -27,7 +26,6 @@ public class GameController {
         return selectedPiece;
     }
 
-
     /**
      * Handles a move request from a position to another.
      */
@@ -39,27 +37,22 @@ public class GameController {
      * Handles tile clicks in the GUI.
      */
     public void handleTileClick(Position position, BoardView view) {
-        // We'll figure out how to display row/col in logs shortly
         int clickedRow = position.getRow();
         int clickedCol = position.getColumn();
 
         // Check if current player is Red
         boolean isRed = getCurrentPlayer().equals("RED");
 
-        // For logging, flip the row/col if Red is current player
-        // (Matches your BoardView flipping: row=7 top -> 0 bottom, col=4 left -> 0 right)
         int displayClickedRow = isRed ? (7 - clickedRow) : clickedRow;
         int displayClickedCol = isRed ? (4 - clickedCol) : clickedCol;
 
         // If no piece is selected yet
         if (selectedPiece == null) {
-            // Try to select a piece if it belongs to the current player
             Piece piece = game.getBoard().getPieceAt(position);
             if (piece != null && piece.getColor().name().equalsIgnoreCase(game.getCurrentPlayer().name())) {
                 selectedPiece = position;
                 List<Position> validMoves = game.getPossibleMoves(piece, position);
 
-                // Flip for logs
                 int displayFromRow = isRed ? (7 - selectedPiece.getRow()) : selectedPiece.getRow();
                 int displayFromCol = isRed ? (4 - selectedPiece.getColumn()) : selectedPiece.getColumn();
 
@@ -75,7 +68,6 @@ public class GameController {
             }
         } else {
             // A piece is already selected
-            // 1) If the user clicks the same piece => deselect
             if (selectedPiece.equals(position)) {
                 int displayFromRow = isRed ? (7 - selectedPiece.getRow()) : selectedPiece.getRow();
                 int displayFromCol = isRed ? (4 - selectedPiece.getColumn()) : selectedPiece.getColumn();
@@ -89,7 +81,6 @@ public class GameController {
                 view.clearHighlights();
 
             } else {
-                // 2) If the user clicks another piece of the same color => ignore
                 Piece pieceAtClicked = game.getBoard().getPieceAt(position);
                 if (pieceAtClicked != null &&
                         pieceAtClicked.getColor().name().equalsIgnoreCase(game.getCurrentPlayer().name())) {
@@ -97,9 +88,6 @@ public class GameController {
                     return;
                 }
 
-                // 3) Otherwise, try to move the selected piece to the clicked tile
-
-                // Flip for logs
                 int displayFromRow = isRed ? (7 - selectedPiece.getRow()) : selectedPiece.getRow();
                 int displayFromCol = isRed ? (4 - selectedPiece.getColumn()) : selectedPiece.getColumn();
 
@@ -110,8 +98,6 @@ public class GameController {
                 );
 
                 if (game.movePiece(selectedPiece, position)) {
-                    // Successful move
-
                     System.out.printf(
                             "GUI: Move successful: from (%d, %d) to (%d, %d).%n",
                             displayFromRow, displayFromCol,
@@ -119,14 +105,12 @@ public class GameController {
                     );
 
                     view.clearHighlights();
-                    view.refreshBoard();  // Refresh after a successful move
+                    view.refreshBoard();
 
-                    // If needed, refresh again if there's any extra logic after moves
                     if (game.getTurnCounter() % 2 == 0) {
                         view.refreshBoard();
                     }
 
-                    // Check if the move ended the game
                     if (game.isGameOver()) {
                         String winnerMessage = game.getWinner() + " wins! Game Over.";
                         System.out.println("GUI: " + winnerMessage);
@@ -136,9 +120,8 @@ public class GameController {
                     System.out.println("GUI: Invalid move. Try again.");
                 }
 
-                // Reset the selected piece
                 selectedPiece = null;
-                view.refreshBoard();  // Ensure final board state is shown
+                view.refreshBoard();
             }
         }
     }
@@ -172,15 +155,15 @@ public class GameController {
     }
 
     /**
-     *  Reset the game.
+     * Reset the game.
      */
     public void resetGame() {
-        Game.reset(game); // Reset the game model with a new board
-        selectedPiece = null; // Clear any selected piece
+        Game.reset(game);
+        selectedPiece = null;
     }
 
     /**
-     *  Save the game in .txt file.
+     * Save the game in .txt file.
      */
     public void saveGameAsText(String filename) {
         GameState gameState = new GameState(game.getBoard(), game.getCurrentPlayer(), game.getTurnCounter());
@@ -193,6 +176,9 @@ public class GameController {
         }
     }
 
+    /**
+     * Load the game from a text file.
+     */
     public void loadGame(String filename) {
         try {
             GameState gameState = GameSaver.loadGame(filename);
@@ -202,7 +188,8 @@ public class GameController {
 
             // Safely set the current player
             if (gameState.getCurrentPlayer() != null) {
-                game.setCurrentPlayer(gameState.getCurrentPlayer().equalsIgnoreCase("blue") ? Color.BLUE : Color.RED);
+                // Correct comparison for Color enum
+                game.setCurrentPlayer(gameState.getCurrentPlayer() == Color.BLUE ? Color.BLUE : Color.RED);
             } else {
                 System.err.println("Warning: Current player is null in the loaded game state.");
             }
@@ -210,7 +197,6 @@ public class GameController {
             // Set the turn counter
             game.setTurn(gameState.getTurn());
 
-            // Print success message
             System.out.println("Game loaded successfully!");
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

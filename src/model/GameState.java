@@ -1,62 +1,45 @@
-// GameState.java
 package model;
 
-import java.io.Serial;
-import java.io.Serializable;
+public class GameState {
+    private Board board;           // Contains the board state
+    private Color currentPlayer;   // Current player
+    private int turn;              // Turn counter
+    private boolean isGameOver;    // Whether the game is over
 
-public class GameState implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
-
-    private Board board;      // The board object (includes piece positions)
-    private String currentPlayer; // "blue" or "red"
-    private int turn;  // Tracks the number of turns
-    private boolean gameOver;  // Whether the game is over or not
-    private boolean isBlueTurn; // Flag for blue's turn
-
+    // Constructor and getter methods
     public GameState(Board board, Color currentPlayer, int turn) {
         this.board = board;
-        this.currentPlayer = String.valueOf(currentPlayer);
+        this.currentPlayer = currentPlayer;
         this.turn = turn;
-        this.isBlueTurn = currentPlayer == Color.BLUE; // Determine if it's Blue's turn
+        this.isGameOver = false;  // Default to false, will be checked/updated elsewhere
     }
 
-    // Getter for isBlueTurn
-    public boolean isBlueTurn() {
-        return isBlueTurn;
-    }
-
-    // Getters and Setters
     public Board getBoard() {
         return board;
     }
 
-    public void setBoard(Board board) {
-        this.board = board;
-    }
-
-    public String getCurrentPlayer() {
+    public Color getCurrentPlayer() {
         return currentPlayer;
-    }
-
-    public void setCurrentPlayer(String currentPlayer) {
-        this.currentPlayer = currentPlayer;
     }
 
     public int getTurn() {
         return turn;
     }
 
-    public void setTurnCounter(int turn) {
-        this.turn = turn;
-    }
-
-
+    // Getter for isGameOver
     public boolean isGameOver() {
-        return gameOver;
+        return isGameOver;
     }
 
-    public void setGameOver(boolean gameOver) {
-        this.gameOver = gameOver;
+    // Setter for isGameOver (in case you want to manually set it)
+    public void setGameOver(boolean isGameOver) {
+        this.isGameOver = isGameOver;
+    }
+
+    // Update game over status based on the game's board state
+    public void updateGameOverStatus() {
+        // Use the game's or board's logic to determine if the game is over
+        // For example, you could check for remaining pieces or a winner
+        this.isGameOver = board.isGameOver();  // Assuming you have isGameOver() in Board
     }
 }
