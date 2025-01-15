@@ -11,17 +11,20 @@ public class GameSaver {
     // Save the game state to a text file in the specified format
     public static void saveGameAsText(GameState gameState, String filename) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-            writer.write("// The move count made\n");
-            writer.write("moveCount: " + gameState.getTurn() + "\n");
+            // Write the turn count
+            writer.write("// --- Game State ---\n");
+            writer.write("// Move count (total number of moves made in the game)\n");
+            writer.write("moveCount: " + gameState.getTurn() + "\n\n");
 
-            writer.write("\n// The player to play a move\n");
-            writer.write("currentPlayer: " + gameState.getCurrentPlayer() + "\n");
+            // Write the current player
+            writer.write("// Current player to move (RED or BLUE)\n");
+            writer.write("currentPlayer: " + gameState.getCurrentPlayer() + "\n\n");
 
-            writer.write("\n// Pieces on the board\n");
-            writer.write("// Type, ID, row, col, Color\n");
+            // Write the board state
+            writer.write("// --- Board State ---\n");
+            writer.write("// Format: piece: [Type], [ID], [Row], [Col], [Color]\n");
 
             boolean isRedTurn = gameState.getCurrentPlayer().equals(Color.RED);
-
             for (int row = 0; row < gameState.getBoard().getRows(); row++) {
                 for (int col = 0; col < gameState.getBoard().getColumns(); col++) {
                     Position position = new Position(row, col);
@@ -31,15 +34,17 @@ public class GameSaver {
                         Position adjustedPosition = gameState.getBoard().rotateCoordinates(position, isRedTurn);
 
                         writer.write(String.format("piece: %s, %d, %d, %d, %s\n",
-                                piece.getType(),
-                                piece.getId(),
-                                adjustedPosition.getRow(),
-                                adjustedPosition.getColumn(),
-                                piece.getColor()));
+                                piece.getType(),      // Type of piece
+                                piece.getId(),        // Unique ID
+                                adjustedPosition.getRow(),   // Row (adjusted for player's view)
+                                adjustedPosition.getColumn(), // Column (adjusted for player's view)
+                                piece.getColor()      // Piece color (RED/BLUE)
+                        ));
                     }
                 }
             }
-
+            // End message
+            writer.write("\n// --- End of Game State ---\n");
             System.out.println("Game saved successfully to " + filename);
         } catch (IOException e) {
             e.printStackTrace();
