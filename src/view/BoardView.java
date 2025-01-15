@@ -45,20 +45,21 @@ public class BoardView extends JFrame {
         });
 
         setVisible(true);
+
     }
 
     private void resizeBoard() {
         int panelWidth = mainPanel.getWidth();
         int panelHeight = mainPanel.getHeight();
 
-        // Determine the size of the square board based on the smaller dimension
-        int newSize = Math.min(panelWidth / 5 * 5, panelHeight / 8 * 8);
+        int cellSize = Math.min(panelWidth / 5, panelHeight / 8);
+        int newWidth = cellSize * 5;
+        int newHeight = cellSize * 8;
 
-        // Update the preferred size of the board panel to keep it square
-        boardPanel.setPreferredSize(new Dimension(newSize, newSize));
+        boardPanel.setPreferredSize(new Dimension(newWidth, newHeight));
         boardPanel.revalidate();
+        boardPanel.repaint();
     }
-
 
     /**
      * Provide access to the main panel, so that a subclass can
@@ -124,7 +125,7 @@ public class BoardView extends JFrame {
         gbc.gridy = 1;
         gbc.gridwidth = 5;
         gbc.gridheight = 8;
-        gbc.fill = GridBagConstraints.BOTH;
+        gbc.fill = GridBagConstraints.NONE;
         gbc.anchor = GridBagConstraints.CENTER;
         mainPanel.add(boardPanel, gbc);
 
