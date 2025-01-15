@@ -16,27 +16,30 @@ public class GameScreen extends BoardView {
 
     // Sidebar components
     private JPanel sidePanel;
-    // Removed currentPlayerLabel
-    // Timer
     private JLabel timerLabel;
     private Timer gameTimer;
     private int secondsElapsed = 0;
 
+    // Move history components
     private DefaultListModel<String> moveListModel;
     private JList<String> moveList;
 
     public GameScreen(GameController controller) {
+        // 1) Create the BoardView
         super(controller); // Call BoardView constructor (which sets up mainPanel)
         this.controller = controller;
+
+        // 2) Add the menu bar
         addNavigationBar(); // The menu bar
 
-        // Layout with sidebar
+        // 3) Build the sidebar (including moveListModel, moveList)
         setupLayoutWithSidebar();
-        // Start the timer
+
+        // 4) Start the timer
         startGameTimer();
 
-        // Now that sidePanel + moveListModel are created,
-        // you can safely refresh the board (which calls updateMoveList()).
+        // 5) Now that everything is ready, refresh the board
+        //    which also calls updateMoveList() to show moves
         refreshBoard();
     }
 
@@ -68,29 +71,26 @@ public class GameScreen extends BoardView {
         timerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         sidePanel.add(timerLabel);
 
+        // >>> CREATE moveListModel and moveList <<<
         moveListModel = new DefaultListModel<>();
         moveList = new JList<>(moveListModel);
 
-        // Make it scrollable
-        JScrollPane scrollPane = new JScrollPane(moveList);
-        scrollPane.setPreferredSize(new Dimension(180, 300));
-        scrollPane.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        // Optional label above the list
+        // Add a label for the move list
         JLabel moveListLabel = new JLabel("Move History", SwingConstants.CENTER);
         moveListLabel.setFont(new Font("Arial", Font.BOLD, 16));
         moveListLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Add label + scroll pane to side panel
-        sidePanel.add(Box.createVerticalStrut(20));  // Some spacing
+        // Scroll pane for the list
+        JScrollPane scrollPane = new JScrollPane(moveList);
+        scrollPane.setPreferredSize(new Dimension(180, 300));
+        scrollPane.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        sidePanel.add(Box.createVerticalStrut(20));
         sidePanel.add(moveListLabel);
         sidePanel.add(Box.createVerticalStrut(10));
         sidePanel.add(scrollPane);
 
-        // 6) Add sidePanel to the east
         getContentPane().add(sidePanel, BorderLayout.EAST);
-
-        // 7) Revalidate & repaint
         getContentPane().revalidate();
         getContentPane().repaint();
     }
