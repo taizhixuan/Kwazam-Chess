@@ -68,14 +68,16 @@ public class Board {
     /**
      * Rotate coordinates if it's Blue's turn
      */
-    public Position rotateCoordinates(Position position, boolean isBlueTurn) {
-        if (isBlueTurn) {
-            int rotatedRow = Board.ROWS - 1 - position.getRow();  // Flip row (7 -> 0)
-            int rotatedCol = Board.COLUMNS - 1 - position.getColumn();  // Flip column (4 -> 0)
-            return new Position(rotatedRow, rotatedCol);
-        } else {
-            return position; // No rotation for Red's turn
+    public Position rotateCoordinates(Position position, boolean isRedTurn) {
+        int row = position.getRow();
+        int col = position.getColumn();
+
+        // Flip coordinates for the Red player's turn (180-degree rotation)
+        if (isRedTurn) {
+            row = 7 - row;
+            col = 4 - col;
         }
+        return new Position(row, col);
     }
 
     public void placePiece(Piece piece, Position position) {

@@ -12,26 +12,14 @@ public class GameLoader {
             Color currentPlayer = null;
             List<Piece> pieces = new ArrayList<>();
 
-            // Read through the file line by line
             while ((line = reader.readLine()) != null) {
-                // Skip empty lines and comments
-                if (line.trim().isEmpty() || line.startsWith("//")) {
-                    continue;
-                }
+                if (line.trim().isEmpty() || line.startsWith("//")) continue;
 
-                // Parse move count
                 if (line.startsWith("moveCount:")) {
                     turn = Integer.parseInt(line.split(":")[1].trim());
-                }
-
-                // Parse current player
-                if (line.startsWith("currentPlayer:")) {
-                    String player = line.split(":")[1].trim();
-                    currentPlayer = Color.valueOf(player); // Assumes Color is an enum with RED/BLUE
-                }
-
-                // Parse pieces on the board
-                if (line.startsWith("piece:")) {
+                } else if (line.startsWith("currentPlayer:")) {
+                    currentPlayer = Color.valueOf(line.split(":")[1].trim());
+                } else if (line.startsWith("piece:")) {
                     String[] parts = line.split(", ");
                     if (parts.length == 5) {
                         String type = parts[0].split(":")[1].trim();
@@ -40,29 +28,30 @@ public class GameLoader {
                         int col = Integer.parseInt(parts[3].trim());
                         String color = parts[4].trim();
 
-                        // Create the corresponding piece and add it to the pieces list
-                        Piece piece = createPiece(type, id, color, new Position(row, col));
+                        boolean isRedTurn = currentPlayer.equals(Color.RED);
+                        Position adjustedPosition = new Position(row, col);
+                        Position originalPosition = new Board().rotateCoordinates(adjustedPosition, isRedTurn);
+
+                        Piece piece = PieceFactory.createPiece(type, Color.valueOf(color), id);
+                        piece.setPosition(originalPosition);
                         pieces.add(piece);
                     }
                 }
             }
 
-            // Create a new board and populate it with pieces
             Board board = new Board();
             for (Piece piece : pieces) {
-                board.setPieceAt(piece.getPosition(), piece);  // Place each piece on the board
+                board.setPieceAt(piece.getPosition(), piece);
             }
 
-            // Default value for isGameOver as false
-            boolean isGameOver = false;  // Default value, can be changed based on logic if needed
-
-            return new GameState(board, currentPlayer, turn);  // Only pass 3 parameters now
+            return new GameState(board, currentPlayer, turn);
 
         } catch (IOException e) {
             e.printStackTrace();
             throw new IOException("Error loading game from text file: " + e.getMessage());
         }
     }
+
 
     // Helper method to create a piece based on its type
     private static Piece createPiece(String type, int id, String color, Position position) {

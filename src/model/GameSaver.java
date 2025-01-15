@@ -21,38 +21,38 @@ public class GameSaver {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             writer.write("// The move count made\n");
             writer.write("moveCount: " + gameState.getTurn() + "\n");
-            writer.write("\n" + "// The player to play a move\n");
-            // Save the current player (who will make the next move after the flip)
+
+            writer.write("\n// The player to play a move\n");
             writer.write("currentPlayer: " + gameState.getCurrentPlayer() + "\n");
 
-            // Log game-over status
-            writer.write("\n" + "// Whether the game is over\n");
-            writer.write("isGameOver: " + gameState.isGameOver() + "\n");
+            writer.write("\n// Pieces on the board\n");
+            writer.write("// Type, ID, row, col, Color\n");
 
-            // Write each piece on the board
-            writer.write("\n" + "// Pieces on the board\n");
-            writer.write("// Type, ID, y Position, x Position, Color, direction (for Point)\n");
+            boolean isRedTurn = gameState.getCurrentPlayer().equals(Color.RED);
+
             for (int row = 0; row < gameState.getBoard().getRows(); row++) {
                 for (int col = 0; col < gameState.getBoard().getColumns(); col++) {
-                    Piece piece = gameState.getBoard().getPieceAt(new Position(row, col));
+                    Position position = new Position(row, col);
+                    Piece piece = gameState.getBoard().getPieceAt(position);
                     if (piece != null) {
-                        // Log each piece's details
-                        String line = "piece: " +
-                                piece.getType() + ", " +
-                                piece.getId() + ", " +
-                                row + ", " + col + ", " +
-                                piece.getColor();
-                        writer.write(line + "\n");
+                        Position adjustedPosition = gameState.getBoard().rotateCoordinates(position, isRedTurn);
+
+                        writer.write(String.format("piece: %s, %d, %d, %d, %s\n",
+                                piece.getType(),
+                                piece.getId(),
+                                adjustedPosition.getRow(),
+                                adjustedPosition.getColumn(),
+                                piece.getColor()));
                     }
                 }
             }
+
             System.out.println("Game saved successfully to " + filename);
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("Error saving game as text: " + e.getMessage());
         }
     }
-
 
     // Load the game state from a binary file
     public static GameState loadGame(String filename) throws IOException, ClassNotFoundException {
