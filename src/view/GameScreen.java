@@ -6,11 +6,12 @@ import model.Move;
 import model.Position;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.List;
 
 /**
- * GameScreen: Removes the "Current Player" label, adds a timer feature.
+ * GameScreen
  */
 public class GameScreen extends BoardView {
     private final GameController controller;
@@ -60,8 +61,9 @@ public class GameScreen extends BoardView {
 
         // 4) Create our new sidePanel
         sidePanel = new JPanel();
-        sidePanel.setPreferredSize(new Dimension(200, getHeight()));
+        sidePanel.setPreferredSize(new Dimension(250, getHeight())); // Increased width for better spacing
         sidePanel.setLayout(new BoxLayout(sidePanel, BoxLayout.Y_AXIS));
+        sidePanel.setBorder(new EmptyBorder(10, 10, 10, 10)); // Add padding around the side panel
 
         // Add a gap at the top
         sidePanel.add(Box.createVerticalStrut(20));
@@ -72,24 +74,38 @@ public class GameScreen extends BoardView {
         timerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         sidePanel.add(timerLabel);
 
+        // Add some spacing after the timer
+        sidePanel.add(Box.createVerticalStrut(30));
+
         // >>> CREATE moveListModel and moveList <<<
         moveListModel = new DefaultListModel<>();
         moveList = new JList<>(moveListModel);
+        moveList.setFont(new Font("Monospaced", Font.PLAIN, 14)); // Use monospaced font for alignment
 
         // Add a label for the move list
         JLabel moveListLabel = new JLabel("Move History", SwingConstants.CENTER);
         moveListLabel.setFont(new Font("Arial", Font.BOLD, 16));
         moveListLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Scroll pane for the list
+        // Scroll pane for the list with added padding
         JScrollPane scrollPane = new JScrollPane(moveList);
-        scrollPane.setPreferredSize(new Dimension(180, 300));
+        scrollPane.setPreferredSize(new Dimension(220, 300));
         scrollPane.setAlignmentX(Component.CENTER_ALIGNMENT);
+        scrollPane.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.GRAY),
+                new EmptyBorder(10, 10, 10, 10) // Add padding inside the scroll pane
+        ));
 
-        sidePanel.add(Box.createVerticalStrut(20));
+        // Add a border around the move history for better separation
+        moveList.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+        // Add components to the sidePanel
         sidePanel.add(moveListLabel);
         sidePanel.add(Box.createVerticalStrut(10));
         sidePanel.add(scrollPane);
+
+        // Add some spacing at the bottom
+        sidePanel.add(Box.createVerticalGlue());
 
         getContentPane().add(sidePanel, BorderLayout.EAST);
         getContentPane().revalidate();

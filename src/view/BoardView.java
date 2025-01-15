@@ -32,8 +32,8 @@ public class BoardView extends JFrame {
 
         initializeBoard();
 
-        setSize(BUTTON_SIZE * 7 + 100, BUTTON_SIZE * 9 + 100); // Adjust window size to fit the board appropriately // Adjust window size to fit the even smaller board // Adjust window size to fit the smaller board // Adjust window size to fit margins and labels // Adjust window size to fit board and labels // Set initial window size
-        setMinimumSize(new Dimension(BUTTON_SIZE * 7 + 100, BUTTON_SIZE * 9 + 100)); // Ensure minimum window size to fit the board // Ensure minimum window size for the smaller board // Ensure minimum window size for smaller board // Ensure fixed size including margins // Ensure minimum window size
+        setSize(BUTTON_SIZE * 7 + 150, BUTTON_SIZE * 9 + 150); // Adjust window size to fit the board appropriately // Adjust window size to fit the even smaller board // Adjust window size to fit the smaller board // Adjust window size to fit margins and labels // Adjust window size to fit board and labels // Set initial window size
+        setMinimumSize(new Dimension(BUTTON_SIZE * 7 + 150, BUTTON_SIZE * 9 + 150)); // Ensure minimum window size to fit the board // Ensure minimum window size for the smaller board // Ensure minimum window size for smaller board // Ensure fixed size including margins // Ensure minimum window size
         setLocationRelativeTo(null); // Center the window on the screen
 
         setVisible(true);
