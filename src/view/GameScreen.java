@@ -61,7 +61,7 @@ public class GameScreen extends BoardView {
 
         // 4) Create our new sidePanel
         sidePanel = new JPanel();
-        sidePanel.setPreferredSize(new Dimension(250, getHeight())); // Increased width for better spacing
+        sidePanel.setPreferredSize(new Dimension(300, getHeight())); // Increased width for better spacing
         sidePanel.setLayout(new BoxLayout(sidePanel, BoxLayout.Y_AXIS));
         sidePanel.setBorder(new EmptyBorder(10, 10, 10, 10)); // Add padding around the side panel
 
@@ -89,7 +89,7 @@ public class GameScreen extends BoardView {
 
         // Scroll pane for the list with added padding
         JScrollPane scrollPane = new JScrollPane(moveList);
-        scrollPane.setPreferredSize(new Dimension(220, 300));
+        scrollPane.setPreferredSize(new Dimension(270, 300));
         scrollPane.setAlignmentX(Component.CENTER_ALIGNMENT);
         scrollPane.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.GRAY),
