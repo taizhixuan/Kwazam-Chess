@@ -47,14 +47,18 @@ public class BoardView extends JFrame {
     }
 
     private void initializeBoard() {
-        // Assign to the class field mainPanel, not a local variable
+        // Create the main panel
         this.mainPanel = new JPanel(new GridBagLayout());
         mainPanel.setBackground(getBackground());
 
         // Create the board panel with GridLayout for buttons
         boardPanel = new JPanel(new GridLayout(8, 5));
         buttons = new JButton[8][5];
-        boardPanel.setPreferredSize(new Dimension(BUTTON_SIZE * 5, BUTTON_SIZE * 8));
+
+        // Create dynamic button size based on the window size
+        Dimension boardSize = new Dimension(BUTTON_SIZE * 5, BUTTON_SIZE * 8);
+        boardPanel.setPreferredSize(boardSize);
+        boardPanel.setMinimumSize(boardSize);
 
         // Create labels for row numbers
         JPanel rowLabels = new JPanel(new GridLayout(8, 1));
@@ -107,7 +111,6 @@ public class BoardView extends JFrame {
         refreshBoard();
     }
 
-
     /**
      * Redraws the board with updated piece positions and icons.
      */
@@ -125,7 +128,7 @@ public class BoardView extends JFrame {
                  col += isCurrentPlayerRed ? -1 : 1) {
 
                 JButton button = new JButton();
-                button.setPreferredSize(new Dimension(BUTTON_SIZE, BUTTON_SIZE));
+                button.setPreferredSize(new Dimension(boardPanel.getWidth() / 5, boardPanel.getHeight() / 8));
                 buttons[row][col] = button;
 
                 Position position = new Position(row, col);
