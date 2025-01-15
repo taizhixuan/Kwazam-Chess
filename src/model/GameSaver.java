@@ -48,12 +48,13 @@ public class GameSaver {
 
             // Write the move history
             writer.write("\n// --- Move History ---\n");
-            writer.write("// Format: move: [Player], [FromRow], [FromCol], [ToRow], [ToCol]\n");
+            writer.write("// Format: move: [Player], [PieceType], [FromRow], [FromCol], [ToRow], [ToCol]\n");
 
             List<Move> moveHistory = gameState.getMoveHistory();
             for (Move move : moveHistory) {
-                writer.write(String.format("move: %s, %d, %d, %d, %d\n",
+                writer.write(String.format("move: %s, %s, %d, %d, %d, %d\n",
                         move.getPlayer(),
+                        move.getPieceType(),
                         move.getFrom().getRow(),
                         move.getFrom().getColumn(),
                         move.getTo().getRow(),

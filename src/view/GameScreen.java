@@ -235,6 +235,10 @@ public class GameScreen extends BoardView {
      * Pulls the entire move history from the controller
      * and displays it in the moveListModel with correct display coordinates.
      */
+    /**
+     * Pulls the entire move history from the controller
+     * and displays it in the moveListModel with correct display coordinates.
+     */
     private void updateMoveList() {
         // Clear old contents first
         moveListModel.clear();
@@ -243,8 +247,11 @@ public class GameScreen extends BoardView {
         List<Move> history = controller.getMoveHistory();
         boolean isRedPerspective = controller.getCurrentPlayer().equals("BLUE"); // Since player just switched
 
+        int moveNumber = 1; // For numbering moves
+
         for (Move move : history) {
             String player = move.getPlayer();
+            String pieceType = move.getPieceType(); // Get piece type
 
             // Determine if the move should be displayed with inversion
             boolean isRedPlayer = player.equalsIgnoreCase("RED");
@@ -257,8 +264,10 @@ public class GameScreen extends BoardView {
             int displayToCol = shouldInvert ? (4 - move.getTo().getColumn()) : move.getTo().getColumn();
 
             String formattedMove = String.format(
-                    "%s: (%d,%d) -> (%d,%d)",
+                    "%d. %s (%s): (%d,%d) -> (%d,%d)",
+                    moveNumber++,
                     player,
+                    pieceType,
                     displayFromRow, displayFromCol,
                     displayToRow, displayToCol
             );

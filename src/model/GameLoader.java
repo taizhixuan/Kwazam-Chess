@@ -48,19 +48,20 @@ public class GameLoader {
                 } else if (line.startsWith("move:")) {
                     loadingMoveHistory = true;
                     String[] parts = line.substring(5).split(",\\s*");
-                    if (parts.length != 5) {
+                    if (parts.length != 6) { // Updated to expect 6 parts
                         throw new IOException("Invalid move format: " + line);
                     }
                     String player = parts[0].trim();
-                    int fromRow = Integer.parseInt(parts[1].trim());
-                    int fromCol = Integer.parseInt(parts[2].trim());
-                    int toRow = Integer.parseInt(parts[3].trim());
-                    int toCol = Integer.parseInt(parts[4].trim());
+                    String pieceType = parts[1].trim(); // New: piece type
+                    int fromRow = Integer.parseInt(parts[2].trim());
+                    int fromCol = Integer.parseInt(parts[3].trim());
+                    int toRow = Integer.parseInt(parts[4].trim());
+                    int toCol = Integer.parseInt(parts[5].trim());
 
                     Position from = new Position(fromRow, fromCol);
                     Position to = new Position(toRow, toCol);
 
-                    Move move = new Move(player, from, to);
+                    Move move = new Move(player, pieceType, from, to);
                     moveHistory.add(move);
                 }
             }

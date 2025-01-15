@@ -39,13 +39,20 @@ public class GameController {
         // Fetch the current player before making the move
         String currentPlayer = game.getCurrentPlayer().name();
 
+        // Fetch the piece being moved to get its type
+        Piece piece = game.getBoard().getPieceAt(from);
+        if (piece == null) {
+            return false; // No piece to move
+        }
+        String pieceType = piece.getType();
+
         boolean success = game.movePiece(from, to);
         if (success) {
-            // Record the move with internal coordinates
-            Move move = new Move(currentPlayer, from, to);
+            // Record the move with piece type
+            Move move = new Move(currentPlayer, pieceType, from, to);
             moveHistory.add(move);
-        }        return success;
-
+        }
+        return success;
     }
 
     /**
