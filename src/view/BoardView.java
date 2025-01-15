@@ -35,8 +35,30 @@ public class BoardView extends JFrame {
         setSize(BUTTON_SIZE * 7 + 100, BUTTON_SIZE * 9 + 100); // Adjust window size to fit the board appropriately // Adjust window size to fit the even smaller board // Adjust window size to fit the smaller board // Adjust window size to fit margins and labels // Adjust window size to fit board and labels // Set initial window size
         setMinimumSize(new Dimension(BUTTON_SIZE * 7 + 100, BUTTON_SIZE * 9 + 100)); // Ensure minimum window size to fit the board // Ensure minimum window size for the smaller board // Ensure minimum window size for smaller board // Ensure fixed size including margins // Ensure minimum window size
         setLocationRelativeTo(null); // Center the window on the screen
+
+        // Add a listener to resize the board dynamically
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            @Override
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                resizeBoard();
+            }
+        });
+
         setVisible(true);
     }
+
+    private void resizeBoard() {
+        int panelWidth = mainPanel.getWidth();
+        int panelHeight = mainPanel.getHeight();
+
+        // Determine the size of the square board based on the smaller dimension
+        int newSize = Math.min(panelWidth / 5 * 5, panelHeight / 8 * 8);
+
+        // Update the preferred size of the board panel to keep it square
+        boardPanel.setPreferredSize(new Dimension(newSize, newSize));
+        boardPanel.revalidate();
+    }
+
 
     /**
      * Provide access to the main panel, so that a subclass can
@@ -118,6 +140,9 @@ public class BoardView extends JFrame {
         boardPanel.removeAll();
         Board board = controller.getBoard();
 
+        // Calculate the size of each button to maintain square tiles
+        int buttonSize = boardPanel.getPreferredSize().width / 5;
+
         boolean isCurrentPlayerRed = controller.getCurrentPlayer().equals("RED");
 
         for (int row = isCurrentPlayerRed ? board.getRows() - 1 : 0;
@@ -128,7 +153,7 @@ public class BoardView extends JFrame {
                  col += isCurrentPlayerRed ? -1 : 1) {
 
                 JButton button = new JButton();
-                button.setPreferredSize(new Dimension(boardPanel.getWidth() / 5, boardPanel.getHeight() / 8));
+                button.setPreferredSize(new Dimension(buttonSize, buttonSize));
                 buttons[row][col] = button;
 
                 Position position = new Position(row, col);
@@ -141,7 +166,7 @@ public class BoardView extends JFrame {
                     );
                     Image originalImage = icon.getImage();
                     Image displayedImage = isCurrentPlayerRed ? rotateImage(originalImage) : originalImage;
-                    Image scaledImage = displayedImage.getScaledInstance(BUTTON_SIZE - 15, BUTTON_SIZE - 15, Image.SCALE_SMOOTH);
+                    Image scaledImage = displayedImage.getScaledInstance(buttonSize - 15, buttonSize - 15, Image.SCALE_SMOOTH);
                     button.setIcon(new ImageIcon(scaledImage));
                 }
 
@@ -164,7 +189,6 @@ public class BoardView extends JFrame {
         boardPanel.revalidate();
         boardPanel.repaint();
     }
-
 
     /**
      * Handles user clicks on the board.
