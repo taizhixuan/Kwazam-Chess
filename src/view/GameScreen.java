@@ -60,7 +60,7 @@ public class GameScreen extends BoardView {
 
         // 4) Create our new sidePanel with increased width
         sidePanel = new JPanel();
-        sidePanel.setPreferredSize(new Dimension(300, getHeight())); // Increased width: 300
+        sidePanel.setPreferredSize(new Dimension(300, getHeight()));
         sidePanel.setLayout(new BoxLayout(sidePanel, BoxLayout.Y_AXIS));
         sidePanel.setBorder(new EmptyBorder(10, 10, 10, 10)); // Add padding around the side panel
 
@@ -79,7 +79,7 @@ public class GameScreen extends BoardView {
         // >>> CREATE moveListModel and moveList <<<
         moveListModel = new DefaultListModel<>();
         moveList = new JList<>(moveListModel);
-        moveList.setFont(new Font("Monospaced", Font.PLAIN, 16)); // Increased font size: 16
+        moveList.setFont(new Font("Monospaced", Font.PLAIN, 16));
 
         // Add a label for the move list
         JLabel moveListLabel = new JLabel("Move History", SwingConstants.CENTER);
@@ -88,7 +88,7 @@ public class GameScreen extends BoardView {
 
         // Scroll pane for the list with added padding and increased width
         JScrollPane scrollPane = new JScrollPane(moveList);
-        scrollPane.setPreferredSize(new Dimension(270, 300)); // Increased width: 270
+        scrollPane.setPreferredSize(new Dimension(270, 300));
         scrollPane.setAlignmentX(Component.CENTER_ALIGNMENT);
         scrollPane.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.GRAY),
