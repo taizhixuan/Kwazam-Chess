@@ -5,10 +5,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-//import java.io.BufferedReader;
-//import java.io.FileReader;
-//import java.io.IOException;
-
 public class GameLoader {
 
     public static GameState loadGameFromTextFile(String filename) throws IOException {
