@@ -22,6 +22,7 @@ public class GameSaver {
             writer.write("// The move count made\n");
             writer.write("moveCount: " + gameState.getTurn() + "\n");
             writer.write("\n" + "// The player to play a move\n");
+            // Save the current player (who will make the next move after the flip)
             writer.write("currentPlayer: " + gameState.getCurrentPlayer() + "\n");
 
             // Log game-over status

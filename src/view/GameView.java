@@ -36,12 +36,12 @@ public class GameView {
                 int toCol   = scanner.nextInt();
 
                 // --- Coordinate Flip Only if RED is current player ---
-                if (currentPlayer.equals("RED")) {
-                    fromRow = 7 - fromRow; // 7 = last row index
-                    fromCol = 4 - fromCol; // 4 = last col index
-                    toRow   = 7 - toRow;
-                    toCol   = 4 - toCol;
-                }
+//                if (currentPlayer.equals("RED")) {
+//                    fromRow = 7 - fromRow; // 7 = last row index
+//                    fromCol = 4 - fromCol; // 4 = last col index
+//                    toRow   = 7 - toRow;
+//                    toCol   = 4 - toCol;
+//                }
 
                 Position from = new Position(fromRow, fromCol);
                 Position to   = new Position(toRow, toCol);
