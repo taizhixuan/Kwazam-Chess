@@ -20,6 +20,7 @@ public class GameLoader {
             int turn = 0;
             Color currentPlayer = null;
             List<Move> moveHistory = new ArrayList<>();
+            int secondsElapsed = 0; // Initialize timer
 
             boolean loadingMoveHistory = false;
 
@@ -63,11 +64,14 @@ public class GameLoader {
 
                     Move move = new Move(player, pieceType, from, to);
                     moveHistory.add(move);
+                } else if (line.startsWith("secondsElapsed:")) {
+                    secondsElapsed = Integer.parseInt(line.split(":")[1].trim());
                 }
             }
 
             // Create GameState with move history
             GameState gameState = new GameState(board, currentPlayer, turn, moveHistory);
+            gameState.setSecondsElapsed(secondsElapsed); // Set timer state
 
             // Update game over status if necessary
             gameState.updateGameOverStatus();

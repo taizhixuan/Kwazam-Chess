@@ -20,7 +20,6 @@ public class GameScreen extends BoardView {
     private JPanel sidePanel;
     private JLabel timerLabel;
     private Timer gameTimer;
-    private int secondsElapsed = 0;
 
     // Move history components
     private DefaultListModel<String> moveListModel;
@@ -37,7 +36,7 @@ public class GameScreen extends BoardView {
         // 3) Build the sidebar (including moveListModel, moveList)
         setupLayoutWithSidebar();
 
-        // 4) Start the timer
+        // 4) Start the timer with the current secondsElapsed from controller
         startGameTimer();
 
         // 5) Now that everything is ready, refresh the board
@@ -59,9 +58,9 @@ public class GameScreen extends BoardView {
         JPanel boardViewPanel = getMainPanel();
         getContentPane().add(boardViewPanel, BorderLayout.CENTER);
 
-        // 4) Create our new sidePanel
+        // 4) Create our new sidePanel with increased width
         sidePanel = new JPanel();
-        sidePanel.setPreferredSize(new Dimension(300, getHeight())); // Increased width for better spacing
+        sidePanel.setPreferredSize(new Dimension(300, getHeight())); // Increased width: 300
         sidePanel.setLayout(new BoxLayout(sidePanel, BoxLayout.Y_AXIS));
         sidePanel.setBorder(new EmptyBorder(10, 10, 10, 10)); // Add padding around the side panel
 
@@ -69,7 +68,7 @@ public class GameScreen extends BoardView {
         sidePanel.add(Box.createVerticalStrut(20));
 
         // 5) Timer label
-        timerLabel = new JLabel("Time: 0s");
+        timerLabel = new JLabel("Time: " + controller.getSecondsElapsed() + "s"); // Initialize with controller's time
         timerLabel.setFont(new Font("Arial", Font.PLAIN, 16));
         timerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         sidePanel.add(timerLabel);
@@ -80,16 +79,16 @@ public class GameScreen extends BoardView {
         // >>> CREATE moveListModel and moveList <<<
         moveListModel = new DefaultListModel<>();
         moveList = new JList<>(moveListModel);
-        moveList.setFont(new Font("Monospaced", Font.PLAIN, 14)); // Use monospaced font for alignment
+        moveList.setFont(new Font("Monospaced", Font.PLAIN, 16)); // Increased font size: 16
 
         // Add a label for the move list
         JLabel moveListLabel = new JLabel("Move History", SwingConstants.CENTER);
         moveListLabel.setFont(new Font("Arial", Font.BOLD, 16));
         moveListLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Scroll pane for the list with added padding
+        // Scroll pane for the list with added padding and increased width
         JScrollPane scrollPane = new JScrollPane(moveList);
-        scrollPane.setPreferredSize(new Dimension(270, 300));
+        scrollPane.setPreferredSize(new Dimension(270, 300)); // Increased width: 270
         scrollPane.setAlignmentX(Component.CENTER_ALIGNMENT);
         scrollPane.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.GRAY),
@@ -98,6 +97,22 @@ public class GameScreen extends BoardView {
 
         // Add a border around the move history for better separation
         moveList.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+        // >>> ADD CUSTOM CELL RENDERER FOR COLOR-CODING <<<
+        moveList.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index,
+                                                          boolean isSelected, boolean cellHasFocus) {
+                JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                String moveStr = (String) value;
+                if (moveStr.contains("(RED)")) {
+                    label.setForeground(Color.RED);
+                } else if (moveStr.contains("(BLUE)")) {
+                    label.setForeground(new Color(0, 0, 255)); // Blue color
+                }
+                return label;
+            }
+        });
 
         // Add components to the sidePanel
         sidePanel.add(moveListLabel);
@@ -116,10 +131,13 @@ public class GameScreen extends BoardView {
      * Sets up a javax.swing.Timer that increments `secondsElapsed` every second.
      */
     private void startGameTimer() {
+        // Initialize the timer label with current secondsElapsed
+        timerLabel.setText("Time: " + controller.getSecondsElapsed() + "s");
+
         // Fire an event every 1000 ms = 1 second
         gameTimer = new Timer(1000, e -> {
-            secondsElapsed++;
-            timerLabel.setText("Time: " + secondsElapsed + "s");
+            controller.incrementSecondsElapsed(); // Increment in controller
+            timerLabel.setText("Time: " + controller.getSecondsElapsed() + "s");
         });
         gameTimer.start();
     }
@@ -149,8 +167,9 @@ public class GameScreen extends BoardView {
         newGame.addActionListener(e -> {
             controller.resetGame();
             super.refreshBoard();
-            // Reset the timer if you like
-            secondsElapsed = 0;
+            // Reset the timer
+            controller.setSecondsElapsed(0);
+            timerLabel.setText("Time: 0s");
             JOptionPane.showMessageDialog(this, "New game started!");
         });
         gameMenu.add(newGame);
@@ -186,7 +205,8 @@ public class GameScreen extends BoardView {
                 try {
                     controller.loadGame(filename);
                     refreshBoard();
-                    // Reset or keep the timer as you wish
+                    // Update the timer label
+                    timerLabel.setText("Time: " + controller.getSecondsElapsed() + "s");
                     JOptionPane.showMessageDialog(this, "Game loaded successfully!");
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this,
@@ -227,14 +247,6 @@ public class GameScreen extends BoardView {
         updateMoveList();
     }
 
-    /**
-     * Pulls the entire move history from the controller
-     * and displays it in the moveListModel with correct display coordinates.
-     */
-    /**
-     * Pulls the entire move history from the controller
-     * and displays it in the moveListModel with correct display coordinates.
-     */
     /**
      * Pulls the entire move history from the controller
      * and displays it in the moveListModel with correct display coordinates.

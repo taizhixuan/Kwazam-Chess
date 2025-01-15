@@ -9,6 +9,7 @@ public class GameState {
     private int turn;              // Turn counter
     private boolean isGameOver;    // Whether the game is over
     private List<Move> moveHistory; // List of moves made in the game
+    private int secondsElapsed;    // New field for timer
 
     // Constructor and getter methods
     public GameState(Board board, Color currentPlayer, int turn, List<Move> moveHistory) {
@@ -17,6 +18,7 @@ public class GameState {
         this.turn = turn;
         this.moveHistory = moveHistory;
         this.isGameOver = false;  // Default to false, will be checked/updated elsewhere
+        this.secondsElapsed = 0;  // Initialize timer
     }
 
     public Board getBoard() {
@@ -43,6 +45,16 @@ public class GameState {
     public void setGameOver(boolean isGameOver) {
         this.isGameOver = isGameOver;
     }
+
+    // Getter and setter for secondsElapsed
+    public int getSecondsElapsed() {
+        return secondsElapsed;
+    }
+
+    public void setSecondsElapsed(int secondsElapsed) {
+        this.secondsElapsed = secondsElapsed;
+    }
+
 
     // Update game over status based on the game's board state
     public void updateGameOverStatus() {

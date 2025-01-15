@@ -18,10 +18,26 @@ public class GameController {
 
     private final List<Move> moveHistory = new ArrayList<>();
 
+    private int secondsElapsed = 0;
 
     public GameController(Board board) {
         this.game = new Game(board);
         this.selectedPiece = null;
+    }
+
+    // Getter for secondsElapsed
+    public int getSecondsElapsed() {
+        return secondsElapsed;
+    }
+
+    // Setter for secondsElapsed
+    public void setSecondsElapsed(int secondsElapsed) {
+        this.secondsElapsed = secondsElapsed;
+    }
+
+    // Method to increment secondsElapsed
+    public void incrementSecondsElapsed() {
+        this.secondsElapsed++;
     }
 
     public boolean isPieceSelected() {
@@ -197,13 +213,15 @@ public class GameController {
         Game.reset(game);
         selectedPiece = null;
         moveHistory.clear(); // Clear move history when resetting
+        secondsElapsed = 0;  // Reset the timer
     }
 
     /**
      * Save the game in .txt file.
      */
     public void saveGameAsText(String filename) {
-        GameState gameState = new GameState(game.getBoard(), game.getCurrentPlayer(), game.getTurnCounter(), new ArrayList<>(moveHistory));
+        GameState gameState = new GameState(game.getBoard(), game.getCurrentPlayer(), game.getTurnCounter(), new ArrayList<>(moveHistory));        gameState.setSecondsElapsed(this.secondsElapsed); // Save timer state
+        gameState.setSecondsElapsed(this.secondsElapsed); // Save timer state
         try {
             GameSaver.saveGameAsText(gameState, filename);
             System.out.println("Game saved as text successfully!");
@@ -228,6 +246,9 @@ public class GameController {
             // Restore move history
             moveHistory.clear();
             moveHistory.addAll(gameState.getMoveHistory());
+
+            // Restore timer state
+            this.secondsElapsed = gameState.getSecondsElapsed();
 
             // Notify the GUI to update
             selectedPiece = null;

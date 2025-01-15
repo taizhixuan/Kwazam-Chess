@@ -62,6 +62,10 @@ public class GameSaver {
                 ));
             }
 
+            // Write the timer state
+            writer.write("\n// --- Timer State ---\n");
+            writer.write("secondsElapsed: " + gameState.getSecondsElapsed() + "\n");
+
             // End message
             writer.write("\n// --- End of Game State ---\n");
             System.out.println("Game saved successfully to " + filename);
