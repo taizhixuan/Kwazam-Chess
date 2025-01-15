@@ -186,23 +186,16 @@ public class GameController {
 
             // Restore the game state from the loaded file
             game.setBoard(gameState.getBoard());
+            game.setCurrentPlayer(gameState.getCurrentPlayer());
+            game.setTurnCounter(gameState.getTurn());
 
-            // Safely set the current player
-            if (gameState.getCurrentPlayer() != null) {
-                // Correct comparison for Color enum
-                game.setCurrentPlayer(gameState.getCurrentPlayer() == Color.BLUE ? Color.BLUE : Color.RED);
-            } else {
-                System.err.println("Warning: Current player is null in the loaded game state.");
-            }
-
-            // Set the turn counter
-            game.setTurn(gameState.getTurn());
-
+            // Notify the GUI to update
+            selectedPiece = null;
             System.out.println("Game loaded successfully!");
-        } catch (IOException | ClassNotFoundException e) {
+
+        } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Failed to load the game.");
         }
     }
-
 }

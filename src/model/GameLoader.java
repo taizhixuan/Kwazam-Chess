@@ -52,7 +52,6 @@ public class GameLoader {
         }
     }
 
-
     // Helper method to create a piece based on its type
     private static Piece createPiece(String type, int id, String color, Position position) {
         Color pieceColor = Color.valueOf(color); // Assumes Color is an enum with RED/BLUE

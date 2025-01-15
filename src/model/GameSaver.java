@@ -35,6 +35,7 @@ public class GameSaver {
                     Position position = new Position(row, col);
                     Piece piece = gameState.getBoard().getPieceAt(position);
                     if (piece != null) {
+                        // Adjust coordinates based on the current player's perspective
                         Position adjustedPosition = gameState.getBoard().rotateCoordinates(position, isRedTurn);
 
                         writer.write(String.format("piece: %s, %d, %d, %d, %s\n",
@@ -54,10 +55,36 @@ public class GameSaver {
         }
     }
 
-    // Load the game state from a binary file
-    public static GameState loadGame(String filename) throws IOException, ClassNotFoundException {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
-            return (GameState) ois.readObject();
+    public static GameState loadGame(String filename) throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            Board board = new Board();
+            Color currentPlayer = null;
+            int turn = 0;
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("moveCount:")) {
+                    turn = Integer.parseInt(line.split(":")[1].trim());
+                } else if (line.startsWith("currentPlayer:")) {
+                    currentPlayer = Color.valueOf(line.split(":")[1].trim());
+                } else if (line.startsWith("piece:")) {
+                    String[] parts = line.split(", ");
+                    String type = parts[0].split(":")[1].trim();
+                    int id = Integer.parseInt(parts[1].trim());
+                    int row = Integer.parseInt(parts[2].trim());
+                    int col = Integer.parseInt(parts[3].trim());
+                    Color color = Color.valueOf(parts[4].trim());
+
+                    Position position = new Position(row, col);
+                    Piece piece = PieceFactory.createPiece(type, color, id);
+                    board.setPieceAt(position, piece);
+                }
+            }
+
+            return new GameState(board, currentPlayer, turn);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new IOException("Error loading game from text file: " + e.getMessage());
         }
     }
 }
