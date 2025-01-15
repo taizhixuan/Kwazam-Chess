@@ -98,22 +98,6 @@ public class GameScreen extends BoardView {
         // Add a border around the move history for better separation
         moveList.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-        // >>> ADD CUSTOM CELL RENDERER FOR COLOR-CODING <<<
-        moveList.setCellRenderer(new DefaultListCellRenderer() {
-            @Override
-            public Component getListCellRendererComponent(JList<?> list, Object value, int index,
-                                                          boolean isSelected, boolean cellHasFocus) {
-                JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                String moveStr = (String) value;
-                if (moveStr.contains("(RED)")) {
-                    label.setForeground(Color.RED);
-                } else if (moveStr.contains("(BLUE)")) {
-                    label.setForeground(new Color(0, 0, 255)); // Blue color
-                }
-                return label;
-            }
-        });
-
         // Add components to the sidePanel
         sidePanel.add(moveListLabel);
         sidePanel.add(Box.createVerticalStrut(10));
