@@ -182,7 +182,7 @@ public class GameController {
      */
     public void loadGame(String filename) {
         try {
-            GameState gameState = GameSaver.loadGame(filename);
+            GameState gameState = GameLoader.loadGameFromTextFile(filename);
 
             // Restore the game state from the loaded file
             game.setBoard(gameState.getBoard());

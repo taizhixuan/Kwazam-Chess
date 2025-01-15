@@ -1,3 +1,4 @@
+// Board.java
 package model;
 
 import java.util.ArrayList;
@@ -66,7 +67,18 @@ public class Board {
     }
 
     /**
-     * Rotate coordinates if it's Blue's turn
+     * Clear the entire board by removing all pieces.
+     */
+    public void clearBoard() {
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLUMNS; col++) {
+                grid[row][col] = null;
+            }
+        }
+    }
+
+    /**
+     * Rotate coordinates if it's Red's turn.
      */
     public Position rotateCoordinates(Position position, boolean isRedTurn) {
         int row = position.getRow();
