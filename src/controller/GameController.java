@@ -189,13 +189,14 @@ public class GameController {
     public void resetGame() {
         Game.reset(game);
         selectedPiece = null;
+        moveHistory.clear(); // Clear move history when resetting
     }
 
     /**
      * Save the game in .txt file.
      */
     public void saveGameAsText(String filename) {
-        GameState gameState = new GameState(game.getBoard(), game.getCurrentPlayer(), game.getTurnCounter());
+        GameState gameState = new GameState(game.getBoard(), game.getCurrentPlayer(), game.getTurnCounter(), new ArrayList<>(moveHistory));
         try {
             GameSaver.saveGameAsText(gameState, filename);
             System.out.println("Game saved as text successfully!");
@@ -216,6 +217,10 @@ public class GameController {
             game.setBoard(gameState.getBoard());
             game.setCurrentPlayer(gameState.getCurrentPlayer());
             game.setTurnCounter(gameState.getTurn());
+
+            // Restore move history
+            moveHistory.clear();
+            moveHistory.addAll(gameState.getMoveHistory());
 
             // Notify the GUI to update
             selectedPiece = null;

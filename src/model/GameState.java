@@ -1,17 +1,21 @@
 // GameState.java
 package model;
 
+import java.util.List;
+
 public class GameState {
     private Board board;           // Contains the board state
     private Color currentPlayer;   // Current player
     private int turn;              // Turn counter
     private boolean isGameOver;    // Whether the game is over
+    private List<Move> moveHistory; // List of moves made in the game
 
     // Constructor and getter methods
-    public GameState(Board board, Color currentPlayer, int turn) {
+    public GameState(Board board, Color currentPlayer, int turn, List<Move> moveHistory) {
         this.board = board;
         this.currentPlayer = currentPlayer;
         this.turn = turn;
+        this.moveHistory = moveHistory;
         this.isGameOver = false;  // Default to false, will be checked/updated elsewhere
     }
 
@@ -27,12 +31,15 @@ public class GameState {
         return turn;
     }
 
-    // Getter for isGameOver
+    public List<Move> getMoveHistory() {
+        return moveHistory;
+    }
+
+    // Getter and setter for isGameOver
     public boolean isGameOver() {
         return isGameOver;
     }
 
-    // Setter for isGameOver (in case you want to manually set it)
     public void setGameOver(boolean isGameOver) {
         this.isGameOver = isGameOver;
     }

@@ -5,6 +5,10 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+//import java.io.BufferedReader;
+//import java.io.FileReader;
+//import java.io.IOException;
+
 public class GameLoader {
 
     public static GameState loadGameFromTextFile(String filename) throws IOException {
@@ -15,9 +19,13 @@ public class GameLoader {
             String line;
             int turn = 0;
             Color currentPlayer = null;
+            List<Move> moveHistory = new ArrayList<>();
+
+            boolean loadingMoveHistory = false;
 
             while ((line = reader.readLine()) != null) {
-                if (line.trim().isEmpty() || line.startsWith("//")) continue;
+                line = line.trim();
+                if (line.isEmpty() || line.startsWith("//")) continue;
 
                 if (line.startsWith("moveCount:")) {
                     turn = Integer.parseInt(line.split(":")[1].trim());
@@ -37,10 +45,34 @@ public class GameLoader {
 
                     Piece piece = PieceFactory.createPiece(type, color, id);
                     board.setPieceAt(originalPosition, piece);
+                } else if (line.startsWith("move:")) {
+                    loadingMoveHistory = true;
+                    String[] parts = line.substring(5).split(",\\s*");
+                    if (parts.length != 5) {
+                        throw new IOException("Invalid move format: " + line);
+                    }
+                    String player = parts[0].trim();
+                    int fromRow = Integer.parseInt(parts[1].trim());
+                    int fromCol = Integer.parseInt(parts[2].trim());
+                    int toRow = Integer.parseInt(parts[3].trim());
+                    int toCol = Integer.parseInt(parts[4].trim());
+
+                    Position from = new Position(fromRow, fromCol);
+                    Position to = new Position(toRow, toCol);
+
+                    Move move = new Move(player, from, to);
+                    moveHistory.add(move);
                 }
             }
 
-            return new GameState(board, currentPlayer, turn);
+            // Create GameState with move history
+            GameState gameState = new GameState(board, currentPlayer, turn, moveHistory);
+
+            // Update game over status if necessary
+            gameState.updateGameOverStatus();
+
+            System.out.println("Game loaded successfully from " + filename);
+            return gameState;
         } catch (IOException e) {
             e.printStackTrace();
             throw new IOException("Error loading game from text file: " + e.getMessage());

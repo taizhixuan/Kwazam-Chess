@@ -1,10 +1,12 @@
 // GameSaver.java
 package model;
 
-import controller.GameController;
-
 import java.io.*;
 import java.util.List;
+
+//import java.io.BufferedWriter;
+//import java.io.FileWriter;
+//import java.io.IOException;
 
 public class GameSaver {
 
@@ -43,6 +45,22 @@ public class GameSaver {
                     }
                 }
             }
+
+            // Write the move history
+            writer.write("\n// --- Move History ---\n");
+            writer.write("// Format: move: [Player], [FromRow], [FromCol], [ToRow], [ToCol]\n");
+
+            List<Move> moveHistory = gameState.getMoveHistory();
+            for (Move move : moveHistory) {
+                writer.write(String.format("move: %s, %d, %d, %d, %d\n",
+                        move.getPlayer(),
+                        move.getFrom().getRow(),
+                        move.getFrom().getColumn(),
+                        move.getTo().getRow(),
+                        move.getTo().getColumn()
+                ));
+            }
+
             // End message
             writer.write("\n// --- End of Game State ---\n");
             System.out.println("Game saved successfully to " + filename);
