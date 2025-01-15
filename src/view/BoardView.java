@@ -36,29 +36,8 @@ public class BoardView extends JFrame {
         setMinimumSize(new Dimension(BUTTON_SIZE * 7 + 100, BUTTON_SIZE * 9 + 100)); // Ensure minimum window size to fit the board // Ensure minimum window size for the smaller board // Ensure minimum window size for smaller board // Ensure fixed size including margins // Ensure minimum window size
         setLocationRelativeTo(null); // Center the window on the screen
 
-        // Add a listener to resize the board dynamically
-        addComponentListener(new java.awt.event.ComponentAdapter() {
-            @Override
-            public void componentResized(java.awt.event.ComponentEvent evt) {
-                resizeBoard();
-            }
-        });
-
         setVisible(true);
 
-    }
-
-    private void resizeBoard() {
-        int panelWidth = mainPanel.getWidth();
-        int panelHeight = mainPanel.getHeight();
-
-        int cellSize = Math.min(panelWidth / 5, panelHeight / 8);
-        int newWidth = cellSize * 5;
-        int newHeight = cellSize * 8;
-
-        boardPanel.setPreferredSize(new Dimension(newWidth, newHeight));
-        boardPanel.revalidate();
-        boardPanel.repaint();
     }
 
     /**
