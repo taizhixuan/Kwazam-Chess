@@ -55,90 +55,74 @@ public class GameController {
      * Handles tile clicks in the GUI.
      */
     public void handleTileClick(Position position, BoardView view) {
+        // Simply use the row/col from the clicked position, with no flipping
         int clickedRow = position.getRow();
         int clickedCol = position.getColumn();
 
-        // Check if current player is Red
-        boolean isRed = getCurrentPlayer().equals("RED");
-
-        int displayClickedRow = isRed ? (7 - clickedRow) : clickedRow;
-        int displayClickedCol = isRed ? (4 - clickedCol) : clickedCol;
-
-        // If no piece is selected yet
+        // If no piece is currently selected
         if (selectedPiece == null) {
             Piece piece = game.getBoard().getPieceAt(position);
+
+            // Make sure the tile has the current player's piece
             if (piece != null && piece.getColor().name().equalsIgnoreCase(game.getCurrentPlayer().name())) {
+                // Select this piece
                 selectedPiece = position;
                 List<Position> validMoves = game.getPossibleMoves(piece, position);
 
-                int displayFromRow = isRed ? (7 - selectedPiece.getRow()) : selectedPiece.getRow();
-                int displayFromCol = isRed ? (4 - selectedPiece.getColumn()) : selectedPiece.getColumn();
+                // Log a simple console message
+                System.out.printf("GUI: %s piece at (%d, %d) selected.%n",
+                        piece.getClass().getSimpleName(), clickedRow, clickedCol);
 
-                System.out.printf(
-                        "GUI: %s piece at (%d, %d) selected.%n",
-                        piece.getClass().getSimpleName(),
-                        displayFromRow, displayFromCol
-                );
-
+                // Highlight the selected piece + its valid moves
                 view.clearHighlights();
                 view.highlightSelectedPiece(position);
                 view.highlightValidMoves(validMoves);
+
+            } else {
+                // Either the tile is empty or it's the opponent's piece
+                System.out.println("GUI: No valid piece selected or it's the opponent's piece.");
             }
         } else {
-            // A piece is already selected
+            // A piece was already selected
             if (selectedPiece.equals(position)) {
-                int displayFromRow = isRed ? (7 - selectedPiece.getRow()) : selectedPiece.getRow();
-                int displayFromCol = isRed ? (4 - selectedPiece.getColumn()) : selectedPiece.getColumn();
-
-                System.out.printf(
-                        "GUI: Piece at (%d, %d) deselected.%n",
-                        displayFromRow, displayFromCol
-                );
+                // The user clicked the same tile => deselect the piece
+                Piece piece = game.getBoard().getPieceAt(position);
+                System.out.printf("GUI: %s piece at (%d, %d) deselected.%n",
+                        (piece != null) ? piece.getClass().getSimpleName() : "Unknown",
+                        clickedRow, clickedCol);
 
                 selectedPiece = null;
                 view.clearHighlights();
 
             } else {
-                Piece pieceAtClicked = game.getBoard().getPieceAt(position);
-                if (pieceAtClicked != null &&
-                        pieceAtClicked.getColor().name().equalsIgnoreCase(game.getCurrentPlayer().name())) {
-                    System.out.println("GUI: You must deselect the current piece first.");
-                    return;
-                }
-
-                int displayFromRow = isRed ? (7 - selectedPiece.getRow()) : selectedPiece.getRow();
-                int displayFromCol = isRed ? (4 - selectedPiece.getColumn()) : selectedPiece.getColumn();
-
-                System.out.printf(
-                        "GUI: Attempting to move from (%d, %d) to (%d, %d).%n",
-                        displayFromRow, displayFromCol,
-                        displayClickedRow, displayClickedCol
-                );
+                // Attempt to move from selectedPiece to this clicked tile
+                System.out.printf("GUI: Attempting to move from (%d, %d) to (%d, %d).%n",
+                        selectedPiece.getRow(), selectedPiece.getColumn(),
+                        clickedRow, clickedCol);
 
                 if (game.movePiece(selectedPiece, position)) {
-                    System.out.printf(
-                            "GUI: Move successful: from (%d, %d) to (%d, %d).%n",
-                            displayFromRow, displayFromCol,
-                            displayClickedRow, displayClickedCol
-                    );
+                    // If move is successful, log it and refresh
+                    System.out.printf("GUI: Move successful: from (%d, %d) to (%d, %d).%n",
+                            selectedPiece.getRow(), selectedPiece.getColumn(),
+                            clickedRow, clickedCol);
 
                     view.clearHighlights();
                     view.refreshBoard();
 
-                    if (game.getTurnCounter() % 2 == 0) {
-                        view.refreshBoard();
-                    }
-
+                    // Check if the game is over
                     if (game.isGameOver()) {
                         String winnerMessage = game.getWinner() + " wins! Game Over.";
                         System.out.println("GUI: " + winnerMessage);
                         view.gameOver(winnerMessage);
                     }
                 } else {
+                    // If move is invalid
                     System.out.println("GUI: Invalid move. Try again.");
                 }
 
+                // Clear the selection either way
                 selectedPiece = null;
+                // Re-draw the board to remove or update highlights
                 view.refreshBoard();
             }
         }
