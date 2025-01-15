@@ -5,6 +5,8 @@ import model.*;
 import view.BoardView;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -13,6 +15,9 @@ import java.util.List;
 public class GameController {
     private final Game game;
     private Position selectedPiece; // Stores the currently selected piece
+
+    private final List<String> moveHistory = new ArrayList<>();
+
 
     public GameController(Board board) {
         this.game = new Game(board);
@@ -31,7 +36,19 @@ public class GameController {
      * Handles a move request from a position to another.
      */
     public boolean movePiece(Position from, Position to) {
-        return game.movePiece(from, to);
+        boolean success = game.movePiece(from, to);
+        if (success) {
+            // Record the move in the moveHistory list
+            String currentPlayer = game.getCurrentPlayer().name();
+            // Example format: "RED: (1,2) -> (2,2)"
+            String moveDesc = String.format(
+                    "%s: (%d,%d) -> (%d,%d)",
+                    currentPlayer, from.getRow(), from.getColumn(),
+                    to.getRow(), to.getColumn()
+            );
+            moveHistory.add(moveDesc);
+        }
+        return success;
     }
 
     /**
@@ -125,6 +142,10 @@ public class GameController {
                 view.refreshBoard();
             }
         }
+    }
+
+    public List<String> getMoveHistory() {
+        return Collections.unmodifiableList(moveHistory);
     }
 
     /**

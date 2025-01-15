@@ -131,7 +131,7 @@ public class BoardView extends JFrame {
 
         // Finally, add mainPanel to the frame
         add(mainPanel);
-        refreshBoard();
+//        refreshBoard();
     }
 
     /**

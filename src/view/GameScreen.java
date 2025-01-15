@@ -22,6 +22,9 @@ public class GameScreen extends BoardView {
     private Timer gameTimer;
     private int secondsElapsed = 0;
 
+    private DefaultListModel<String> moveListModel;
+    private JList<String> moveList;
+
     public GameScreen(GameController controller) {
         super(controller); // Call BoardView constructor (which sets up mainPanel)
         this.controller = controller;
@@ -31,6 +34,10 @@ public class GameScreen extends BoardView {
         setupLayoutWithSidebar();
         // Start the timer
         startGameTimer();
+
+        // Now that sidePanel + moveListModel are created,
+        // you can safely refresh the board (which calls updateMoveList()).
+        refreshBoard();
     }
 
     /**
@@ -61,7 +68,24 @@ public class GameScreen extends BoardView {
         timerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         sidePanel.add(timerLabel);
 
-        // You could add more controls (buttons, text fields, etc.) here if desired
+        moveListModel = new DefaultListModel<>();
+        moveList = new JList<>(moveListModel);
+
+        // Make it scrollable
+        JScrollPane scrollPane = new JScrollPane(moveList);
+        scrollPane.setPreferredSize(new Dimension(180, 300));
+        scrollPane.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Optional label above the list
+        JLabel moveListLabel = new JLabel("Move History", SwingConstants.CENTER);
+        moveListLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        moveListLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Add label + scroll pane to side panel
+        sidePanel.add(Box.createVerticalStrut(20));  // Some spacing
+        sidePanel.add(moveListLabel);
+        sidePanel.add(Box.createVerticalStrut(10));
+        sidePanel.add(scrollPane);
 
         // 6) Add sidePanel to the east
         getContentPane().add(sidePanel, BorderLayout.EAST);
@@ -183,7 +207,27 @@ public class GameScreen extends BoardView {
     @Override
     public void refreshBoard() {
         super.refreshBoard();
-        // Optionally, do something else here if needed
+        updateMoveList();
+    }
+
+    /**
+     * Pulls the entire move history from the controller
+     * and displays it in the moveListModel.
+     */
+    private void updateMoveList() {
+        // Clear old contents first
+        moveListModel.clear();
+
+        // Retrieve the entire move history from the controller
+        List<String> history = controller.getMoveHistory();
+        for (String move : history) {
+            moveListModel.addElement(move);
+        }
+
+        // Optionally, auto-scroll to the last move
+        if (!history.isEmpty()) {
+            moveList.ensureIndexIsVisible(history.size() - 1);
+        }
     }
 
     @Override
