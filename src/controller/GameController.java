@@ -36,11 +36,12 @@ public class GameController {
      * Handles a move request from a position to another.
      */
     public boolean movePiece(Position from, Position to) {
+        // Fetch the current player before making the move
+        String currentPlayer = game.getCurrentPlayer().name();
+
         boolean success = game.movePiece(from, to);
         if (success) {
-            // Record the move in the moveHistory list
-            String currentPlayer = game.getCurrentPlayer().name();
-            // Example format: "RED: (1,2) -> (2,2)"
+            // Record the move with the correct player
             String moveDesc = String.format(
                     "%s: (%d,%d) -> (%d,%d)",
                     currentPlayer, from.getRow(), from.getColumn(),
@@ -100,7 +101,7 @@ public class GameController {
                         selectedPiece.getRow(), selectedPiece.getColumn(),
                         clickedRow, clickedCol);
 
-                if (game.movePiece(selectedPiece, position)) {
+                if (movePiece(selectedPiece, position)) {
                     // If move is successful, log it and refresh
                     System.out.printf("GUI: Move successful: from (%d, %d) to (%d, %d).%n",
                             selectedPiece.getRow(), selectedPiece.getColumn(),
