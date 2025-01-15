@@ -16,7 +16,7 @@ public class GameController {
     private final Game game;
     private Position selectedPiece; // Stores the currently selected piece
 
-    private final List<String> moveHistory = new ArrayList<>();
+    private final List<Move> moveHistory = new ArrayList<>();
 
 
     public GameController(Board board) {
@@ -41,15 +41,11 @@ public class GameController {
 
         boolean success = game.movePiece(from, to);
         if (success) {
-            // Record the move with the correct player
-            String moveDesc = String.format(
-                    "%s: (%d,%d) -> (%d,%d)",
-                    currentPlayer, from.getRow(), from.getColumn(),
-                    to.getRow(), to.getColumn()
-            );
-            moveHistory.add(moveDesc);
-        }
-        return success;
+            // Record the move with internal coordinates
+            Move move = new Move(currentPlayer, from, to);
+            moveHistory.add(move);
+        }        return success;
+
     }
 
     /**
@@ -105,13 +101,7 @@ public class GameController {
                         displayFromRow, displayFromCol
                 );
 
-
                 // The user clicked the same tile => deselect the piece
-//                Piece piece = game.getBoard().getPieceAt(position);
-//                System.out.printf("GUI: %s piece at (%d, %d) deselected.%n",
-//                        (piece != null) ? piece.getClass().getSimpleName() : "Unknown",
-//                        clickedRow, clickedCol);
-
                 selectedPiece = null;
                 view.clearHighlights();
 
@@ -161,7 +151,7 @@ public class GameController {
         }
     }
 
-    public List<String> getMoveHistory() {
+    public List<Move> getMoveHistory() {
         return Collections.unmodifiableList(moveHistory);
     }
 

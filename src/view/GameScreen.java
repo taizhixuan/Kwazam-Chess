@@ -2,6 +2,7 @@
 package view;
 
 import controller.GameController;
+import model.Move;
 import model.Position;
 
 import javax.swing.*;
@@ -212,16 +213,41 @@ public class GameScreen extends BoardView {
 
     /**
      * Pulls the entire move history from the controller
-     * and displays it in the moveListModel.
+     * and displays it in the moveListModel with correct display coordinates.
+     */
+    /**
+     * Pulls the entire move history from the controller
+     * and displays it in the moveListModel with correct display coordinates.
      */
     private void updateMoveList() {
         // Clear old contents first
         moveListModel.clear();
 
         // Retrieve the entire move history from the controller
-        List<String> history = controller.getMoveHistory();
-        for (String move : history) {
-            moveListModel.addElement(move);
+        List<Move> history = controller.getMoveHistory();
+        boolean isRedPerspective = controller.getCurrentPlayer().equals("BLUE"); // Since player just switched
+
+        for (Move move : history) {
+            String player = move.getPlayer();
+
+            // Determine if the move should be displayed with inversion
+            boolean isRedPlayer = player.equalsIgnoreCase("RED");
+            boolean shouldInvert = isRedPlayer;
+
+            // Calculate display coordinates based on player perspective
+            int displayFromRow = shouldInvert ? (7 - move.getFrom().getRow()) : move.getFrom().getRow();
+            int displayFromCol = shouldInvert ? (4 - move.getFrom().getColumn()) : move.getFrom().getColumn();
+            int displayToRow = shouldInvert ? (7 - move.getTo().getRow()) : move.getTo().getRow();
+            int displayToCol = shouldInvert ? (4 - move.getTo().getColumn()) : move.getTo().getColumn();
+
+            String formattedMove = String.format(
+                    "%s: (%d,%d) -> (%d,%d)",
+                    player,
+                    displayFromRow, displayFromCol,
+                    displayToRow, displayToCol
+            );
+
+            moveListModel.addElement(formattedMove);
         }
 
         // Optionally, auto-scroll to the last move
