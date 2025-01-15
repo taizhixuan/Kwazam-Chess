@@ -23,7 +23,7 @@ public class BoardView extends JFrame {
     // Make the mainPanel protected so subclasses can rearrange it
     protected JPanel mainPanel;
 
-    private static final int BUTTON_SIZE = 80; // Adjust this for larger pieces
+    private static final int BUTTON_SIZE = 83; // Adjust this for larger pieces
 
     public BoardView(GameController controller) {
         this.controller = controller;
