@@ -60,6 +60,12 @@ public class GameController {
         int clickedRow = position.getRow();
         int clickedCol = position.getColumn();
 
+        // Check if current player is Red
+        boolean isRed = getCurrentPlayer().equals("RED");
+
+        int displayClickedRow = isRed ? (7 - clickedRow) : clickedRow;
+        int displayClickedCol = isRed ? (4 - clickedCol) : clickedCol;
+
         // If no piece is currently selected
         if (selectedPiece == null) {
             Piece piece = game.getBoard().getPieceAt(position);
@@ -70,9 +76,14 @@ public class GameController {
                 selectedPiece = position;
                 List<Position> validMoves = game.getPossibleMoves(piece, position);
 
-                // Log a simple console message
-                System.out.printf("GUI: %s piece at (%d, %d) selected.%n",
-                        piece.getClass().getSimpleName(), clickedRow, clickedCol);
+                int displayFromRow = isRed ? (7 - selectedPiece.getRow()) : selectedPiece.getRow();
+                int displayFromCol = isRed ? (4 - selectedPiece.getColumn()) : selectedPiece.getColumn();
+
+                System.out.printf(
+                        "GUI: %s piece at (%d, %d) selected.%n",
+                        piece.getClass().getSimpleName(),
+                        displayFromRow, displayFromCol
+                );
 
                 // Highlight the selected piece + its valid moves
                 view.clearHighlights();
@@ -86,26 +97,47 @@ public class GameController {
         } else {
             // A piece was already selected
             if (selectedPiece.equals(position)) {
+                int displayFromRow = isRed ? (7 - selectedPiece.getRow()) : selectedPiece.getRow();
+                int displayFromCol = isRed ? (4 - selectedPiece.getColumn()) : selectedPiece.getColumn();
+
+                System.out.printf(
+                        "GUI: Piece at (%d, %d) deselected.%n",
+                        displayFromRow, displayFromCol
+                );
+
+
                 // The user clicked the same tile => deselect the piece
-                Piece piece = game.getBoard().getPieceAt(position);
-                System.out.printf("GUI: %s piece at (%d, %d) deselected.%n",
-                        (piece != null) ? piece.getClass().getSimpleName() : "Unknown",
-                        clickedRow, clickedCol);
+//                Piece piece = game.getBoard().getPieceAt(position);
+//                System.out.printf("GUI: %s piece at (%d, %d) deselected.%n",
+//                        (piece != null) ? piece.getClass().getSimpleName() : "Unknown",
+//                        clickedRow, clickedCol);
 
                 selectedPiece = null;
                 view.clearHighlights();
 
             } else {
-                // Attempt to move from selectedPiece to this clicked tile
-                System.out.printf("GUI: Attempting to move from (%d, %d) to (%d, %d).%n",
-                        selectedPiece.getRow(), selectedPiece.getColumn(),
-                        clickedRow, clickedCol);
+                Piece pieceAtClicked = game.getBoard().getPieceAt(position);
+                if (pieceAtClicked != null &&
+                        pieceAtClicked.getColor().name().equalsIgnoreCase(game.getCurrentPlayer().name())) {
+                    System.out.println("GUI: You must deselect the current piece first.");
+                    return;
+                }
+
+                int displayFromRow = isRed ? (7 - selectedPiece.getRow()) : selectedPiece.getRow();
+                int displayFromCol = isRed ? (4 - selectedPiece.getColumn()) : selectedPiece.getColumn();
+
+                System.out.printf(
+                        "GUI: Attempting to move from (%d, %d) to (%d, %d).%n",
+                        displayFromRow, displayFromCol,
+                        displayClickedRow, displayClickedCol
+                );
 
                 if (movePiece(selectedPiece, position)) {
-                    // If move is successful, log it and refresh
-                    System.out.printf("GUI: Move successful: from (%d, %d) to (%d, %d).%n",
-                            selectedPiece.getRow(), selectedPiece.getColumn(),
-                            clickedRow, clickedCol);
+                    System.out.printf(
+                            "GUI: Move successful: from (%d, %d) to (%d, %d).%n",
+                            displayFromRow, displayFromCol,
+                            displayClickedRow, displayClickedCol
+                    );
 
                     view.clearHighlights();
                     view.refreshBoard();
