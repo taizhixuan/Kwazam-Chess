@@ -196,18 +196,20 @@ public class Game {
      * Transforms Tor and Xor pieces as per game rules.
      */
     private void transformPieces() {
+        IDGenerator idGen = IDGenerator.getInstance(); // Obtain Singleton instance
+
         for (int row = 0; row < board.getRows(); row++) {
             for (int col = 0; col < board.getColumns(); col++) {
                 Position position = new Position(row, col);
                 Piece piece = board.getPieceAt(position);
 
                 if (piece instanceof Tor) {
-                    int xorId = Board.IDGenerator.getXorId();
+                    int xorId = idGen.getXorId(); // Updated reference
                     Xor newXor = new Xor(piece.getColor(), xorId);
                     newXor.setPosition(position);
                     board.setPieceAt(position, newXor);
                 } else if (piece instanceof Xor) {
-                    int torId = Board.IDGenerator.getTorId();
+                    int torId = idGen.getTorId(); // Updated reference
                     Tor newTor = new Tor(piece.getColor(), torId);
                     newTor.setPosition(position);
                     board.setPieceAt(position, newTor);
@@ -219,6 +221,7 @@ public class Game {
         // Notify observers about the transformation
         notifyObservers(GameEvent.TRANSFORM);
     }
+
 
     /**
      * Checks if the game is over by verifying the existence of Sau pieces.

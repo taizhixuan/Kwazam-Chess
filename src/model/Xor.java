@@ -20,7 +20,8 @@ public class Xor extends Piece {
     public void transform(Board board) {
         // Replace this Xor with a new Tor
         if (moveCount == 2) {
-            int torId = Board.IDGenerator.getTorId();
+            IDGenerator idGen = IDGenerator.getInstance(); // Obtain Singleton instance
+            int torId = idGen.getTorId();
             Tor newTor = new Tor(this.color, torId);
             newTor.setPosition(this.position);
             newTor.setMoveCount(0); // Reset move count for the transformed piece

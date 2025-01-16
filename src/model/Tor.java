@@ -1,6 +1,7 @@
 // Tor.java
 package model;
 
+
 /**
  * Tor: rook-like movement, transforms into Xor after 2 moves.
  */
@@ -19,8 +20,9 @@ public class Tor extends Piece {
     @Override
     public void transform(Board board) {
         if (moveCount == 2) {
+            IDGenerator idGen = IDGenerator.getInstance(); // Obtain Singleton instance
             // Replace this Tor with a new Xor
-            int xorId = Board.IDGenerator.getXorId();
+            int xorId = idGen.getXorId();
             Xor newXor = new Xor(this.color, xorId);
             newXor.setPosition(this.position);
             newXor.setMoveCount(0); // Reset move count for the transformed piece
