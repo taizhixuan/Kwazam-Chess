@@ -75,8 +75,7 @@ public class GameLoader {
             System.out.println("Game loaded successfully from " + filename);
             return gameState;
         } catch (IOException e) {
-            e.printStackTrace();
-            throw new IOException("Error loading game from text file: " + e.getMessage());
+            throw new IOException("Error reading the game file: " + filename, e);
         }
     }
 }

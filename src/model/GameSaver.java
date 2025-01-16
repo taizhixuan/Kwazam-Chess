@@ -70,8 +70,7 @@ public class GameSaver {
             writer.write("\n// --- End of Game State ---\n");
             System.out.println("Game saved successfully to " + filename);
         } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("Error saving game as text: " + e.getMessage());
+            System.err.println("Failed to save the game to " + filename + ": " + e.getMessage());
         }
     }
 }

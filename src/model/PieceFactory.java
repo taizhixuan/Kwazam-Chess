@@ -33,13 +33,13 @@ public class PieceFactory {
      */
     public static Piece createPiece(String type, Color color) {
         IDGenerator idGen = IDGenerator.getInstance();
-        return switch (type.toLowerCase()) {
-            case "ram" -> new Ram(color, idGen.getNextRamId());
-            case "tor" -> new Tor(color, idGen.getTorId());
-            case "xor" -> new Xor(color, idGen.getXorId());
-            case "biz" -> new Biz(color, idGen.getNextBizId());
-            case "sau" -> new Sau(color, idGen.getSauId());
+        return createPiece(type, color, switch (type.toLowerCase()) {
+            case "ram" -> idGen.getNextRamId();
+            case "tor" -> idGen.getTorId();
+            case "xor" -> idGen.getXorId();
+            case "biz" -> idGen.getNextBizId();
+            case "sau" -> idGen.getSauId();
             default -> throw new IllegalArgumentException("Unknown piece type: " + type);
-        };
+        });
     }
 }

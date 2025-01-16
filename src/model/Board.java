@@ -132,31 +132,33 @@ public class Board {
     /**
      * Initializes the board with starting positions for all pieces.
      */
+// Board.java
     private void initializeBoard() {
         IDGenerator idGen = IDGenerator.getInstance();
 
         // Top row - Red
-        setPieceAt(new Position(0, 0), new Tor(Color.RED, idGen.getTorId()));
-        setPieceAt(new Position(0, 1), new Biz(Color.RED, idGen.getNextBizId()));
-        setPieceAt(new Position(0, 2), new Sau(Color.RED, idGen.getSauId()));
-        setPieceAt(new Position(0, 3), new Biz(Color.RED, idGen.getNextBizId()));
-        setPieceAt(new Position(0, 4), new Xor(Color.RED, idGen.getXorId()));
+        setPieceAt(new Position(0, 0), PieceFactory.createPiece("tor", Color.RED, idGen.getTorId()));
+        setPieceAt(new Position(0, 1), PieceFactory.createPiece("biz", Color.RED, idGen.getNextBizId()));
+        setPieceAt(new Position(0, 2), PieceFactory.createPiece("sau", Color.RED, idGen.getSauId()));
+        setPieceAt(new Position(0, 3), PieceFactory.createPiece("biz", Color.RED, idGen.getNextBizId()));
+        setPieceAt(new Position(0, 4), PieceFactory.createPiece("xor", Color.RED, idGen.getXorId()));
 
         // Row 1 - Red Rams
         for (int col = 0; col < COLUMNS; col++) {
-            setPieceAt(new Position(1, col), new Ram(Color.RED, idGen.getNextRamId()));
+            setPieceAt(new Position(1, col), PieceFactory.createPiece("ram", Color.RED, idGen.getNextRamId()));
         }
 
         // Row 6 - Blue Rams
         for (int col = 0; col < COLUMNS; col++) {
-            setPieceAt(new Position(6, col), new Ram(Color.BLUE, idGen.getNextRamId()));
+            setPieceAt(new Position(6, col), PieceFactory.createPiece("ram", Color.BLUE, idGen.getNextRamId()));
         }
 
         // Bottom row - Blue
-        setPieceAt(new Position(7, 0), new Xor(Color.BLUE, idGen.getXorId()));
-        setPieceAt(new Position(7, 1), new Biz(Color.BLUE, idGen.getNextBizId()));
-        setPieceAt(new Position(7, 2), new Sau(Color.BLUE, idGen.getSauId()));
-        setPieceAt(new Position(7, 3), new Biz(Color.BLUE, idGen.getNextBizId()));
-        setPieceAt(new Position(7, 4), new Tor(Color.BLUE, idGen.getTorId()));
+        setPieceAt(new Position(7, 0), PieceFactory.createPiece("xor", Color.BLUE, idGen.getXorId()));
+        setPieceAt(new Position(7, 1), PieceFactory.createPiece("biz", Color.BLUE, idGen.getNextBizId()));
+        setPieceAt(new Position(7, 2), PieceFactory.createPiece("sau", Color.BLUE, idGen.getSauId()));
+        setPieceAt(new Position(7, 3), PieceFactory.createPiece("biz", Color.BLUE, idGen.getNextBizId()));
+        setPieceAt(new Position(7, 4), PieceFactory.createPiece("tor", Color.BLUE, idGen.getTorId()));
     }
+
 }
