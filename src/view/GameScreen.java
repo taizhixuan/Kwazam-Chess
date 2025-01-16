@@ -10,6 +10,9 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.List;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 /**
  * GameScreen extends BoardView to include additional UI components
  * like move history and a game timer.
@@ -48,6 +51,28 @@ public class GameScreen extends BoardView {
         // Now that everything is ready, refresh the board
         // which also calls updateMoveList() to show moves
         refreshBoard();
+
+        // Add a WindowListener to handle window closing events
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                stopGameTimer();
+                super.windowClosing(e);
+            }
+        });
+    }
+
+    /**
+     * Overrides the setVisible method to restart the timer when the window is shown.
+     *
+     * @param visible True to make the window visible, false to hide it.
+     */
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        if (visible && gameTimer != null && !gameTimer.isRunning()) {
+            gameTimer.start();
+        }
     }
 
     /**
