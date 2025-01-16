@@ -99,4 +99,8 @@ public abstract class Piece {
     public int getId() {
         return id;
     }
+
+    public void setMoveCount(int moveCount) {
+        this.moveCount = moveCount;
+    }
 }

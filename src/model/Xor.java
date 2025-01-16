@@ -18,11 +18,9 @@ public class Xor extends Piece {
 
     @Override
     public void transform(Board board) {
-        // Replace this Xor with a new Tor
         if (moveCount == 2) {
-            IDGenerator idGen = IDGenerator.getInstance(); // Obtain Singleton instance
-            int torId = idGen.getTorId();
-            Tor newTor = new Tor(this.color, torId);
+            // Replace this Xor with a new Tor
+            Piece newTor = PieceFactory.createPiece("tor", this.color, IDGenerator.getInstance().getTorId());
             newTor.setPosition(this.position);
             newTor.setMoveCount(0); // Reset move count for the transformed piece
             board.setPieceAt(this.position, newTor);

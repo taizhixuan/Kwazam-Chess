@@ -204,13 +204,11 @@ public class Game {
                 Piece piece = board.getPieceAt(position);
 
                 if (piece instanceof Tor) {
-                    int xorId = idGen.getXorId(); // Updated reference
-                    Xor newXor = new Xor(piece.getColor(), xorId);
+                    Piece newXor = PieceFactory.createPiece("xor", piece.getColor(), idGen.getXorId());
                     newXor.setPosition(position);
                     board.setPieceAt(position, newXor);
                 } else if (piece instanceof Xor) {
-                    int torId = idGen.getTorId(); // Updated reference
-                    Tor newTor = new Tor(piece.getColor(), torId);
+                    Piece newTor = PieceFactory.createPiece("tor", piece.getColor(), idGen.getTorId());
                     newTor.setPosition(position);
                     board.setPieceAt(position, newTor);
                 }
@@ -221,7 +219,6 @@ public class Game {
         // Notify observers about the transformation
         notifyObservers(GameEvent.TRANSFORM);
     }
-
 
     /**
      * Checks if the game is over by verifying the existence of Sau pieces.
