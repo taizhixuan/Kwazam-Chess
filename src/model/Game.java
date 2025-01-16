@@ -34,7 +34,7 @@ public class Game {
      *
      * @param observer The observer to add.
      */
-    public void addObserver(GameObserver observer) {
+    public synchronized void addObserver(GameObserver observer) {
         observers.add(observer);
     }
 
@@ -43,16 +43,22 @@ public class Game {
      *
      * @param observer The observer to remove.
      */
-    public void removeObserver(GameObserver observer) {
+    public synchronized void removeObserver(GameObserver observer) {
         observers.remove(observer);
     }
 
     /**
      * Notifies all registered observers of a state change.
+     *
+     * @param event The type of event that occurred.
      */
-    private void notifyObservers() {
-        for (GameObserver observer : observers) {
-            observer.update();
+    private void notifyObservers(GameEvent event) {
+        List<GameObserver> observersCopy;
+        synchronized(this) {
+            observersCopy = new ArrayList<>(observers);
+        }
+        for (GameObserver observer : observersCopy) {
+            observer.update(event);
         }
     }
 
@@ -65,7 +71,7 @@ public class Game {
         this.gameOver = false; // Reset game over flag
         this.turnCounter = 0; // Reset turn counter
         this.turn = 0; // Reset turn
-        notifyObservers(); // Notify observers of the reset
+        notifyObservers(GameEvent.RESET); // Notify observers of the reset
     }
 
     /**
@@ -117,7 +123,7 @@ public class Game {
             checkGameOver();
 
             // Notify observers about the move
-            notifyObservers();
+            notifyObservers(GameEvent.MOVE);
 
             if (gameOver) {
                 return true; // End the move and indicate the game is over
@@ -127,6 +133,7 @@ public class Game {
             board.setPieceAt(to, piece);
             board.removePiece(from);
             piece.setPosition(to);
+            notifyObservers(GameEvent.MOVE); // Notify observers about the move
         }
 
         turn++;
@@ -137,8 +144,8 @@ public class Game {
         // Switch turn to the next player
         switchTurn();
 
-        // Notify observers about the move
-        notifyObservers();
+        // Notify observers about the turn switch
+        notifyObservers(GameEvent.TRANSFORM);
 
         return true;
     }
@@ -210,7 +217,7 @@ public class Game {
         System.out.println("All Tor and Xor pieces have transformed!");
 
         // Notify observers about the transformation
-        notifyObservers();
+        notifyObservers(GameEvent.TRANSFORM);
     }
 
     /**
@@ -242,7 +249,7 @@ public class Game {
             }
 
             // Notify observers about the game over
-            notifyObservers();
+            notifyObservers(GameEvent.GAME_OVER);
         }
     }
 
@@ -281,7 +288,7 @@ public class Game {
      */
     public void setBoard(Board board) {
         this.board = board;
-        notifyObservers();
+        notifyObservers(GameEvent.MOVE); // Assuming setting board is akin to a move
     }
 
     /**
@@ -291,7 +298,7 @@ public class Game {
      */
     public void setCurrentPlayer(Color currentPlayer) {
         this.currentPlayer = currentPlayer;
-        notifyObservers();
+        notifyObservers(GameEvent.TRANSFORM); // Assuming a turn switch is related to transformation
     }
 
     /**
@@ -301,7 +308,7 @@ public class Game {
      */
     public void setTurn(int turn) {
         this.turn = turn;
-        notifyObservers();
+        notifyObservers(GameEvent.MOVE); // Assuming turn number relates to moves
     }
 
     /**
@@ -311,7 +318,7 @@ public class Game {
      */
     public void setTurnCounter(int turnCounter) {
         this.turnCounter = turnCounter;
-        notifyObservers();
+        notifyObservers(GameEvent.TRANSFORM); // Assuming turn counter relates to transformations
     }
 
     /**
@@ -324,7 +331,7 @@ public class Game {
         this.turnCounter = 0;
         this.turn = 0;
 
-        notifyObservers();
+        notifyObservers(GameEvent.RESET);
     }
 
     /**
@@ -334,6 +341,6 @@ public class Game {
      */
     public void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
-        notifyObservers();
+        notifyObservers(GameEvent.GAME_OVER);
     }
 }

@@ -2,9 +2,7 @@
 package controller;
 
 import model.*;
-import view.BoardView;
-import view.GameScreen;
-
+import view.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -203,17 +201,39 @@ public class GameController implements GameObserver {
      * This method is called whenever the Game notifies its observers.
      */
     @Override
-    public void update() {
-        // Refresh the view automatically when the game state changes
-        view.refreshBoard();
-        // Update move history and other UI components if necessary
-        if (view instanceof GameScreen) {
-            ((GameScreen) view).updateMoveList();
+    public void update(GameEvent event) {
+        // Handle different types of game events
+        switch (event) {
+            case MOVE:
+                // Refresh the board to reflect the move
+                view.refreshBoard();
+                break;
+            case RESET:
+                // Reset move history and timer
+                moveHistory.clear();
+                secondsElapsed = 0;
+                if (view instanceof GameScreen) {
+                    ((GameScreen) view).updateMoveList();
+                }
+                break;
+            case TRANSFORM:
+                // Refresh the board to reflect transformations
+                view.refreshBoard();
+                break;
+            case GAME_OVER:
+                // Handle game over scenario
+                if (game.isGameOver()) {
+                    String winnerMessage = game.getWinner() + " wins! Game Over.";
+                    view.gameOver(winnerMessage);
+                }
+                break;
+            default:
+                break;
         }
-        // Handle game over scenario
-        if (game.isGameOver()) {
-            String winnerMessage = game.getWinner() + " wins! Game Over.";
-            view.gameOver(winnerMessage);
+
+        // Update move history and other UI components if necessary
+        if (event == GameEvent.MOVE && view instanceof GameScreen) {
+            ((GameScreen) view).updateMoveList();
         }
     }
 
@@ -314,7 +334,7 @@ public class GameController implements GameObserver {
             selectedPiece = null;
             System.out.println("Game loaded successfully!");
 
-            // The Game class will notify observers internally
+            // The Game class will notify observers internally with appropriate GameEvent
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Failed to load the game.");

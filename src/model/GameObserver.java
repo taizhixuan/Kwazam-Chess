@@ -7,6 +7,8 @@ package model;
 public interface GameObserver {
     /**
      * Called when the Game's state changes.
+     *
+     * @param event The type of event that occurred.
      */
-    void update();
+    void update(GameEvent event);
 }
