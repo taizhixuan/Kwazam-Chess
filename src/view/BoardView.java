@@ -79,7 +79,7 @@ public class BoardView extends JFrame implements ViewInterface {
         JPanel rowLabels = new JPanel(new GridLayout(8, 1));
         for (int i = 0; i < 8; i++) {
             JLabel label = new JLabel(String.valueOf(i), SwingConstants.CENTER);
-            label.setFont(new Font("Liberation Sans", Font.BOLD, 22));
+            label.setFont(new Font("Liberation Sans", Font.BOLD, 20));
             rowLabels.add(label);
         }
 
@@ -87,7 +87,7 @@ public class BoardView extends JFrame implements ViewInterface {
         JPanel columnLabels = new JPanel(new GridLayout(1, 5));
         for (int i = 0; i < 5; i++) {
             JLabel label = new JLabel(String.valueOf(i), SwingConstants.CENTER);
-            label.setFont(new Font("Liberation Sans", Font.BOLD, 22));
+            label.setFont(new Font("Liberation Sans", Font.BOLD, 20));
             columnLabels.add(label);
         }
 

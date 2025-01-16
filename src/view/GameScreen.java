@@ -173,7 +173,7 @@ public class GameScreen extends BoardView {
         JMenu gameMenu = new JMenu("Menu");
 
         // Set custom font size for the menu
-        Font menuFont = new Font("Arial", Font.BOLD, 20);
+        Font menuFont = new Font("Arial", Font.BOLD, 16);
         gameMenu.setFont(menuFont);
 
         // 1) New Game
