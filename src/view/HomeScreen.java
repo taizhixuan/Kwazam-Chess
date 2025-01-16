@@ -8,10 +8,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
 
+/**
+ * HomeScreen provides the main menu interface for the Kwazam Chess application.
+ */
 public class HomeScreen extends JFrame {
     // Keep a static reference to the last GameController so we can "resume" it
     private static GameController savedController = null;
 
+    /**
+     * Constructor for HomeScreen.
+     * Initializes the main menu UI components.
+     */
     public HomeScreen() {
         // Frame settings
         setTitle("Kwazam Chess");
@@ -67,6 +74,9 @@ public class HomeScreen extends JFrame {
 
     /**
      * Helper method to create gradient-styled buttons with hover effects.
+     *
+     * @param text The text to display on the button.
+     * @return A CustomButton instance.
      */
     private CustomButton createGradientButton(String text) {
         CustomButton button = new CustomButton(text);
@@ -95,18 +105,17 @@ public class HomeScreen extends JFrame {
     }
 
     /**
-     * Create a new game and store the controller in a static reference
-     * so we can resume it later.
+     * Creates a new game and stores the controller in a static reference for resuming.
      */
     private void startNewGame() {
-        dispose(); // close this HomeScreen
+        dispose(); // Close the HomeScreen
         GameController controller = new GameController(new Board());
-        savedController = controller; // store in static field
-        new GameScreen(controller);   // open the game screen
+        savedController = controller; // Store in static field
+        controller.getView().setVisible(true); // Open the game screen
     }
 
     /**
-     * Resume a previously created game if it exists.
+     * Resumes a previously created game if it exists.
      */
     private void resumeGame() {
         if (savedController == null) {
@@ -118,12 +127,11 @@ public class HomeScreen extends JFrame {
         }
         // If we have a saved controller, open it again
         dispose();
-        new GameScreen(savedController);
+        savedController.getView().setVisible(true);
     }
 
     /**
-     * Load an existing game from a file into a new GameController,
-     * then open GameScreen with that.
+     * Loads an existing game from a file into a new GameController, then opens GameScreen with it.
      */
     private void loadGame() {
         JFileChooser fileChooser = new JFileChooser();
@@ -131,13 +139,12 @@ public class HomeScreen extends JFrame {
         int result = fileChooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             String filename = fileChooser.getSelectedFile().getAbsolutePath();
-            Board board = new Board(); // Create an empty board
-            GameController controller = new GameController(board);
+            GameController controller = new GameController(new Board());
             try {
                 controller.loadGame(filename);
                 dispose();
-                savedController = controller;  // store it for "resume"
-                new GameScreen(controller);     // Launch the game screen
+                savedController = controller;  // Store it for "resume"
+                controller.getView().setVisible(true);     // Launch the game screen
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this,
                         "Failed to load the game: " + e.getMessage(),
@@ -147,6 +154,9 @@ public class HomeScreen extends JFrame {
         }
     }
 
+    /**
+     * Displays the game instructions in a dialog.
+     */
     private void showInstructions() {
         // 1) Load each piece image via getResource(...)
         //    Make sure the filenames match your actual PNG files in /resources/images/.

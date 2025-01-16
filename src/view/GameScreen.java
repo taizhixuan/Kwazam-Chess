@@ -11,7 +11,8 @@ import java.awt.*;
 import java.util.List;
 
 /**
- * GameScreen
+ * GameScreen extends BoardView to include additional UI components
+ * like move history and a game timer.
  */
 public class GameScreen extends BoardView {
     private final GameController controller;
@@ -25,28 +26,32 @@ public class GameScreen extends BoardView {
     private DefaultListModel<String> moveListModel;
     private JList<String> moveList;
 
+    /**
+     * Constructor for GameScreen.
+     *
+     * @param controller The GameController instance.
+     */
     public GameScreen(GameController controller) {
-        // 1) Create the BoardView
-        super(controller); // Call BoardView constructor (which sets up mainPanel)
+        super(); // Call BoardView constructor
         this.controller = controller;
+        setController(controller); // Set the controller in BoardView
 
-        // 2) Add the menu bar
+        // Add the menu bar
         addNavigationBar(); // The menu bar
 
-        // 3) Build the sidebar (including moveListModel, moveList)
+        // Build the sidebar (including moveListModel, moveList)
         setupLayoutWithSidebar();
 
-        // 4) Start the timer with the current secondsElapsed from controller
+        // Start the timer with the current secondsElapsed from controller
         startGameTimer();
 
-        // 5) Now that everything is ready, refresh the board
-        //    which also calls updateMoveList() to show moves
+        // Now that everything is ready, refresh the board
+        // which also calls updateMoveList() to show moves
         refreshBoard();
     }
 
     /**
-     * Reconfigure the frame so mainPanel is in the center,
-     * and we have an additional panel on the right side for game status, controls, etc.
+     * Configures the layout to include a sidebar for move history and timer.
      */
     private void setupLayoutWithSidebar() {
         // 1) Remove everything from the current frame (including mainPanel).
@@ -58,7 +63,7 @@ public class GameScreen extends BoardView {
         JPanel boardViewPanel = getMainPanel();
         getContentPane().add(boardViewPanel, BorderLayout.CENTER);
 
-        // 4) Create our new sidePanel with increased width
+        // 4) Create a new sidePanel with increased width
         sidePanel = new JPanel();
         sidePanel.setPreferredSize(new Dimension(300, getHeight()));
         sidePanel.setLayout(new BoxLayout(sidePanel, BoxLayout.Y_AXIS));
@@ -76,7 +81,7 @@ public class GameScreen extends BoardView {
         // Add some spacing after the timer
         sidePanel.add(Box.createVerticalStrut(30));
 
-        // >>> CREATE moveListModel and moveList <<<
+        // 6) Move History
         moveListModel = new DefaultListModel<>();
         moveList = new JList<>(moveListModel);
         moveList.setFont(new Font("Monospaced", Font.PLAIN, 16));
@@ -127,7 +132,7 @@ public class GameScreen extends BoardView {
     }
 
     /**
-     * (Optional) Stop the timer if the game is over or the window is closed.
+     * Stops the game timer.
      */
     private void stopGameTimer() {
         if (gameTimer != null) {
@@ -136,7 +141,7 @@ public class GameScreen extends BoardView {
     }
 
     /**
-     * Add your navigation bar / menu items here
+     * Adds the navigation bar with menu items.
      */
     private void addNavigationBar() {
         JMenuBar menuBar = new JMenuBar();
@@ -225,6 +230,9 @@ public class GameScreen extends BoardView {
         setJMenuBar(menuBar);
     }
 
+    /**
+     * Refreshes the board and updates the move history.
+     */
     @Override
     public void refreshBoard() {
         super.refreshBoard();
@@ -232,10 +240,9 @@ public class GameScreen extends BoardView {
     }
 
     /**
-     * Pulls the entire move history from the controller
-     * and displays it in the moveListModel with correct display coordinates.
+     * Updates the move history display based on the controller's move history.
      */
-    private void updateMoveList() {
+    public void updateMoveList() {
         // Clear old contents first
         moveListModel.clear();
 
@@ -277,16 +284,29 @@ public class GameScreen extends BoardView {
         }
     }
 
+    /**
+     * Highlights valid move positions in green.
+     *
+     * @param validMoves List of valid positions to highlight.
+     */
     @Override
     public void highlightValidMoves(List<Position> validMoves) {
         super.highlightValidMoves(validMoves);
     }
 
+    /**
+     * Clears all highlights on the board.
+     */
     @Override
     public void clearHighlights() {
         super.clearHighlights();
     }
 
+    /**
+     * Handles game over scenarios by stopping the timer and displaying messages.
+     *
+     * @param message The game over message to display.
+     */
     @Override
     public void gameOver(String message) {
         // Stop the timer if game is over

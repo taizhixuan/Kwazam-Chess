@@ -14,9 +14,10 @@ import java.util.Objects;
 
 /**
  * Swing-based GUI for Kwazam Chess.
+ * Acts as the base view, handling the graphical representation of the game board.
  */
-public class BoardView extends JFrame {
-    private final GameController controller;
+public class BoardView extends JFrame implements ViewInterface {
+    protected GameController controller;
     private JPanel boardPanel;
     private JButton[][] buttons;
 
@@ -25,29 +26,41 @@ public class BoardView extends JFrame {
 
     private static final int BUTTON_SIZE = 83; // Adjust this for larger pieces
 
-    public BoardView(GameController controller) {
-        this.controller = controller;
+    /**
+     * Default constructor for BoardView.
+     * Initializes the GUI components.
+     */
+    public BoardView() {
         setTitle("Kwazam Chess");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         initializeBoard();
-
-        setSize(BUTTON_SIZE * 7 + 200, BUTTON_SIZE * 9 + 200); // Adjust window size to fit the board appropriately // Adjust window size to fit the even smaller board // Adjust window size to fit the smaller board // Adjust window size to fit margins and labels // Adjust window size to fit board and labels // Set initial window size
-        setMinimumSize(new Dimension(BUTTON_SIZE * 7 + 200, BUTTON_SIZE * 9 + 200)); // Ensure minimum window size to fit the board // Ensure minimum window size for the smaller board // Ensure minimum window size for smaller board // Ensure fixed size including margins // Ensure minimum window size
+        setSize(BUTTON_SIZE * 7 + 200, BUTTON_SIZE * 8 + 200); // Adjust window size to fit the board appropriately
+        setMinimumSize(new Dimension(BUTTON_SIZE * 7 + 200, BUTTON_SIZE * 8 + 200)); // Ensure minimum window size to fit the board
         setLocationRelativeTo(null); // Center the window on the screen
-
         setVisible(true);
-
     }
 
     /**
-     * Provide access to the main panel, so that a subclass can
-     * place it in a different layout or add a sidebar.
+     * Sets the controller after construction to avoid circular dependency.
+     *
+     * @param controller The GameController instance.
+     */
+    public void setController(GameController controller) {
+        this.controller = controller;
+    }
+
+    /**
+     * Provides access to the main panel, allowing subclasses to modify the layout.
+     *
+     * @return The main panel.
      */
     protected JPanel getMainPanel() {
         return mainPanel;
     }
 
+    /**
+     * Initializes the game board GUI components.
+     */
     private void initializeBoard() {
         // Create the main panel
         this.mainPanel = new JPanel(new GridBagLayout());
@@ -110,7 +123,6 @@ public class BoardView extends JFrame {
 
         // Finally, add mainPanel to the frame
         add(mainPanel);
-//        refreshBoard();
     }
 
     /**
@@ -172,15 +184,19 @@ public class BoardView extends JFrame {
 
     /**
      * Handles user clicks on the board.
+     *
+     * @param row The row of the clicked tile.
+     * @param col The column of the clicked tile.
      */
     private void handleClick(int row, int col) {
         Position position = new Position(row, col);
         controller.handleTileClick(position, this);
     }
 
-
     /**
      * Highlights the selected piece in yellow.
+     *
+     * @param position The position of the selected piece.
      */
     public void highlightSelectedPiece(Position position) {
         int row = position.getRow();
@@ -191,16 +207,16 @@ public class BoardView extends JFrame {
         }
     }
 
-
     /**
      * Highlights valid move positions in green.
+     *
+     * @param validMoves List of valid positions to highlight.
      */
     public void highlightValidMoves(List<Position> validMoves) {
         for (Position move : validMoves) {
             buttons[move.getRow()][move.getColumn()].setBackground(Color.GREEN);
         }
     }
-
 
     /**
      * Clears all highlights and resets the checkerboard.
@@ -217,9 +233,11 @@ public class BoardView extends JFrame {
         }
     }
 
-
     /**
-     * Rotate the image (pieces) 180 degree when the board is flip
+     * Rotates an image by 180 degrees.
+     *
+     * @param original The original image.
+     * @return The rotated image.
      */
     private Image rotateImage(Image original) {
         int width = original.getWidth(null);
@@ -240,10 +258,10 @@ public class BoardView extends JFrame {
         return rotatedImage;
     }
 
-
     /**
-     * Display the game over message by using dialog box.
-     * Ask the user if they would like to start a new game or exit the application.
+     * Displays the game over message and prompts the user to start a new game or exit.
+     *
+     * @param message The game over message to display.
      */
     public void gameOver(String message) {
         JOptionPane.showMessageDialog(this, message, "Game Over", JOptionPane.PLAIN_MESSAGE);

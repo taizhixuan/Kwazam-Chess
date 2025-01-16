@@ -3,6 +3,7 @@ package controller;
 
 import model.*;
 import view.BoardView;
+import view.GameScreen;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,9 +11,10 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Connects the GUI (BoardView) with the Game model.
+ * GameController acts as the Controller in the MVC pattern.
+ * It observes the Game model and updates the view accordingly.
  */
-public class GameController {
+public class GameController implements GameObserver {
     private final Game game;
     private Position selectedPiece; // Stores the currently selected piece
 
@@ -20,17 +22,33 @@ public class GameController {
 
     private int secondsElapsed = 0;
 
+    private final BoardView view; // Reference to the view
+
+    /**
+     * Constructor for GameController.
+     *
+     * @param board The initial game board.
+     */
     public GameController(Board board) {
         this.game = new Game(board);
-        this.selectedPiece = null;
+        this.view = new GameScreen(this); // Create the view, passing the controller
+        this.game.addObserver(this);
     }
 
-    // Getter for secondsElapsed
+    /**
+     * Retrieves the view associated with this controller.
+     *
+     * @return The BoardView instance.
+     */
+    public BoardView getView() {
+        return view;
+    }
+
+    // Getter and Setter for secondsElapsed
     public int getSecondsElapsed() {
         return secondsElapsed;
     }
 
-    // Setter for secondsElapsed
     public void setSecondsElapsed(int secondsElapsed) {
         this.secondsElapsed = secondsElapsed;
     }
@@ -50,10 +68,14 @@ public class GameController {
 
     /**
      * Handles a move request from a position to another.
+     *
+     * @param from The starting position.
+     * @param to   The target position.
+     * @return True if the move was successful, false otherwise.
      */
     public boolean movePiece(Position from, Position to) {
-        // Fetch the current player before making the move
-        String currentPlayer = game.getCurrentPlayer().name();
+        // Fetch the current player as a String before making the move
+        String currentPlayer = getCurrentPlayer(); // Corrected line
 
         // Fetch the piece being moved to get its type
         Piece piece = game.getBoard().getPieceAt(from);
@@ -73,6 +95,9 @@ public class GameController {
 
     /**
      * Handles tile clicks in the GUI.
+     *
+     * @param position The position that was clicked.
+     * @param view     The view component.
      */
     public void handleTileClick(Position position, BoardView view) {
         // Simply use the row/col from the clicked position, with no flipping
@@ -90,7 +115,7 @@ public class GameController {
             Piece piece = game.getBoard().getPieceAt(position);
 
             // Make sure the tile has the current player's piece
-            if (piece != null && piece.getColor().name().equalsIgnoreCase(game.getCurrentPlayer().name())) {
+            if (piece != null && piece.getColor().name().equalsIgnoreCase(getCurrentPlayer())) { // Corrected line
                 // Select this piece
                 selectedPiece = position;
                 List<Position> validMoves = game.getPossibleMoves(piece, position);
@@ -131,7 +156,7 @@ public class GameController {
             } else {
                 Piece pieceAtClicked = game.getBoard().getPieceAt(position);
                 if (pieceAtClicked != null &&
-                        pieceAtClicked.getColor().name().equalsIgnoreCase(game.getCurrentPlayer().name())) {
+                        pieceAtClicked.getColor().name().equalsIgnoreCase(getCurrentPlayer())) { // Corrected line
                     System.out.println("GUI: You must deselect the current piece first.");
                     return;
                 }
@@ -174,12 +199,28 @@ public class GameController {
         }
     }
 
-    public List<Move> getMoveHistory() {
-        return Collections.unmodifiableList(moveHistory);
+    /**
+     * This method is called whenever the Game notifies its observers.
+     */
+    @Override
+    public void update() {
+        // Refresh the view automatically when the game state changes
+        view.refreshBoard();
+        // Update move history and other UI components if necessary
+        if (view instanceof GameScreen) {
+            ((GameScreen) view).updateMoveList();
+        }
+        // Handle game over scenario
+        if (game.isGameOver()) {
+            String winnerMessage = game.getWinner() + " wins! Game Over.";
+            view.gameOver(winnerMessage);
+        }
     }
 
     /**
      * Gets the current game board.
+     *
+     * @return The game board.
      */
     public Board getBoard() {
         return game.getBoard();
@@ -187,13 +228,17 @@ public class GameController {
 
     /**
      * Checks if the game is over.
+     *
+     * @return True if the game is over, false otherwise.
      */
     public boolean isGameOver() {
         return game.isGameOver();
     }
 
     /**
-     * Determine the winner
+     * Determines the winner of the game.
+     *
+     * @return The winner's color as a String, or null if the game isn't over.
      */
     public String getWinner() {
         return game.getWinner();
@@ -201,26 +246,39 @@ public class GameController {
 
     /**
      * Gets the current player.
+     *
+     * @return The current player's color as a String.
      */
     public String getCurrentPlayer() {
         return game.getCurrentPlayer().name();
     }
 
     /**
-     * Reset the game.
+     * Gets the move history.
+     *
+     * @return An unmodifiable list of moves.
+     */
+    public List<Move> getMoveHistory() {
+        return Collections.unmodifiableList(moveHistory);
+    }
+
+    /**
+     * Resets the game.
      */
     public void resetGame() {
-        Game.reset(game);
+        game.reset(); // Call the instance method to reset the game
         selectedPiece = null;
         moveHistory.clear(); // Clear move history when resetting
         secondsElapsed = 0;  // Reset the timer
     }
 
     /**
-     * Save the game in .txt file.
+     * Saves the game state to a text file.
+     *
+     * @param filename The filename to save the game state.
      */
     public void saveGameAsText(String filename) {
-        GameState gameState = new GameState(game.getBoard(), game.getCurrentPlayer(), game.getTurnCounter(), new ArrayList<>(moveHistory));        gameState.setSecondsElapsed(this.secondsElapsed); // Save timer state
+        GameState gameState = new GameState(game.getBoard(), game.getCurrentPlayer(), game.getTurnCounter(), new ArrayList<>(moveHistory));
         gameState.setSecondsElapsed(this.secondsElapsed); // Save timer state
         try {
             GameSaver.saveGameAsText(gameState, filename);
@@ -232,7 +290,9 @@ public class GameController {
     }
 
     /**
-     * Load the game from a text file.
+     * Loads the game state from a text file.
+     *
+     * @param filename The filename to load the game state from.
      */
     public void loadGame(String filename) {
         try {
@@ -254,6 +314,7 @@ public class GameController {
             selectedPiece = null;
             System.out.println("Game loaded successfully!");
 
+            // The Game class will notify observers internally
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Failed to load the game.");
