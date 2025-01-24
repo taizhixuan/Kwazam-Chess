@@ -1,12 +1,28 @@
-// GameLoader.java
 package model;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The GameLoader class handles loading game states from text files.
+ * It parses the file and reconstructs the GameState, including the board setup,
+ * current player, turn counts, and move history.
+ *
+ * Design Pattern: Factory Pattern
+ * Role: Utilizes PieceFactory to create piece instances.
+ *
+ * @author Joyce Ong Pay Teng
+ */
 public class GameLoader {
 
+    /**
+     * Loads a game state from a specified text file.
+     *
+     * @param filename The path to the game state text file.
+     * @return A GameState object representing the loaded game.
+     * @throws IOException If an error occurs while reading the file.
+     */
     public static GameState loadGameFromTextFile(String filename) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             Board board = new Board();
@@ -16,7 +32,7 @@ public class GameLoader {
             int turn = 0;
             Color currentPlayer = null;
             List<Move> moveHistory = new ArrayList<>();
-            int secondsElapsed = 0; // Initialize timer
+            int secondsElapsed = 0;
 
             boolean loadingMoveHistory = false;
 
@@ -65,11 +81,9 @@ public class GameLoader {
                 }
             }
 
-            // Create GameState with move history
             GameState gameState = new GameState(board, currentPlayer, turn, moveHistory);
-            gameState.setSecondsElapsed(secondsElapsed); // Set timer state
+            gameState.setSecondsElapsed(secondsElapsed);
 
-            // Update game over status if necessary
             gameState.updateGameOverStatus();
 
             System.out.println("Game loaded successfully from " + filename);

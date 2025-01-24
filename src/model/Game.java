@@ -1,38 +1,68 @@
-// Game.java
 package model;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The Game class represents the state and logic of the Kwazam Chess game.
- * It acts as the Subject in the Observer pattern, notifying observers of state changes.
+ * The Game class encapsulates the state and logic of a Kwazam Chess game.
+ * It manages the game board, player turns, move history, and determines game outcomes.
+ *
+ * Design Pattern: Observer Pattern
+ *Role: Subject - Maintains a list of observers and notifies them of state changes.
+ *
+ * @author Tai Zhi Xuan, Tiffany Jong Shu Ting, Joyce Ong Pay Teng
  */
 public class Game {
+    /**
+     * The game board containing all pieces and their positions.
+     */
     private Board board;
+
+    /**
+     * The color of the current player (RED or BLUE).
+     */
     private Color currentPlayer;
+
+    /**
+     * Flag indicating whether the game has ended.
+     */
     private boolean gameOver;
-    private int turnCounter; // Tracks the total number of turns (Red + Blue moves count as one turn)
-    private int turn; // Track the total number of turns (for each side)
+
+    /**
+     * Tracks the total number of turns taken by both players.
+     * (Red and Blue moves together count as one full turn.)
+     */
+    private int turnCounter;
+
+    /**
+     * Tracks the total number of individual player turns.
+     */
+    private int turn;
+
+    /**
+     * List of observers subscribed to game events.
+     */
     private final List<GameObserver> observers = new ArrayList<>();
 
     /**
-     * Initializes a new game with the provided board.
+     * Constructs a new Game instance with the provided board.
+     * Initializes the starting player and turn counters.
      *
-     * @param board The initial game board.
+     * @param board The initial game board setup.
      */
     public Game(Board board) {
         this.board = board;
         this.currentPlayer = Color.RED;
         this.gameOver = false;
-        this.turnCounter = 0; // Initialize turn counter
-        this.turn = 0; // Initialize turn
+        this.turnCounter = 0;
+        this.turn = 0;
     }
 
     /**
      * Adds an observer to the game.
+     * Observers will be notified of game events such as moves, resets, and game over.
      *
-     * @param observer The observer to add.
+     * @param observer The observer to be added.
      */
     public synchronized void addObserver(GameObserver observer) {
         observers.add(observer);
@@ -41,14 +71,14 @@ public class Game {
     /**
      * Removes an observer from the game.
      *
-     * @param observer The observer to remove.
+     * @param observer The observer to be removed.
      */
     public synchronized void removeObserver(GameObserver observer) {
         observers.remove(observer);
     }
 
     /**
-     * Notifies all registered observers of a state change.
+     * Notifies all registered observers of a specific game event.
      *
      * @param event The type of event that occurred.
      */
@@ -64,22 +94,23 @@ public class Game {
 
     /**
      * Resets the game to its initial state.
+     * Clears the board, resets player turns, and notifies observers.
      */
     public void reset() {
-        this.board = new Board();  // Reinitialize the board with starting positions
-        this.currentPlayer = Color.RED; // Reset to the starting player
-        this.gameOver = false; // Reset game over flag
-        this.turnCounter = 0; // Reset turn counter
-        this.turn = 0; // Reset turn
-        notifyObservers(GameEvent.RESET); // Notify observers of the reset
+        this.board = new Board();
+        this.currentPlayer = Color.RED;
+        this.gameOver = false;
+        this.turnCounter = 0;
+        this.turn = 0;
+        notifyObservers(GameEvent.RESET);
     }
 
     /**
-     * Retrieves the list of possible moves for a given piece at a specified position.
+     * Retrieves a list of possible moves for a given piece at a specified position.
      *
-     * @param piece    The piece to move.
+     * @param piece    The piece for which to calculate moves.
      * @param position The current position of the piece.
-     * @return A list of valid target positions.
+     * @return A list of valid target positions for the piece.
      */
     public List<Position> getPossibleMoves(Piece piece, Position position) {
         if (piece == null || !piece.getColor().equals(currentPlayer)) {
@@ -90,19 +121,22 @@ public class Game {
 
     /**
      * Attempts to move a piece from one position to another.
+     * Validates the move, executes it if valid, handles captures, and updates game state.
      *
-     * @param from The starting position.
-     * @param to   The target position.
-     * @return True if the move was successful, false otherwise.
+     * @param from The starting position of the piece.
+     * @param to   The target position to move the piece to.
+     * @return True if the move was successful; false otherwise.
      */
     public boolean movePiece(Position from, Position to) {
         Piece piece = board.getPieceAt(from);
 
+        // Validate that the piece exists and belongs to the current player
         if (piece == null || !piece.getColor().equals(currentPlayer)) {
             System.out.println("Invalid move: Not your piece or no piece at position.");
             return false;
         }
 
+        // Validate the move using the piece's movement strategy
         if (!piece.isValidMove(to, board)) {
             System.out.println("Invalid move: Cannot move to that position.");
             return false;
@@ -111,43 +145,43 @@ public class Game {
         // Execute the move
         Piece destinationPiece = board.getPieceAt(to);
 
-        // If there is an opponent's Sau piece on the destination, remove it
+        // Handle capturing an opponent's Sau
         if (destinationPiece instanceof Sau && destinationPiece.getColor() != currentPlayer) {
             System.out.println("\n" + destinationPiece.getColor() + " Sau has been captured!");
 
-            board.setPieceAt(to, piece); // Place the capturing piece in the captured Sau's position
-            board.removePiece(from); // Remove the captured Sau piece
-            piece.setPosition(to); // Update the capturing piece's position
+            board.setPieceAt(to, piece); // Move the piece to the destination
+            board.removePiece(from); // Remove the captured Sau
+            piece.setPosition(to); // Update the piece's position
 
-            // Check if the game is over immediately after the Sau is removed
+            // Check if the game has ended after the capture
             checkGameOver();
 
             // Notify observers about the move
             notifyObservers(GameEvent.MOVE);
 
             if (gameOver) {
-                return true; // End the move and indicate the game is over
+                return true; // Exit if the game is over
             }
         } else {
-            // Execute the move
-            board.setPieceAt(to, piece);
-            board.removePiece(from);
-            piece.setPosition(to);
+            // Standard move without capture
+            board.setPieceAt(to, piece); // Move the piece to the destination
+            board.removePiece(from); // Remove the piece from the original position
+            piece.setPosition(to); // Update the piece's position
             notifyObservers(GameEvent.MOVE); // Notify observers about the move
         }
 
-        turn++;
+        turn++; // Increment individual turn counter
 
-        // After the move, check if the piece should transform
+        // Handle transformation if applicable
         piece.onMove(board);
 
-        // Switch turn to the next player
+        // Switch to the next player
         switchTurn();
 
-        // Notify observers about the turn switch
+        // Notify observers about the turn switch and potential transformations
         notifyObservers(GameEvent.TRANSFORM);
 
-        return true;
+        return true; // Move was successful
     }
 
     /**
@@ -160,16 +194,16 @@ public class Game {
     }
 
     /**
-     * Checks if the game is over.
+     * Checks whether the game has ended.
      *
-     * @return True if the game is over, false otherwise.
+     * @return True if the game is over; false otherwise.
      */
     public boolean isGameOver() {
         return gameOver;
     }
 
     /**
-     * Retrieves the current player.
+     * Retrieves the color of the current player.
      *
      * @return The current player's color.
      */
@@ -178,15 +212,16 @@ public class Game {
     }
 
     /**
-     * Switches the turn to the next player and handles transformations.
+     * Switches the turn to the next player.
+     * Handles transformation of pieces after a complete turn cycle.
      */
     private void switchTurn() {
         currentPlayer = (currentPlayer == Color.RED) ? Color.BLUE : Color.RED;
 
-        // Increment turn counter only after both players have moved (one full turn)
+        // Increment turn counter after both players have moved (one full turn)
         if (currentPlayer == Color.RED) {
             turnCounter++;
-            if (turnCounter % 2 == 0) { // After every 2 full turns (one Blue + one Red move)
+            if (turnCounter % 2 == 0) { // After every 2 full turns (Red + Blue)
                 transformPieces();
             }
         }
@@ -194,6 +229,7 @@ public class Game {
 
     /**
      * Transforms Tor and Xor pieces as per game rules.
+     * Replaces Tor with Xor and vice versa.
      */
     private void transformPieces() {
         IDGenerator idGen = IDGenerator.getInstance(); // Obtain Singleton instance
@@ -221,7 +257,8 @@ public class Game {
     }
 
     /**
-     * Checks if the game is over by verifying the existence of Sau pieces.
+     * Checks if the game has ended by verifying the existence of Sau pieces.
+     * If either player has no Sau remaining, the game is over.
      */
     public void checkGameOver() {
         boolean redSauExists = false;
@@ -254,9 +291,9 @@ public class Game {
     }
 
     /**
-     * Determines the winner of the game.
+     * Determines the winner of the game based on the remaining Sau pieces.
      *
-     * @return The winner's color as a String, or null if the game isn't over.
+     * @return The winner's color as a String ("Red" or "Blue"), or null if the game isn't over.
      */
     public String getWinner() {
         if (!gameOver) return null;
@@ -264,7 +301,7 @@ public class Game {
     }
 
     /**
-     * Retrieves the current turn number.
+     * Retrieves the current individual turn number.
      *
      * @return The current turn number.
      */
@@ -273,7 +310,7 @@ public class Game {
     }
 
     /**
-     * Retrieves the turn counter.
+     * Retrieves the current full turn counter.
      *
      * @return The turn counter.
      */
@@ -282,47 +319,48 @@ public class Game {
     }
 
     /**
-     * Sets a new board for the game and notifies observers.
+     * Sets a new board for the game and notifies observers of the change.
      *
      * @param board The new game board.
      */
     public void setBoard(Board board) {
         this.board = board;
-        notifyObservers(GameEvent.MOVE); // Assuming setting board is akin to a move
+        notifyObservers(GameEvent.MOVE);
     }
 
     /**
-     * Sets the current player and notifies observers.
+     * Sets the current player and notifies observers of the turn switch.
      *
      * @param currentPlayer The new current player.
      */
     public void setCurrentPlayer(Color currentPlayer) {
         this.currentPlayer = currentPlayer;
-        notifyObservers(GameEvent.TRANSFORM); // Assuming a turn switch is related to transformation
+        notifyObservers(GameEvent.TRANSFORM);
     }
 
     /**
-     * Sets the turn number and notifies observers.
+     * Sets the current individual turn number and notifies observers.
      *
      * @param turn The new turn number.
      */
     public void setTurn(int turn) {
         this.turn = turn;
-        notifyObservers(GameEvent.MOVE); // Assuming turn number relates to moves
+        notifyObservers(GameEvent.MOVE);
     }
 
     /**
-     * Sets the turn counter and notifies observers.
+     * Sets the full turn counter and notifies observers.
      *
-     * @param turnCounter The new turn counter.
+     * @param turnCounter The new turn counter value.
      */
     public void setTurnCounter(int turnCounter) {
         this.turnCounter = turnCounter;
-        notifyObservers(GameEvent.TRANSFORM); // Assuming turn counter relates to transformations
+        notifyObservers(GameEvent.TRANSFORM);
     }
 
     /**
-     * Resets the game to its initial state and notifies observers.
+     * Resets the game to its initial state, including the board, player turns, and turn counters.
+     * Notifies observers of the reset.
      */
     public void resetGame() {
         this.board = new Board();

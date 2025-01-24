@@ -1,16 +1,28 @@
-// GameSaver.java
 package model;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 
-//import java.io.BufferedWriter;
-//import java.io.FileWriter;
-//import java.io.IOException;
-
+/**
+ * The GameSaver class handles saving the current state of the game to a text file.
+ * It serializes the board state, current player, turn counts, and move history.
+ *
+ * Design Pattern: Singleton Pattern (for PieceFactory)
+ * Role: Utilizes PieceFactory to recreate pieces.
+ *
+ * @author Tiffany Jong Shu Ting
+ */
 public class GameSaver {
 
-    // Save the game state to a text file in the specified format
+    /**
+     * Saves the provided GameState to a text file in a structured format.
+     *
+     * @param gameState The current state of the game to be saved.
+     * @param filename  The name of the file to which the game state will be saved.
+     * @throws IOException If an error occurs while writing to the file.
+     */
     public static void saveGameAsText(GameState gameState, String filename) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             // Write the turn count
@@ -32,7 +44,6 @@ public class GameSaver {
                     Position position = new Position(row, col);
                     Piece piece = gameState.getBoard().getPieceAt(position);
                     if (piece != null) {
-                        // Adjust coordinates based on the current player's perspective
                         Position adjustedPosition = gameState.getBoard().rotateCoordinates(position, isRedTurn);
 
                         writer.write(String.format("piece: %s, %d, %d, %d, %s\n",
@@ -53,12 +64,12 @@ public class GameSaver {
             List<Move> moveHistory = gameState.getMoveHistory();
             for (Move move : moveHistory) {
                 writer.write(String.format("move: %s, %s, %d, %d, %d, %d\n",
-                        move.getPlayer(),
-                        move.getPieceType(),
-                        move.getFrom().getRow(),
-                        move.getFrom().getColumn(),
-                        move.getTo().getRow(),
-                        move.getTo().getColumn()
+                        move.getPlayer(),       // Player who made the move
+                        move.getPieceType(),    // Type of piece moved
+                        move.getFrom().getRow(),    // Starting row
+                        move.getFrom().getColumn(), // Starting column
+                        move.getTo().getRow(),      // Target row
+                        move.getTo().getColumn()    // Target column
                 ));
             }
 

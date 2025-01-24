@@ -1,20 +1,49 @@
-// IDGenerator.java
 package model;
 
 /**
- * Singleton class for generating unique IDs for different piece types.
+ * The IDGenerator class is a singleton responsible for generating unique identifiers
+ * for different types of pieces in the game. It ensures that each piece has a distinct ID.
+ *
+ * Design Pattern: Singleton Pattern
+ * Role: Singleton - Ensures a single instance exists throughout the application.
+ *
+ * @author Tiffany Jong Shu Ting
  */
 public class IDGenerator {
-    // Volatile keyword ensures visibility of changes across threads
+    /**
+     * The single instance of IDGenerator.
+     */
     private static volatile IDGenerator instance = null;
 
+    /**
+     * Counter for Ram pieces.
+     */
     private int ramId;
+
+    /**
+     * Fixed ID for Tor pieces.
+     */
     private final int torId;
+
+    /**
+     * Fixed ID for Xor pieces.
+     */
     private final int xorId;
+
+    /**
+     * Counter for Biz pieces.
+     */
     private int bizId;
+
+    /**
+     * Fixed ID for Sau pieces.
+     */
     private final int sauId;
 
-    // Private constructor to prevent instantiation
+    /**
+     * Private constructor to prevent instantiation.
+     * Initializes all piece ID counters.
+     */
     private IDGenerator() {
         this.ramId = 1;
         this.torId = 7;
@@ -24,7 +53,8 @@ public class IDGenerator {
     }
 
     /**
-     * Returns the single instance of IDGenerator.
+     * Retrieves the single instance of IDGenerator.
+     * Implements double-checked locking for thread safety.
      *
      * @return The IDGenerator instance.
      */
@@ -40,9 +70,10 @@ public class IDGenerator {
     }
 
     /**
-     * Gets the next Ram ID.
+     * Retrieves the next available Ram ID.
+     * Cycles between 1 and 5.
      *
-     * @return The next available Ram ID.
+     * @return The next Ram ID.
      */
     public synchronized int getNextRamId() {
         if (ramId <= 5) {
@@ -54,7 +85,7 @@ public class IDGenerator {
     }
 
     /**
-     * Gets the Tor ID.
+     * Retrieves the fixed Tor ID.
      *
      * @return The Tor ID.
      */
@@ -63,7 +94,7 @@ public class IDGenerator {
     }
 
     /**
-     * Gets the Xor ID.
+     * Retrieves the fixed Xor ID.
      *
      * @return The Xor ID.
      */
@@ -72,9 +103,10 @@ public class IDGenerator {
     }
 
     /**
-     * Gets the next Biz ID.
+     * Retrieves the next available Biz ID.
+     * Cycles between 8 and 9.
      *
-     * @return The next available Biz ID.
+     * @return The next Biz ID.
      */
     public synchronized int getNextBizId() {
         if (bizId <= 9) {
@@ -86,7 +118,7 @@ public class IDGenerator {
     }
 
     /**
-     * Gets the Sau ID.
+     * Retrieves the fixed Sau ID.
      *
      * @return The Sau ID.
      */
@@ -95,11 +127,11 @@ public class IDGenerator {
     }
 
     /**
-     * Resets the ID counters for a new game.
+     * Resets the ID counters for Ram and Biz pieces.
+     * Useful when starting a new game.
      */
     public synchronized void resetIds() {
         this.ramId = 1;
         this.bizId = 8;
-        // torId, xorId, sauId are final and do not reset
     }
 }
