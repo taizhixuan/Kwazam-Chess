@@ -13,22 +13,43 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Swing-based GUI for Kwazam Chess.
- * Acts as the base view, handling the graphical representation of the game board.
+ * BoardView is the base graphical user interface (GUI) component for the Kwazam Chess game.
+ * It extends JFrame and implements the ViewInterface to handle the visual representation
+ * of the game board and user interactions.
+ *
+ * Design Pattern:Adapter Pattern
+ * Role: Adaptee - Provides the foundational board view which is adapted by GameScreen to include additional UI components.
+ *
+ * @author Tai ZHi Xuan, Tiffany Jong Shu Ting
  */
 public class BoardView extends JFrame implements ViewInterface {
+    /**
+     * The controller that manages interactions between the view and the model.
+     */
     protected GameController controller;
-    private JPanel boardPanel;
-    private JButton[][] buttons;
-
-    // Make the mainPanel protected so subclasses can rearrange it
-    protected JPanel mainPanel;
-
-    private static final int BUTTON_SIZE = 83; // Adjust this for larger pieces
 
     /**
-     * Default constructor for BoardView.
-     * Initializes the GUI components.
+     * The panel that contains all the board buttons.
+     */
+    private JPanel boardPanel;
+
+    /**
+     * A 2D array of buttons representing each tile on the game board.
+     */
+    private JButton[][] buttons;
+
+    /**
+     * The main panel that holds all UI components.
+     */
+    protected JPanel mainPanel;
+
+    /**
+     * The size of each button on the board.
+     */
+    private static final int BUTTON_SIZE = 83;
+
+    /**
+     * Constructs a new BoardView, initializing the GUI components.
      */
     public BoardView() {
         setTitle("Kwazam Chess");
@@ -41,41 +62,42 @@ public class BoardView extends JFrame implements ViewInterface {
     }
 
     /**
-     * Sets the controller after construction to avoid circular dependency.
+     * Sets the GameController for this view.
      *
-     * @param controller The GameController instance.
+     * @param controller The GameController instance managing the game logic.
      */
     public void setController(GameController controller) {
         this.controller = controller;
     }
 
     /**
-     * Provides access to the main panel, allowing subclasses to modify the layout.
+     * Retrieves the main panel of the board view.
      *
-     * @return The main panel.
+     * @return The main JPanel containing all UI components.
      */
     protected JPanel getMainPanel() {
         return mainPanel;
     }
 
     /**
-     * Initializes the game board GUI components.
+     * Initializes the game board GUI components, including the grid of buttons
+     * and the row and column labels.
      */
     private void initializeBoard() {
-        // Create the main panel
+        // Create the main panel with GridBagLayout for flexible component placement
         this.mainPanel = new JPanel(new GridBagLayout());
         mainPanel.setBackground(getBackground());
 
-        // Create the board panel with GridLayout for buttons
+        // Create the board panel with GridLayout for buttons (8 rows x 5 columns)
         boardPanel = new JPanel(new GridLayout(8, 5));
         buttons = new JButton[8][5];
 
-        // Create dynamic button size based on the window size
+        // Define the preferred and minimum size of the board panel
         Dimension boardSize = new Dimension(BUTTON_SIZE * 5, BUTTON_SIZE * 8);
         boardPanel.setPreferredSize(boardSize);
         boardPanel.setMinimumSize(boardSize);
 
-        // Create labels for row numbers
+        // Create labels for row numbers (0 to 7)
         JPanel rowLabels = new JPanel(new GridLayout(8, 1));
         for (int i = 0; i < 8; i++) {
             JLabel label = new JLabel(String.valueOf(i), SwingConstants.CENTER);
@@ -83,7 +105,7 @@ public class BoardView extends JFrame implements ViewInterface {
             rowLabels.add(label);
         }
 
-        // Create labels for column numbers
+        // Create labels for column numbers (0 to 4)
         JPanel columnLabels = new JPanel(new GridLayout(1, 5));
         for (int i = 0; i < 5; i++) {
             JLabel label = new JLabel(String.valueOf(i), SwingConstants.CENTER);
@@ -100,7 +122,7 @@ public class BoardView extends JFrame implements ViewInterface {
         gbc.gridheight = 8;
         gbc.fill = GridBagConstraints.VERTICAL;
         gbc.anchor = GridBagConstraints.CENTER;
-        gbc.insets = new Insets(10, 0, 0, 0); // Add spacing between column labels and the board
+        gbc.insets = new Insets(10, 0, 0, 0);
         mainPanel.add(rowLabels, gbc);
 
         // Position column labels below the board
@@ -109,7 +131,7 @@ public class BoardView extends JFrame implements ViewInterface {
         gbc.gridwidth = 5;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.CENTER;
-        gbc.insets = new Insets(0, 10, 10, 0); // Add spacing between row labels and the board
+        gbc.insets = new Insets(0, 10, 10, 0);
         mainPanel.add(columnLabels, gbc);
 
         // Position the board in the center
@@ -121,22 +143,22 @@ public class BoardView extends JFrame implements ViewInterface {
         gbc.anchor = GridBagConstraints.CENTER;
         mainPanel.add(boardPanel, gbc);
 
-        // Finally, add mainPanel to the frame
         add(mainPanel);
     }
 
     /**
-     * Redraws the board with updated piece positions and icons.
+     * Refreshes the board display by updating piece positions and icons.
+     * This method should be called whenever the game state changes.
      */
     public void refreshBoard() {
         boardPanel.removeAll();
         Board board = controller.getBoard();
 
-        // Calculate the size of each button to maintain square tiles
         int buttonSize = boardPanel.getPreferredSize().width / 5;
 
         boolean isCurrentPlayerRed = controller.getCurrentPlayer().equals("RED");
 
+        // Iterate through each position on the board
         for (int row = isCurrentPlayerRed ? board.getRows() - 1 : 0;
              isCurrentPlayerRed ? row >= 0 : row < board.getRows();
              row += isCurrentPlayerRed ? -1 : 1) {
@@ -151,7 +173,6 @@ public class BoardView extends JFrame implements ViewInterface {
                 Position position = new Position(row, col);
                 Piece piece = board.getPieceAt(position);
 
-                // Set piece icon with 180-degree rotation if necessary
                 if (piece != null) {
                     ImageIcon icon = new ImageIcon(
                             Objects.requireNonNull(getClass().getClassLoader().getResource(piece.getImagePath()))
@@ -162,7 +183,6 @@ public class BoardView extends JFrame implements ViewInterface {
                     button.setIcon(new ImageIcon(scaledImage));
                 }
 
-                // Checkerboard background
                 if ((row + col) % 2 == 0) {
                     button.setBackground(Color.LIGHT_GRAY);
                 } else {
@@ -171,7 +191,6 @@ public class BoardView extends JFrame implements ViewInterface {
                 button.setOpaque(true);
                 button.setBorderPainted(false);
 
-                // Add click listener
                 final int r = row, c = col;
                 button.addActionListener(e -> handleClick(r, c));
 
@@ -183,10 +202,10 @@ public class BoardView extends JFrame implements ViewInterface {
     }
 
     /**
-     * Handles user clicks on the board.
+     * Handles user clicks on the board tiles.
      *
-     * @param row The row of the clicked tile.
-     * @param col The column of the clicked tile.
+     * @param row The row index of the clicked tile.
+     * @param col The column index of the clicked tile.
      */
     private void handleClick(int row, int col) {
         Position position = new Position(row, col);
@@ -194,7 +213,7 @@ public class BoardView extends JFrame implements ViewInterface {
     }
 
     /**
-     * Highlights the selected piece in yellow.
+     * Highlights the selected piece by changing its background color to yellow.
      *
      * @param position The position of the selected piece.
      */
@@ -208,9 +227,9 @@ public class BoardView extends JFrame implements ViewInterface {
     }
 
     /**
-     * Highlights valid move positions in green.
+     * Highlights all valid move positions by changing their background color to green.
      *
-     * @param validMoves List of valid positions to highlight.
+     * @param validMoves A list of valid positions to highlight.
      */
     public void highlightValidMoves(List<Position> validMoves) {
         for (Position move : validMoves) {
@@ -219,7 +238,7 @@ public class BoardView extends JFrame implements ViewInterface {
     }
 
     /**
-     * Clears all highlights and resets the checkerboard.
+     * Clears all highlights on the board by resetting the background colors to the checkerboard pattern.
      */
     public void clearHighlights() {
         for (int row = 0; row < buttons.length; row++) {
@@ -236,18 +255,16 @@ public class BoardView extends JFrame implements ViewInterface {
     /**
      * Rotates an image by 180 degrees.
      *
-     * @param original The original image.
-     * @return The rotated image.
+     * @param original The original Image to rotate.
+     * @return The rotated Image.
      */
     private Image rotateImage(Image original) {
         int width = original.getWidth(null);
         int height = original.getHeight(null);
 
-        // Create a new buffered image with the same dimensions
         BufferedImage rotatedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = rotatedImage.createGraphics();
 
-        // Translate to the center of the image, rotate, then translate back
         g2d.translate(width / 2, height / 2);
         g2d.rotate(Math.toRadians(180));
         g2d.translate(-width / 2, -height / 2);
@@ -274,10 +291,10 @@ public class BoardView extends JFrame implements ViewInterface {
         );
 
         if (response == JOptionPane.YES_OPTION) {
-            controller.resetGame(); // Reset the game state
-            refreshBoard();         // Refresh the game board
+            controller.resetGame();
+            refreshBoard();
         } else {
-            System.exit(0);          // Exit the game
+            System.exit(0);
         }
     }
 }
