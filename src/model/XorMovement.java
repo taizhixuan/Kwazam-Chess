@@ -1,10 +1,27 @@
-// XorMovement.java
 package model;
 
 /**
- * Xor: bishop-like diagonal moves, no jumping over pieces.
+ * The XorMovement class defines the movement logic specific to the Xor piece.
+ *
+ * Description:
+ * Xor can move any number of squares diagonally, similar to the Bishop in traditional chess.
+ * It cannot jump over other pieces. The move is valid if the path to the target position is clear
+ * and the move adheres to the movement rules.
+ *
+ * Design Patterns:
+ * - Strategy Pattern: Implements the MovementStrategy interface to encapsulate Xor's movement behavior.
+ *
+ * @author Tai Zhi Xuan
  */
 public class XorMovement implements MovementStrategy {
+    /**
+     * Validates whether the Xor can move from the 'from' position to the 'to' position on the given board.
+     *
+     * @param from  The current position of the Xor.
+     * @param to    The target position to move to.
+     * @param board The current state of the game board.
+     * @return True if the move is valid; false otherwise.
+     */
     @Override
     public boolean isValidMove(Position from, Position to, Board board) {
         if (from.equals(to)) return false;
@@ -20,13 +37,12 @@ public class XorMovement implements MovementStrategy {
         int curCol = from.getColumn() + stepCol;
         while (curRow != to.getRow() || curCol != to.getColumn()) {
             if (!board.isPositionEmpty(new Position(curRow, curCol))) {
-                return false; // blocked
+                return false;
             }
             curRow += stepRow;
             curCol += stepCol;
         }
 
-        // final occupant
         Piece mover = board.getPieceAt(from);
         Piece occupant = board.getPieceAt(to);
         if (occupant == null) return true;
