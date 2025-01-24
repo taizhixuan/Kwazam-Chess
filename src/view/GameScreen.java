@@ -1,4 +1,3 @@
-// GameScreen.java
 package view;
 
 import controller.GameController;
@@ -9,47 +8,71 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.List;
-
+import java.util.Objects;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 /**
- * GameScreen extends BoardView to include additional UI components
- * like move history and a game timer.
+ * GameScreen extends BoardView to include additional user interface components
+ * such as move history and a game timer. It enhances the base board view with
+ * more interactive and informative elements.
+ *
+ * Design Pattern: Adapter Pattern
+ * Role: Adapter - Extends BoardView to add new functionalities like sidebar and timer.
+ *
+ * @author Tai Zhi Xuan
  */
 public class GameScreen extends BoardView {
+    /**
+     * The controller managing the game logic and interactions.
+     */
     private final GameController controller;
 
-    // Sidebar components
+    /**
+     * Panel for additional UI components like move history and timer.
+     */
     private JPanel sidePanel;
+
+    /**
+     * Label displaying the elapsed game time.
+     */
     private JLabel timerLabel;
+
+    /**
+     * Timer object to update the game timer every second.
+     */
     private Timer gameTimer;
 
-    // Move history components
+    /**
+     * Model for the move history list.
+     */
     private DefaultListModel<String> moveListModel;
+
+    /**
+     * List component displaying the move history.
+     */
     private JList<String> moveList;
 
     /**
-     * Constructor for GameScreen.
+     * Constructs a new GameScreen with the specified GameController.
      *
-     * @param controller The GameController instance.
+     * @param controller The GameController instance managing the game.
      */
     public GameScreen(GameController controller) {
         super(); // Call BoardView constructor
         this.controller = controller;
         setController(controller); // Set the controller in BoardView
 
-        // Add the menu bar
-        addNavigationBar(); // The menu bar
+        // Add the menu bar with navigation options
+        addNavigationBar();
 
-        // Build the sidebar (including moveListModel, moveList)
+        // Build the sidebar containing move history and timer
         setupLayoutWithSidebar();
 
-        // Start the timer with the current secondsElapsed from controller
+        // Start the game timer with the current elapsed time
         startGameTimer();
 
-        // Now that everything is ready, refresh the board
-        // which also calls updateMoveList() to show moves
+        // Refresh the board to display the initial state
         refreshBoard();
 
         // Add a WindowListener to handle window closing events
@@ -79,50 +102,50 @@ public class GameScreen extends BoardView {
      * Configures the layout to include a sidebar for move history and timer.
      */
     private void setupLayoutWithSidebar() {
-        // 1) Remove everything from the current frame (including mainPanel).
+        // Remove all existing components from the frame
         getContentPane().removeAll();
-        // 2) Set a BorderLayout
+        // Set the layout to BorderLayout for main and sidebar panels
         getContentPane().setLayout(new BorderLayout());
 
-        // 3) Add BoardView's mainPanel to the center
+        // Add the existing board view to the center
         JPanel boardViewPanel = getMainPanel();
         getContentPane().add(boardViewPanel, BorderLayout.CENTER);
 
-        // 4) Create a new sidePanel with increased width
+        // Create a new sidePanel with a fixed width
         sidePanel = new JPanel();
         sidePanel.setPreferredSize(new Dimension(300, getHeight()));
         sidePanel.setLayout(new BoxLayout(sidePanel, BoxLayout.Y_AXIS));
-        sidePanel.setBorder(new EmptyBorder(10, 10, 10, 10)); // Add padding around the side panel
+        sidePanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
-        // Add a gap at the top
+        // Add vertical spacing at the top
         sidePanel.add(Box.createVerticalStrut(20));
 
-        // 5) Timer label
-        timerLabel = new JLabel("Time: " + controller.getSecondsElapsed() + "s"); // Initialize with controller's time
+        // Initialize the timer label with the current elapsed time
+        timerLabel = new JLabel("Time: " + controller.getSecondsElapsed() + "s");
         timerLabel.setFont(new Font("Arial", Font.PLAIN, 16));
         timerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         sidePanel.add(timerLabel);
 
-        // Add some spacing after the timer
+        // Add vertical spacing after the timer
         sidePanel.add(Box.createVerticalStrut(30));
 
-        // 6) Move History
+        // Initialize the move history list model and list
         moveListModel = new DefaultListModel<>();
         moveList = new JList<>(moveListModel);
         moveList.setFont(new Font("Monospaced", Font.PLAIN, 16));
 
-        // Add a label for the move list
+        // Add a label for the move history section
         JLabel moveListLabel = new JLabel("Move History", SwingConstants.CENTER);
         moveListLabel.setFont(new Font("Arial", Font.BOLD, 16));
         moveListLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Scroll pane for the list with added padding and increased width
+        // Create a scroll pane for the move history list with padding and borders
         JScrollPane scrollPane = new JScrollPane(moveList);
         scrollPane.setPreferredSize(new Dimension(270, 300));
         scrollPane.setAlignmentX(Component.CENTER_ALIGNMENT);
         scrollPane.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.GRAY),
-                new EmptyBorder(10, 10, 10, 10) // Add padding inside the scroll pane
+                new EmptyBorder(10, 10, 10, 10)
         ));
 
         // Add a border around the move history for better separation
@@ -133,9 +156,10 @@ public class GameScreen extends BoardView {
         sidePanel.add(Box.createVerticalStrut(10));
         sidePanel.add(scrollPane);
 
-        // Add some spacing at the bottom
+        // Add glue to push components to the top
         sidePanel.add(Box.createVerticalGlue());
 
+        // Add the sidePanel to the right side of the frame
         getContentPane().add(sidePanel, BorderLayout.EAST);
         getContentPane().revalidate();
         getContentPane().repaint();
@@ -143,21 +167,22 @@ public class GameScreen extends BoardView {
 
     /**
      * Sets up a javax.swing.Timer that increments `secondsElapsed` every second.
+     * This timer updates the timer label to show the elapsed game time.
      */
     private void startGameTimer() {
         // Initialize the timer label with current secondsElapsed
         timerLabel.setText("Time: " + controller.getSecondsElapsed() + "s");
 
-        // Fire an event every 1000 ms = 1 second
+        // Create a timer that fires every 1000 ms (1 second)
         gameTimer = new Timer(1000, e -> {
             controller.incrementSecondsElapsed(); // Increment in controller
-            timerLabel.setText("Time: " + controller.getSecondsElapsed() + "s");
+            timerLabel.setText("Time: " + controller.getSecondsElapsed() + "s"); // Update timer label
         });
-        gameTimer.start();
+        gameTimer.start(); // Start the timer
     }
 
     /**
-     * Stops the game timer.
+     * Stops the game timer to prevent it from running in the background.
      */
     private void stopGameTimer() {
         if (gameTimer != null) {
@@ -166,29 +191,25 @@ public class GameScreen extends BoardView {
     }
 
     /**
-     * Adds the navigation bar with menu items.
+     * Adds the navigation menu bar with options like New Game, Save Game, Load Game, etc.
      */
     private void addNavigationBar() {
         JMenuBar menuBar = new JMenuBar();
         JMenu gameMenu = new JMenu("Menu");
 
-        // Set custom font size for the menu
         Font menuFont = new Font("Arial", Font.BOLD, 16);
         gameMenu.setFont(menuFont);
 
-        // 1) New Game
         JMenuItem newGame = new JMenuItem("New Game");
         newGame.addActionListener(e -> {
             controller.resetGame();
             super.refreshBoard();
-            // Reset the timer
             controller.setSecondsElapsed(0);
             timerLabel.setText("Time: 0s");
             JOptionPane.showMessageDialog(this, "New game started!");
         });
         gameMenu.add(newGame);
 
-        // 2) Save Game
         JMenuItem saveGame = new JMenuItem("Save Game");
         saveGame.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
@@ -208,7 +229,6 @@ public class GameScreen extends BoardView {
         });
         gameMenu.add(saveGame);
 
-        // 3) Load Game
         JMenuItem loadGame = new JMenuItem("Load Game");
         loadGame.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
@@ -219,7 +239,6 @@ public class GameScreen extends BoardView {
                 try {
                     controller.loadGame(filename);
                     refreshBoard();
-                    // Update the timer label
                     timerLabel.setText("Time: " + controller.getSecondsElapsed() + "s");
                     JOptionPane.showMessageDialog(this, "Game loaded successfully!");
                 } catch (Exception ex) {
@@ -231,18 +250,14 @@ public class GameScreen extends BoardView {
         });
         gameMenu.add(loadGame);
 
-        // 4) Back to Home
         JMenuItem backHome = new JMenuItem("Back to Home");
         backHome.addActionListener(e -> {
-            // Dispose this window and return to HomeScreen
             dispose();
-            // Stop the timer
             stopGameTimer();
             new HomeScreen();
         });
         gameMenu.add(backHome);
 
-        // 5) Exit Game
         JMenuItem exitGame = new JMenuItem("Exit");
         exitGame.addActionListener(e -> {
             stopGameTimer();
@@ -250,13 +265,12 @@ public class GameScreen extends BoardView {
         });
         gameMenu.add(exitGame);
 
-        // Add the menu to the menu bar
         menuBar.add(gameMenu);
         setJMenuBar(menuBar);
     }
 
     /**
-     * Refreshes the board and updates the move history.
+     * Refreshes the board and updates the move history list.
      */
     @Override
     public void refreshBoard() {
@@ -266,26 +280,23 @@ public class GameScreen extends BoardView {
 
     /**
      * Updates the move history display based on the controller's move history.
+     * This method formats each move and adds it to the moveListModel.
      */
     public void updateMoveList() {
-        // Clear old contents first
         moveListModel.clear();
 
-        // Retrieve the entire move history from the controller
         List<Move> history = controller.getMoveHistory();
-        boolean isRedPerspective = controller.getCurrentPlayer().equals("BLUE"); // Since player just switched
+        boolean isRedPerspective = controller.getCurrentPlayer().equals("BLUE");
 
-        int moveNumber = 1; // For numbering moves
+        int moveNumber = 1;
 
         for (Move move : history) {
             String player = move.getPlayer();
-            String pieceType = move.getPieceType(); // Get piece type
+            String pieceType = move.getPieceType();
 
-            // Determine if the move should be displayed with inversion
             boolean isRedPlayer = player.equalsIgnoreCase("RED");
             boolean shouldInvert = isRedPlayer;
 
-            // Calculate display coordinates based on player perspective
             int displayFromRow = shouldInvert ? (7 - move.getFrom().getRow()) : move.getFrom().getRow();
             int displayFromCol = shouldInvert ? (4 - move.getFrom().getColumn()) : move.getFrom().getColumn();
             int displayToRow = shouldInvert ? (7 - move.getTo().getRow()) : move.getTo().getRow();
@@ -303,7 +314,6 @@ public class GameScreen extends BoardView {
             moveListModel.addElement(formattedMove);
         }
 
-        // Optionally, auto-scroll to the last move
         if (!history.isEmpty()) {
             moveList.ensureIndexIsVisible(history.size() - 1);
         }
@@ -334,7 +344,6 @@ public class GameScreen extends BoardView {
      */
     @Override
     public void gameOver(String message) {
-        // Stop the timer if game is over
         stopGameTimer();
         super.gameOver(message);
     }

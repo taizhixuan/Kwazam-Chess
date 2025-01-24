@@ -1,4 +1,3 @@
-// GameController.java
 package controller;
 
 import model.*;

@@ -1,4 +1,3 @@
-// BoardView.java
 package view;
 
 import controller.GameController;
