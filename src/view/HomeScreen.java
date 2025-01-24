@@ -1,4 +1,3 @@
-// HomeScreen.java
 package view;
 
 import controller.GameController;
@@ -10,14 +9,19 @@ import java.net.URL;
 
 /**
  * HomeScreen provides the main menu interface for the Kwazam Chess application.
+ * It allows users to start a new game, resume a previous game, load a game from a file,
+ * view instructions, or exit the application.
+ *
+ * @author Tai Zhi Xuan, Tiffany Jong Shu Ting, Joyce Ong Pay Teng
  */
 public class HomeScreen extends JFrame {
-    // Keep a static reference to the last GameController so we can "resume" it
+    /**
+     * Static reference to the last GameController to facilitate game resumption.
+     */
     private static GameController savedController = null;
 
     /**
-     * Constructor for HomeScreen.
-     * Initializes the main menu UI components.
+     * Constructs a new HomeScreen, initializing the main menu UI components.
      */
     public HomeScreen() {
         // Frame settings
@@ -29,7 +33,7 @@ public class HomeScreen extends JFrame {
 
         // Title Panel
         JPanel titlePanel = new JPanel();
-        titlePanel.setBackground(new Color(45, 45, 85)); // Darker navy background
+        titlePanel.setBackground(new Color(45, 45, 85));
         titlePanel.setPreferredSize(new Dimension(800, 150));
         titlePanel.setLayout(new BorderLayout());
 
@@ -42,7 +46,7 @@ public class HomeScreen extends JFrame {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(5, 1, 20, 20));
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(50, 150, 50, 150));
-        buttonPanel.setBackground(new Color(230, 230, 230)); // Light gray background
+        buttonPanel.setBackground(new Color(230, 230, 230));
 
         // Create Buttons
         CustomButton newGameButton = createGradientButton("Create New Game");
@@ -76,7 +80,7 @@ public class HomeScreen extends JFrame {
      * Helper method to create gradient-styled buttons with hover effects.
      *
      * @param text The text to display on the button.
-     * @return A CustomButton instance.
+     * @return A CustomButton instance with gradient and hover effects.
      */
     private CustomButton createGradientButton(String text) {
         CustomButton button = new CustomButton(text);
@@ -105,17 +109,18 @@ public class HomeScreen extends JFrame {
     }
 
     /**
-     * Creates a new game and stores the controller in a static reference for resuming.
+     * Creates a new game by initializing a new GameController and displaying the game screen.
      */
     private void startNewGame() {
         dispose(); // Close the HomeScreen
         GameController controller = new GameController(new Board());
-        savedController = controller; // Store in static field
+        savedController = controller; // Store in static field for resumption
         controller.getView().setVisible(true); // Open the game screen
     }
 
     /**
-     * Resumes a previously created game if it exists.
+     * Resumes a previously created game if a saved controller exists.
+     * Displays an error message if no saved game is available.
      */
     private void resumeGame() {
         if (savedController == null) {
@@ -125,13 +130,12 @@ public class HomeScreen extends JFrame {
                     JOptionPane.ERROR_MESSAGE);
             return;
         }
-        // If we have a saved controller, open it again
         dispose();
         savedController.getView().setVisible(true);
     }
 
     /**
-     * Loads an existing game from a file into a new GameController, then opens GameScreen with it.
+     * Loads an existing game from a file into a new GameController, then displays the game screen.
      */
     private void loadGame() {
         JFileChooser fileChooser = new JFileChooser();
@@ -143,8 +147,8 @@ public class HomeScreen extends JFrame {
             try {
                 controller.loadGame(filename);
                 dispose();
-                savedController = controller;  // Store it for "resume"
-                controller.getView().setVisible(true);     // Launch the game screen
+                savedController = controller;
+                controller.getView().setVisible(true);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this,
                         "Failed to load the game: " + e.getMessage(),
@@ -155,12 +159,9 @@ public class HomeScreen extends JFrame {
     }
 
     /**
-     * Displays the game instructions in a dialog.
+     * Displays the game instructions in a dialog window with images and descriptions.
      */
     private void showInstructions() {
-        // 1) Load each piece image via getResource(...)
-        //    Make sure the filenames match your actual PNG files in /resources/images/.
-        //    If any returns null, verify the file path & resource folder settings.
         URL bizBlueURL = getClass().getResource("/resources/images/Biz_blue.png");
         URL bizRedURL  = getClass().getResource("/resources/images/Biz_red.png");
         URL ramBlueURL = getClass().getResource("/resources/images/Ram_blue.png");
@@ -172,8 +173,6 @@ public class HomeScreen extends JFrame {
         URL sauBlueURL = getClass().getResource("/resources/images/Sau_blue.png");
         URL sauRedURL  = getClass().getResource("/resources/images/Sau_red.png");
 
-        // 2) Build an HTML string that shows each piece image with a label/description.
-        //    The <img src='...'> tags will display the images from your resources.
         String instructionsHTML = "<html>" +
                 "<h1 style='text-align:center;'>Kwazam Chess Instructions</h1>" +
                 "<p style='font-size:14px;'>Below are the game rules and piece images for quick reference.</p>" +
@@ -249,9 +248,7 @@ public class HomeScreen extends JFrame {
 
                 "</html>";
 
-        // 3) Display the instructions in a dialog. We use a JLabel with HTML content.
         JLabel instructionsLabel = new JLabel(instructionsHTML);
-        // Optionally, we can allow the label to scroll if there's a lot of content:
         JScrollPane scrollPane = new JScrollPane(instructionsLabel);
         scrollPane.setPreferredSize(new Dimension(550, 500));
 
@@ -264,26 +261,43 @@ public class HomeScreen extends JFrame {
     }
 
     /**
-     * CustomButton class for gradient buttons with hover effects.
+     * CustomButton class extends JButton to provide gradient backgrounds and hover effects.
      */
     private static class CustomButton extends JButton {
+        /**
+         * Flag indicating whether the mouse is hovering over the button.
+         */
         private boolean isHovered = false;
 
+        /**
+         * Constructs a new CustomButton with the specified text.
+         *
+         * @param text The text to display on the button.
+         */
         public CustomButton(String text) {
             super(text);
         }
 
+        /**
+         * Sets the hovered state of the button.
+         *
+         * @param hovered True if the mouse is hovering over the button, false otherwise.
+         */
         public void setHovered(boolean hovered) {
             this.isHovered = hovered;
         }
 
+        /**
+         * Paints the component with gradient background and hover effects.
+         *
+         * @param g The Graphics object used for drawing.
+         */
         @Override
         protected void paintComponent(Graphics g) {
             Graphics2D g2d = (Graphics2D) g;
             int width = getWidth();
             int height = getHeight();
 
-            // Create a gradient background
             GradientPaint gradient = new GradientPaint(
                     0, 0, new Color(77, 182, 172),
                     0, height, new Color(38, 116, 128)
@@ -291,7 +305,6 @@ public class HomeScreen extends JFrame {
             g2d.setPaint(gradient);
             g2d.fillRoundRect(0, 0, width, height, 15, 15);
 
-            // Draw the flashlight effect
             if (isHovered) {
                 g2d.setColor(new Color(255, 255, 255, 128));
                 g2d.setStroke(new BasicStroke(4));

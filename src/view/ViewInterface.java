@@ -1,4 +1,3 @@
-// ViewInterface.java
 package view;
 
 import model.Position;
@@ -6,7 +5,10 @@ import model.Position;
 import java.util.List;
 
 /**
- * Interface defining methods that views must implement.
+ * ViewInterface defines the contract that all view components must adhere to.
+ * It ensures consistency across different views in the application.
+ *
+ * @author Tai Zhi Xuan
  */
 public interface ViewInterface {
     /**
@@ -22,12 +24,12 @@ public interface ViewInterface {
     void clearHighlights();
 
     /**
-     * Refreshes the entire board view.
+     * Refreshes the entire board view, updating piece positions and UI elements.
      */
     void refreshBoard();
 
     /**
-     * Displays a game over message and prompts for a new game or exit.
+     * Displays a game over message and prompts the user to start a new game or exit.
      *
      * @param message The game over message to display.
      */

@@ -1,4 +1,3 @@
-// GameView.java
 package view;
 
 import controller.GameController;
@@ -10,15 +9,29 @@ import model.Position;
 import java.util.Scanner;
 
 /**
- * A console-based view to test moves via text input.
+ * GameView provides a console-based interface for testing game moves via text input.
+ * It interacts with the GameController to perform actions based on user input.
+ *
+ * @author Tai Zhi Xuan
  */
 public class GameView {
+    /**
+     * The controller managing the game logic and interactions.
+     */
     private final GameController controller;
 
+    /**
+     * Constructs a new GameView with the specified GameController.
+     *
+     * @param controller The GameController instance managing the game.
+     */
     public GameView(GameController controller) {
         this.controller = controller;
     }
 
+    /**
+     * Starts the console-based game loop, handling user inputs and displaying game state.
+     */
     public void start() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Welcome to Kwazam Chess!");
@@ -49,16 +62,17 @@ public class GameView {
                 }
             } catch (Exception e) {
                 System.out.println("Invalid input. Must be four integers (e.g., '0 1 0 2').");
-                scanner.nextLine(); // Clear the buffer
+                scanner.nextLine();
             }
         }
 
-        // Once the game is over, announce the winner
         System.out.println("Game over! The winner is " + controller.getCurrentPlayer());
         scanner.close();
     }
 
-
+    /**
+     * Displays the current state of the game board in the console.
+     */
     private void displayBoard() {
         Board board = controller.getBoard();
         for (int r = 0; r < board.getRows(); r++) {
@@ -76,6 +90,11 @@ public class GameView {
         }
     }
 
+    /**
+     * Saves the current game state to a specified filename.
+     *
+     * @param filename The name of the file to save the game state.
+     */
     private void saveGame(String filename) {
         try {
             controller.saveGameAsText(filename);
@@ -85,6 +104,11 @@ public class GameView {
         }
     }
 
+    /**
+     * Loads a game state from a specified filename.
+     *
+     * @param filename The name of the file from which to load the game state.
+     */
     private void loadGame(String filename) {
         try {
             controller.loadGame(filename);
