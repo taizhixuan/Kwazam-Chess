@@ -8,7 +8,6 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.List;
-import java.util.Objects;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
