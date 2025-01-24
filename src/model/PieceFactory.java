@@ -5,11 +5,21 @@ import java.util.Map;
 import java.util.function.BiFunction;
 
 /**
- * Factory class for creating different types of chess pieces.
+ * The PieceFactory class is responsible for creating instances of different chess pieces.
+ * It encapsulates the creation logic, allowing for easy addition of new piece types.
+ *
+ * Design Pattern:Factory Pattern
+ * Role: Factory - Provides a centralized point for creating objects without exposing the creation logic.
+ *
+ * @author Tai Zhi Xuan, Tiffany Jong Shu Ting
  */
 public class PieceFactory {
+    /**
+     * A registry mapping piece type strings to their corresponding constructors.
+     */
     private static final Map<String, BiFunction<Color, Integer, Piece>> pieceRegistry = new HashMap<>();
 
+    // Static block to initialize the registry with available piece types
     static {
         pieceRegistry.put("ram", Ram::new);
         pieceRegistry.put("tor", Tor::new);
@@ -19,12 +29,15 @@ public class PieceFactory {
     }
 
     /**
-     * Creates a piece with a specified type, color, and ID.
+     * Creates a piece of the specified type, color, and unique ID.
      *
      * @param type  The type of the piece (e.g., "ram", "tor").
      * @param color The color of the piece (RED or BLUE).
-     * @param id    The unique ID of the piece.
+     * @param id    The unique identifier for the piece.
      * @return The created Piece instance.
+     * @throws IllegalArgumentException If the piece type is unknown or not registered.
+     *
+     * @author Tai Zhi Xuan
      */
     public static Piece createPiece(String type, Color color, int id) {
         if (type == null || type.isBlank()) {
@@ -38,11 +51,14 @@ public class PieceFactory {
     }
 
     /**
-     * Creates a piece with a specified type and color, automatically assigning a unique ID.
+     * Creates a piece of the specified type and color, automatically assigning a unique ID.
      *
      * @param type  The type of the piece (e.g., "ram", "tor").
      * @param color The color of the piece (RED or BLUE).
      * @return The created Piece instance.
+     * @throws IllegalArgumentException If the piece type is unknown or not registered.
+     *
+     * @author Tiffany Jong Shu Ting
      */
     public static Piece createPiece(String type, Color color) {
         IDGenerator idGen = IDGenerator.getInstance();
