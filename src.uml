@@ -1,0 +1,552 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>D:/Java/JavaProjects/Kwazam-Chess/src</OriginalElement>
+  <nodes>
+    <node x="138.0" y="169.0">model.Color</node>
+    <node x="345.5" y="2925.5">model.GameLoader</node>
+    <node x="1074.0" y="845.5">model.XorMovement</node>
+    <node x="224.0" y="1501.0">model.Ram</node>
+    <node x="1956.0" y="1429.0">model.Board</node>
+    <node x="174.0" y="845.5">model.RamMovement</node>
+    <node x="1514.0" y="845.5">model.TorMovement</node>
+    <node x="2359.5" y="4421.0">model.PieceFactory</node>
+    <node x="684.0" y="1549.5">model.Sau</node>
+    <node x="924.0" y="1249.5">model.Biz</node>
+    <node x="254.0" y="-14.5">model.MovementStrategy</node>
+    <node x="1981.0" y="4397.0">view.GameView</node>
+    <node x="574.0" y="845.5">model.SauMovement</node>
+    <node x="1145.5" y="1585.5">model.GameObserver</node>
+    <node x="2050.5" y="3633.0">controller.GameController</node>
+    <node x="3206.0" y="3777.0">model.Direction</node>
+    <node x="2430.5" y="1549.5">view.ViewInterface</node>
+    <node x="2245.5" y="4305.5">Main</node>
+    <node x="1284.0" y="1237.5">model.Xor</node>
+    <node x="2620.0" y="3261.0">model.IDGenerator</node>
+    <node x="2510.5" y="2097.0">view.BoardView</node>
+    <node x="2408.0" y="2745.0">view.GameScreen</node>
+    <node x="1999.0" y="2205.0">view.HomeScreen</node>
+    <node x="1916.0" y="641.0">model.Piece</node>
+    <node x="2496.0" y="3741.0">model.PieceState</node>
+    <node x="1563.5" y="1953.0">model.Game</node>
+    <node x="2807.5" y="845.5">model.GameSaver</node>
+    <node x="145.5" y="2097.0">model.GameState</node>
+    <node x="1524.0" y="1537.5">model.Tor</node>
+    <node x="774.0" y="545.5">model.BizMovement</node>
+    <node x="-105.0" y="1489.0">model.Move</node>
+    <node x="1962.0" y="85.0">model.Position</node>
+    <node x="2337.5" y="3345.0">model.GameEvent</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="view.GameView" target="controller.GameController" relationship="TO_ONE">
+      <point x="-56.0" y="-81.0" />
+      <point x="2037.0" y="4358.0" />
+      <point x="2033.0" y="4358.0" />
+      <point x="2033.0" y="3298.0" />
+      <point x="2321.3333333333335" y="3298.0" />
+      <point x="108.33333333333334" y="-285.0" />
+    </edge>
+    <edge source="model.GameSaver" target="model.Position" relationship="CREATE">
+      <point x="0.0" y="-32.5" />
+      <point x="2973.0" y="478.0" />
+      <point x="2153.0" y="478.0" />
+      <point x="2153.0" y="418.0" />
+      <point x="2158.5" y="418.0" />
+      <point x="65.5" y="153.0" />
+    </edge>
+    <edge source="model.XorMovement" target="model.Position" relationship="CREATE">
+      <point x="89.5" y="-32.5" />
+      <point x="1342.5" y="478.0" />
+      <point x="2153.0" y="478.0" />
+      <point x="2153.0" y="418.0" />
+      <point x="2158.5" y="418.0" />
+      <point x="65.5" y="153.0" />
+    </edge>
+    <edge source="model.SauMovement" target="model.MovementStrategy" relationship="REALIZATION">
+      <point x="0.0" y="-32.5" />
+      <point x="753.0" y="458.0" />
+      <point x="353.0" y="458.0" />
+      <point x="353.0" y="78.0" />
+      <point x="343.5" y="78.0" />
+      <point x="-89.5" y="32.5" />
+    </edge>
+    <edge source="controller.GameController" target="view.GameScreen" relationship="CREATE">
+      <point x="0.0" y="-285.0" />
+      <point x="2213.0" y="3598.0" />
+      <point x="1533.0" y="3598.0" />
+      <point x="1533.0" y="3218.0" />
+      <point x="2393.0" y="3218.0" />
+      <point x="2393.0" y="2718.0" />
+      <point x="2490.5" y="2718.0" />
+      <point x="-82.5" y="-213.0" />
+    </edge>
+    <edge source="controller.GameController" target="model.Move" relationship="CREATE">
+      <point x="0.0" y="-285.0" />
+      <point x="2213.0" y="3598.0" />
+      <point x="1533.0" y="3598.0" />
+      <point x="1533.0" y="3218.0" />
+      <point x="-47.0" y="3218.0" />
+      <point x="-47.0" y="2038.0" />
+      <point x="-7.0" y="2038.0" />
+      <point x="0.0" y="129.0" />
+    </edge>
+    <edge source="model.Xor" target="model.XorMovement" relationship="CREATE">
+      <point x="74.5" y="-80.5" />
+      <point x="1507.5" y="1178.0" />
+      <point x="1453.0" y="1178.0" />
+      <point x="1453.0" y="818.0" />
+      <point x="1342.5" y="818.0" />
+      <point x="89.5" y="-32.5" />
+    </edge>
+    <edge source="model.Biz" target="model.Piece" relationship="GENERALIZATION">
+      <point x="74.5" y="-68.5" />
+      <point x="1147.5" y="1198.0" />
+      <point x="1153.0" y="1198.0" />
+      <point x="1153.0" y="1138.0" />
+      <point x="2073.0" y="1138.0" />
+      <point x="0.0" y="237.0" />
+    </edge>
+    <edge source="model.Ram" target="model.Piece" relationship="GENERALIZATION">
+      <point x="74.5" y="-117.0" />
+      <point x="447.5" y="1198.0" />
+      <point x="1153.0" y="1198.0" />
+      <point x="1153.0" y="1138.0" />
+      <point x="2073.0" y="1138.0" />
+      <point x="0.0" y="237.0" />
+    </edge>
+    <edge source="model.Game" target="model.Position" relationship="CREATE">
+      <point x="94.75" y="-345.0" />
+      <point x="1847.75" y="1878.0" />
+      <point x="2333.0" y="1878.0" />
+      <point x="2333.0" y="1638.0" />
+      <point x="2373.0" y="1638.0" />
+      <point x="2373.0" y="478.0" />
+      <point x="2153.0" y="478.0" />
+      <point x="2153.0" y="418.0" />
+      <point x="2158.5" y="418.0" />
+      <point x="65.5" y="153.0" />
+    </edge>
+    <edge source="model.Game" target="model.Board" relationship="CREATE">
+      <point x="94.75" y="-345.0" />
+      <point x="1847.75" y="1878.0" />
+      <point x="2333.0" y="1878.0" />
+      <point x="2333.0" y="1378.0" />
+      <point x="2044.5" y="1378.0" />
+      <point x="-88.5" y="-189.0" />
+    </edge>
+    <edge source="model.Sau" target="model.Piece" relationship="GENERALIZATION">
+      <point x="74.5" y="-68.5" />
+      <point x="907.5" y="1198.0" />
+      <point x="1153.0" y="1198.0" />
+      <point x="1153.0" y="1138.0" />
+      <point x="2073.0" y="1138.0" />
+      <point x="0.0" y="237.0" />
+    </edge>
+    <edge source="model.Piece" target="model.Color" relationship="TO_ONE">
+      <point x="-78.5" y="-237.0" />
+      <point x="1994.5" y="618.0" />
+      <point x="1993.0" y="618.0" />
+      <point x="1993.0" y="438.0" />
+      <point x="393.0" y="438.0" />
+      <point x="393.0" y="338.0" />
+      <point x="233.0" y="338.0" />
+      <point x="0.0" y="69.0" />
+    </edge>
+    <edge source="model.TorMovement" target="model.Position" relationship="CREATE">
+      <point x="89.5" y="-32.5" />
+      <point x="1782.5" y="478.0" />
+      <point x="2153.0" y="478.0" />
+      <point x="2153.0" y="418.0" />
+      <point x="2158.5" y="418.0" />
+      <point x="65.5" y="153.0" />
+    </edge>
+    <edge source="model.Move" target="model.Position" relationship="TO_ONE">
+      <point x="0.0" y="-129.0" />
+      <point x="-7.0" y="498.0" />
+      <point x="2033.0" y="498.0" />
+      <point x="2033.0" y="418.0" />
+      <point x="2027.5" y="418.0" />
+      <point x="-65.5" y="153.0" />
+    </edge>
+    <edge source="view.BoardView" target="view.ViewInterface" relationship="REALIZATION">
+      <point x="-81.25" y="-201.0" />
+      <point x="2591.75" y="2058.0" />
+      <point x="2593.0" y="2058.0" />
+      <point x="0.0" y="68.5" />
+    </edge>
+    <edge source="model.Game" target="model.Color" relationship="TO_ONE">
+      <point x="-94.75" y="-345.0" />
+      <point x="1658.25" y="1918.0" />
+      <point x="1653.0" y="1918.0" />
+      <point x="1653.0" y="1738.0" />
+      <point x="1893.0" y="1738.0" />
+      <point x="1893.0" y="518.0" />
+      <point x="393.0" y="518.0" />
+      <point x="393.0" y="338.0" />
+      <point x="233.0" y="338.0" />
+      <point x="0.0" y="69.0" />
+    </edge>
+    <edge source="model.Game" target="model.GameObserver" relationship="TO_MANY">
+      <point x="-94.75" y="-345.0" />
+      <point x="1658.25" y="1918.0" />
+      <point x="1653.0" y="1918.0" />
+      <point x="1653.0" y="1738.0" />
+      <point x="1306.75" y="1738.0" />
+      <point x="53.75" y="32.5" />
+    </edge>
+    <edge source="view.GameView" target="model.Position" relationship="CREATE">
+      <point x="56.0" y="-81.0" />
+      <point x="2149.0" y="4278.0" />
+      <point x="3173.0" y="4278.0" />
+      <point x="3173.0" y="478.0" />
+      <point x="2153.0" y="478.0" />
+      <point x="2153.0" y="418.0" />
+      <point x="2158.5" y="418.0" />
+      <point x="65.5" y="153.0" />
+    </edge>
+    <edge source="model.Game" target="model.Board" relationship="TO_ONE">
+      <point x="-94.75" y="-345.0" />
+      <point x="1658.25" y="1918.0" />
+      <point x="1653.0" y="1918.0" />
+      <point x="1653.0" y="1818.0" />
+      <point x="1613.0" y="1818.0" />
+      <point x="1613.0" y="1718.0" />
+      <point x="1933.0" y="1718.0" />
+      <point x="1933.0" y="1358.0" />
+      <point x="2221.5" y="1358.0" />
+      <point x="88.5" y="-189.0" />
+    </edge>
+    <edge source="model.GameLoader" target="model.Board" relationship="CREATE">
+      <point x="0.0" y="-32.5" />
+      <point x="513.0" y="2878.0" />
+      <point x="1453.0" y="2878.0" />
+      <point x="1453.0" y="1838.0" />
+      <point x="2333.0" y="1838.0" />
+      <point x="2333.0" y="1378.0" />
+      <point x="2044.5" y="1378.0" />
+      <point x="-88.5" y="-189.0" />
+    </edge>
+    <edge source="model.GameLoader" target="model.Position" relationship="CREATE">
+      <point x="0.0" y="-32.5" />
+      <point x="513.0" y="2878.0" />
+      <point x="553.0" y="2878.0" />
+      <point x="553.0" y="478.0" />
+      <point x="2153.0" y="478.0" />
+      <point x="2153.0" y="418.0" />
+      <point x="2158.5" y="418.0" />
+      <point x="65.5" y="153.0" />
+    </edge>
+    <edge source="model.Sau" target="model.SauMovement" relationship="CREATE">
+      <point x="-74.5" y="-68.5" />
+      <point x="758.5" y="1178.0" />
+      <point x="753.0" y="1178.0" />
+      <point x="0.0" y="32.5" />
+    </edge>
+    <edge source="controller.GameController" target="model.Move" relationship="TO_MANY">
+      <point x="108.33333333333334" y="-285.0" />
+      <point x="2321.3333333333335" y="3598.0" />
+      <point x="2313.0" y="3598.0" />
+      <point x="2313.0" y="3018.0" />
+      <point x="113.0" y="3018.0" />
+      <point x="113.0" y="1458.0" />
+      <point x="-7.0" y="1458.0" />
+      <point x="0.0" y="-129.0" />
+    </edge>
+    <edge source="view.BoardView" target="controller.GameController" relationship="TO_ONE">
+      <point x="-81.25" y="201.0" />
+      <point x="2591.75" y="2718.0" />
+      <point x="2753.0" y="2718.0" />
+      <point x="2753.0" y="3198.0" />
+      <point x="2573.0" y="3198.0" />
+      <point x="2573.0" y="3318.0" />
+      <point x="2321.3333333333335" y="3318.0" />
+      <point x="108.33333333333334" y="-285.0" />
+    </edge>
+    <edge source="controller.GameController" target="view.BoardView" relationship="TO_ONE">
+      <point x="108.33333333333334" y="-285.0" />
+      <point x="2321.3333333333335" y="3598.0" />
+      <point x="2313.0" y="3598.0" />
+      <point x="2313.0" y="3018.0" />
+      <point x="2353.0" y="3018.0" />
+      <point x="2353.0" y="2538.0" />
+      <point x="2591.75" y="2538.0" />
+      <point x="-81.25" y="201.0" />
+    </edge>
+    <edge source="model.Board" target="model.Piece" relationship="CREATE">
+      <point x="-88.5" y="-189.0" />
+      <point x="2044.5" y="1398.0" />
+      <point x="2213.0" y="1398.0" />
+      <point x="2213.0" y="1138.0" />
+      <point x="2253.0" y="1138.0" />
+      <point x="2253.0" y="618.0" />
+      <point x="2151.5" y="618.0" />
+      <point x="78.5" y="-237.0" />
+    </edge>
+    <edge source="view.BoardView" target="model.Position" relationship="CREATE">
+      <point x="81.25" y="-201.0" />
+      <point x="2754.25" y="2058.0" />
+      <point x="2773.0" y="2058.0" />
+      <point x="2773.0" y="478.0" />
+      <point x="2153.0" y="478.0" />
+      <point x="2153.0" y="418.0" />
+      <point x="2158.5" y="418.0" />
+      <point x="65.5" y="153.0" />
+    </edge>
+    <edge source="model.Tor" target="model.TorMovement" relationship="CREATE">
+      <point x="74.5" y="-80.5" />
+      <point x="1747.5" y="1158.0" />
+      <point x="1493.0" y="1158.0" />
+      <point x="1493.0" y="818.0" />
+      <point x="1782.5" y="818.0" />
+      <point x="89.5" y="-32.5" />
+    </edge>
+    <edge source="model.Piece" target="model.MovementStrategy" relationship="TO_ONE">
+      <point x="-78.5" y="-237.0" />
+      <point x="1994.5" y="618.0" />
+      <point x="1993.0" y="618.0" />
+      <point x="1993.0" y="418.0" />
+      <point x="522.5" y="418.0" />
+      <point x="89.5" y="32.5" />
+    </edge>
+    <edge source="view.GameScreen" target="view.HomeScreen" relationship="CREATE">
+      <point x="-82.5" y="-213.0" />
+      <point x="2490.5" y="2558.0" />
+      <point x="2260.0" y="2558.0" />
+      <point x="87.0" y="93.0" />
+    </edge>
+    <edge source="model.Piece" target="model.Position" relationship="CREATE">
+      <point x="78.5" y="-237.0" />
+      <point x="2151.5" y="478.0" />
+      <point x="2153.0" y="478.0" />
+      <point x="2153.0" y="418.0" />
+      <point x="2158.5" y="418.0" />
+      <point x="65.5" y="153.0" />
+    </edge>
+    <edge source="view.GameScreen" target="controller.GameController" relationship="TO_ONE">
+      <point x="0.0" y="213.0" />
+      <point x="2573.0" y="3318.0" />
+      <point x="2321.3333333333335" y="3318.0" />
+      <point x="108.33333333333334" y="-285.0" />
+    </edge>
+    <edge source="model.GameState" target="model.Move" relationship="TO_MANY">
+      <point x="0.0" y="-201.0" />
+      <point x="273.0" y="2058.0" />
+      <point x="153.0" y="2058.0" />
+      <point x="153.0" y="2018.0" />
+      <point x="113.0" y="2018.0" />
+      <point x="113.0" y="1458.0" />
+      <point x="-7.0" y="1458.0" />
+      <point x="0.0" y="-129.0" />
+    </edge>
+    <edge source="controller.GameController" target="model.GameObserver" relationship="REALIZATION">
+      <point x="-108.33333333333337" y="-285.0" />
+      <point x="2104.6666666666665" y="3278.0" />
+      <point x="1493.0" y="3278.0" />
+      <point x="1493.0" y="1818.0" />
+      <point x="1199.25" y="1818.0" />
+      <point x="-53.75" y="32.5" />
+    </edge>
+    <edge source="model.GameState" target="model.Board" relationship="TO_ONE">
+      <point x="0.0" y="-201.0" />
+      <point x="273.0" y="2058.0" />
+      <point x="153.0" y="2058.0" />
+      <point x="153.0" y="1758.0" />
+      <point x="1613.0" y="1758.0" />
+      <point x="1613.0" y="1718.0" />
+      <point x="1933.0" y="1718.0" />
+      <point x="1933.0" y="1358.0" />
+      <point x="2221.5" y="1358.0" />
+      <point x="88.5" y="-189.0" />
+    </edge>
+    <edge source="model.Piece" target="model.Position" relationship="TO_ONE">
+      <point x="-78.5" y="-237.0" />
+      <point x="1994.5" y="618.0" />
+      <point x="1993.0" y="618.0" />
+      <point x="1993.0" y="458.0" />
+      <point x="2033.0" y="458.0" />
+      <point x="2033.0" y="418.0" />
+      <point x="2027.5" y="418.0" />
+      <point x="-65.5" y="153.0" />
+    </edge>
+    <edge source="model.BizMovement" target="model.MovementStrategy" relationship="REALIZATION">
+      <point x="0.0" y="-32.5" />
+      <point x="953.0" y="458.0" />
+      <point x="353.0" y="458.0" />
+      <point x="353.0" y="78.0" />
+      <point x="343.5" y="78.0" />
+      <point x="-89.5" y="32.5" />
+    </edge>
+    <edge source="view.HomeScreen" target="controller.GameController" relationship="TO_ONE">
+      <point x="-87.0" y="93.0" />
+      <point x="2086.0" y="2938.0" />
+      <point x="2093.0" y="2938.0" />
+      <point x="2093.0" y="3198.0" />
+      <point x="2573.0" y="3198.0" />
+      <point x="2573.0" y="3318.0" />
+      <point x="2321.3333333333335" y="3318.0" />
+      <point x="108.33333333333334" y="-285.0" />
+    </edge>
+    <edge source="model.GameLoader" target="model.GameState" relationship="CREATE">
+      <point x="0.0" y="-32.5" />
+      <point x="513.0" y="2898.0" />
+      <point x="273.0" y="2898.0" />
+      <point x="0.0" y="201.0" />
+    </edge>
+    <edge source="model.Biz" target="model.BizMovement" relationship="CREATE">
+      <point x="-74.5" y="-68.5" />
+      <point x="998.5" y="1178.0" />
+      <point x="953.0" y="1178.0" />
+      <point x="0.0" y="32.5" />
+    </edge>
+    <edge source="model.Tor" target="model.Piece" relationship="GENERALIZATION">
+      <point x="-74.5" y="-80.5" />
+      <point x="1598.5" y="1198.0" />
+      <point x="1153.0" y="1198.0" />
+      <point x="1153.0" y="1138.0" />
+      <point x="2073.0" y="1138.0" />
+      <point x="0.0" y="237.0" />
+    </edge>
+    <edge source="model.Ram" target="model.RamMovement" relationship="CREATE">
+      <point x="-74.5" y="-117.0" />
+      <point x="298.5" y="1478.0" />
+      <point x="353.0" y="1478.0" />
+      <point x="0.0" y="32.5" />
+    </edge>
+    <edge source="model.Board" target="model.Piece" relationship="TO_MANY">
+      <point x="88.5" y="-189.0" />
+      <point x="2221.5" y="1158.0" />
+      <point x="2293.0" y="1158.0" />
+      <point x="2293.0" y="598.0" />
+      <point x="1994.5" y="598.0" />
+      <point x="-78.5" y="-237.0" />
+    </edge>
+    <edge source="controller.GameController" target="model.GameState" relationship="CREATE">
+      <point x="0.0" y="-285.0" />
+      <point x="2213.0" y="3598.0" />
+      <point x="1533.0" y="3598.0" />
+      <point x="1533.0" y="3218.0" />
+      <point x="273.0" y="3218.0" />
+      <point x="0.0" y="201.0" />
+    </edge>
+    <edge source="view.GameScreen" target="view.BoardView" relationship="GENERALIZATION">
+      <point x="82.5" y="-213.0" />
+      <point x="2655.5" y="2698.0" />
+      <point x="2754.25" y="2698.0" />
+      <point x="81.25" y="201.0" />
+    </edge>
+    <edge source="model.Xor" target="model.Piece" relationship="GENERALIZATION">
+      <point x="-74.5" y="-80.5" />
+      <point x="1358.5" y="1198.0" />
+      <point x="1153.0" y="1198.0" />
+      <point x="1153.0" y="1138.0" />
+      <point x="2073.0" y="1138.0" />
+      <point x="0.0" y="237.0" />
+    </edge>
+    <edge source="model.RamMovement" target="model.MovementStrategy" relationship="REALIZATION">
+      <point x="0.0" y="-32.5" />
+      <point x="353.0" y="78.0" />
+      <point x="343.5" y="78.0" />
+      <point x="-89.5" y="32.5" />
+    </edge>
+    <edge source="controller.GameController" target="model.Game" relationship="TO_ONE">
+      <point x="108.33333333333334" y="-285.0" />
+      <point x="2321.3333333333335" y="3598.0" />
+      <point x="2313.0" y="3598.0" />
+      <point x="2313.0" y="3018.0" />
+      <point x="1973.0" y="3018.0" />
+      <point x="1973.0" y="1898.0" />
+      <point x="1658.25" y="1898.0" />
+      <point x="-94.75" y="-345.0" />
+    </edge>
+    <edge source="model.Board" target="model.Position" relationship="CREATE">
+      <point x="-88.5" y="-189.0" />
+      <point x="2044.5" y="1398.0" />
+      <point x="2213.0" y="1398.0" />
+      <point x="2213.0" y="1138.0" />
+      <point x="2333.0" y="1138.0" />
+      <point x="2333.0" y="478.0" />
+      <point x="2153.0" y="478.0" />
+      <point x="2153.0" y="418.0" />
+      <point x="2158.5" y="418.0" />
+      <point x="65.5" y="153.0" />
+    </edge>
+    <edge source="model.TorMovement" target="model.MovementStrategy" relationship="REALIZATION">
+      <point x="-89.5" y="-32.5" />
+      <point x="1603.5" y="458.0" />
+      <point x="353.0" y="458.0" />
+      <point x="353.0" y="78.0" />
+      <point x="343.5" y="78.0" />
+      <point x="-89.5" y="32.5" />
+    </edge>
+    <edge source="view.HomeScreen" target="controller.GameController" relationship="CREATE">
+      <point x="87.0" y="93.0" />
+      <point x="2260.0" y="2938.0" />
+      <point x="2213.0" y="2938.0" />
+      <point x="0.0" y="-285.0" />
+    </edge>
+    <edge source="model.XorMovement" target="model.MovementStrategy" relationship="REALIZATION">
+      <point x="-89.5" y="-32.5" />
+      <point x="1163.5" y="458.0" />
+      <point x="353.0" y="458.0" />
+      <point x="353.0" y="78.0" />
+      <point x="343.5" y="78.0" />
+      <point x="-89.5" y="32.5" />
+    </edge>
+    <edge source="controller.GameController" target="model.Game" relationship="CREATE">
+      <point x="0.0" y="-285.0" />
+      <point x="2213.0" y="3598.0" />
+      <point x="1533.0" y="3598.0" />
+      <point x="1533.0" y="1858.0" />
+      <point x="1847.75" y="1858.0" />
+      <point x="94.75" y="-345.0" />
+    </edge>
+    <edge source="model.GameState" target="model.Color" relationship="TO_ONE">
+      <point x="0.0" y="-201.0" />
+      <point x="273.0" y="2058.0" />
+      <point x="153.0" y="2058.0" />
+      <point x="153.0" y="518.0" />
+      <point x="393.0" y="518.0" />
+      <point x="393.0" y="338.0" />
+      <point x="233.0" y="338.0" />
+      <point x="0.0" y="69.0" />
+    </edge>
+    <edge source="view.HomeScreen" target="model.Board" relationship="CREATE">
+      <point x="87.0" y="93.0" />
+      <point x="2260.0" y="2418.0" />
+      <point x="2373.0" y="2418.0" />
+      <point x="2373.0" y="1838.0" />
+      <point x="2333.0" y="1838.0" />
+      <point x="2333.0" y="1378.0" />
+      <point x="2044.5" y="1378.0" />
+      <point x="-88.5" y="-189.0" />
+    </edge>
+    <edge source="controller.GameController" target="model.Position" relationship="TO_ONE">
+      <point x="108.33333333333334" y="-285.0" />
+      <point x="2321.3333333333335" y="3598.0" />
+      <point x="2313.0" y="3598.0" />
+      <point x="2313.0" y="2438.0" />
+      <point x="2413.0" y="2438.0" />
+      <point x="2413.0" y="498.0" />
+      <point x="2033.0" y="498.0" />
+      <point x="2033.0" y="418.0" />
+      <point x="2027.5" y="418.0" />
+      <point x="-65.5" y="153.0" />
+    </edge>
+    <edge source="model.GameLoader" target="model.Move" relationship="CREATE">
+      <point x="0.0" y="-32.5" />
+      <point x="513.0" y="2038.0" />
+      <point x="-7.0" y="2038.0" />
+      <point x="0.0" y="129.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Compact" zoom="1.1989247311827957" showDependencies="true" x="488.3228699551569" y="405.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
