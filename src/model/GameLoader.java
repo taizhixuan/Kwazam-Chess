@@ -32,9 +32,7 @@ public class GameLoader {
             int turn = 0;
             Color currentPlayer = null;
             List<Move> moveHistory = new ArrayList<>();
-            int secondsElapsed = 0;
-
-            boolean loadingMoveHistory = false;
+            int secondsElapsed = 0; // Initialize timer
 
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
@@ -53,24 +51,24 @@ public class GameLoader {
                     Color color = Color.valueOf(parts[4].trim());
 
                     boolean isRedTurn = currentPlayer.equals(Color.RED);
-                    Position adjustedPosition = new Position(row, col);
-                    Position originalPosition = board.rotateCoordinates(adjustedPosition, isRedTurn);
+                    Position adjustedPosition = board.rotateCoordinates(new Position(row, col), isRedTurn);
 
                     Piece piece = PieceFactory.createPiece(type, color, id);
-                    board.setPieceAt(originalPosition, piece);
+                    piece.setPosition(adjustedPosition); // Ensure the piece's position is set
+                    board.setPieceAt(adjustedPosition, piece);
                 } else if (line.startsWith("move:")) {
-                    loadingMoveHistory = true;
                     String[] parts = line.substring(5).split(",\\s*");
-                    if (parts.length != 6) { // Updated to expect 6 parts
+                    if (parts.length != 6) { // Ensure there are exactly 6 parts
                         throw new IOException("Invalid move format: " + line);
                     }
                     String player = parts[0].trim();
-                    String pieceType = parts[1].trim(); // New: piece type
+                    String pieceType = parts[1].trim();
                     int fromRow = Integer.parseInt(parts[2].trim());
                     int fromCol = Integer.parseInt(parts[3].trim());
                     int toRow = Integer.parseInt(parts[4].trim());
                     int toCol = Integer.parseInt(parts[5].trim());
 
+                    // **Do not rotate move coordinates**
                     Position from = new Position(fromRow, fromCol);
                     Position to = new Position(toRow, toCol);
 
@@ -81,9 +79,11 @@ public class GameLoader {
                 }
             }
 
+            // Create GameState with move history
             GameState gameState = new GameState(board, currentPlayer, turn, moveHistory);
-            gameState.setSecondsElapsed(secondsElapsed);
+            gameState.setSecondsElapsed(secondsElapsed); // Set timer state
 
+            // Update game over status if necessary
             gameState.updateGameOverStatus();
 
             System.out.println("Game loaded successfully from " + filename);

@@ -340,14 +340,19 @@ public class GameController implements GameObserver {
     public void loadGame(String filename) {
         try {
             GameState gameState = GameLoader.loadGameFromTextFile(filename);
+
+            moveHistory.clear();
+            moveHistory.addAll(gameState.getMoveHistory());
+
             game.setBoard(gameState.getBoard());
             game.setCurrentPlayer(gameState.getCurrentPlayer());
             game.setTurnCounter(gameState.getTurn());
-            moveHistory.clear();
-            moveHistory.addAll(gameState.getMoveHistory());
+
             this.secondsElapsed = gameState.getSecondsElapsed();
+
             selectedPiece = null;
             System.out.println("Game loaded successfully!");
+
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Failed to load the game.");
