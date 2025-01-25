@@ -32,7 +32,7 @@ public class GameLoader {
             int turn = 0;
             Color currentPlayer = null;
             List<Move> moveHistory = new ArrayList<>();
-            int secondsElapsed = 0; // Initialize timer
+            int secondsElapsed = 0;
 
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
@@ -54,11 +54,11 @@ public class GameLoader {
                     Position adjustedPosition = board.rotateCoordinates(new Position(row, col), isRedTurn);
 
                     Piece piece = PieceFactory.createPiece(type, color, id);
-                    piece.setPosition(adjustedPosition); // Ensure the piece's position is set
+                    piece.setPosition(adjustedPosition);
                     board.setPieceAt(adjustedPosition, piece);
                 } else if (line.startsWith("move:")) {
                     String[] parts = line.substring(5).split(",\\s*");
-                    if (parts.length != 6) { // Ensure there are exactly 6 parts
+                    if (parts.length != 6) {
                         throw new IOException("Invalid move format: " + line);
                     }
                     String player = parts[0].trim();
@@ -68,7 +68,6 @@ public class GameLoader {
                     int toRow = Integer.parseInt(parts[4].trim());
                     int toCol = Integer.parseInt(parts[5].trim());
 
-                    // **Do not rotate move coordinates**
                     Position from = new Position(fromRow, fromCol);
                     Position to = new Position(toRow, toCol);
 
@@ -79,11 +78,9 @@ public class GameLoader {
                 }
             }
 
-            // Create GameState with move history
             GameState gameState = new GameState(board, currentPlayer, turn, moveHistory);
-            gameState.setSecondsElapsed(secondsElapsed); // Set timer state
+            gameState.setSecondsElapsed(secondsElapsed);
 
-            // Update game over status if necessary
             gameState.updateGameOverStatus();
 
             System.out.println("Game loaded successfully from " + filename);
